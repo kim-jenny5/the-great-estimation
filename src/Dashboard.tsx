@@ -1,11 +1,13 @@
 import Header from './components/Header';
-// import StatGroup from './components/StatGroup';
+import Slider from './components/Slider';
+import StatGroup from './components/StatGroup';
 
 export default function Dashboard() {
   return (
-    <div className='wrapper'>
+    <div className='wrapper flex-col gap-y-6'>
       <Header />
-      {/* <StatGroup /> */}
+      <StatGroup />
+      <Slider />
     </div>
   );
 }

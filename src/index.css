@@ -7,6 +7,8 @@
   --font-styled: 'Bitcount', monospace;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer components {
   .wrapper {
     @apply container mx-auto flex h-full w-full max-w-7xl px-20 py-4;
