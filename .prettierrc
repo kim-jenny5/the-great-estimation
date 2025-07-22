@@ -1,0 +1,7 @@
+{
+  "arrowParens": "always",
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "objectWrap": "collapse",
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
