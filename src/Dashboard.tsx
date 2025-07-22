@@ -1,9 +1,11 @@
-import StatGroup from './components/StatGroup';
+import Header from './components/Header';
+// import StatGroup from './components/StatGroup';
 
 export default function Dashboard() {
   return (
     <div className='wrapper'>
-      <StatGroup />
+      <Header />
+      {/* <StatGroup /> */}
     </div>
   );
 }

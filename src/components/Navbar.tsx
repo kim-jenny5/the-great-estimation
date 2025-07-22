@@ -1,7 +1,7 @@
 export default function Navbar() {
   return (
     <div className='wrapper items-center justify-between border-b border-black/25'>
-      <div className='flex flex-col text-2xl leading-none font-bold tracking-tight text-black'>
+      <div className='flex flex-col text-xl leading-none font-black text-black'>
         The Great Estimation
       </div>
       <div>
