@@ -1,10 +1,12 @@
 import Navbar from './components/Navbar';
+import Dashboard from './Dashboard';
 
 function App() {
   return (
-    <div className='container mx-auto flex h-full w-full justify-center p-4'>
+    <>
       <Navbar />
-    </div>
+      <Dashboard />
+    </>
   );
 }
 

@@ -1,1 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitcount:wght@100..900&family=DM+Serif+Text:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', Roboto, 'Open Sans', sans-serif;
+  --font-serif: 'DM Serif Text', Times, serif;
+  --font-styled: 'Bitcount', monospace;
+}
+
+@layer components {
+  .wrapper {
+    @apply container mx-auto flex h-full w-full max-w-7xl px-20 py-4;
+  }
+}
+
+html,
+body {
+  font-family: var(--font-sans);
+}
