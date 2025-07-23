@@ -30,7 +30,9 @@ export default function Header() {
     <div className='flex h-full w-full flex-col gap-y-2'>
       <div className='flex w-full items-center justify-between'>
         <div className='flex items-center gap-x-3'>
-          <div className='text-3xl font-medium tracking-tight'>Nike – Back to School – Q3 2025</div>
+          <div className='text-3xl font-medium tracking-tight text-neutral-800'>
+            Nike – Back to School – Q3 2025
+          </div>
           {status && (
             <span
               className={`inline-flex h-fit w-fit items-center rounded-full ${getStatusColor(status)?.bg} px-2 py-1 text-xs font-medium ${getStatusColor(status)?.text} capitalize`}
@@ -40,22 +42,16 @@ export default function Header() {
           )}
         </div>
         <div className='flex gap-x-4'>
-          <button
-            onClick={handleExport}
-            className='rounded-sm bg-black/5 px-3 py-1.5 text-sm font-medium'
-          >
+          <button onClick={handleExport} className='secondary-btn'>
             Export
           </button>
-          <button
-            onClick={handleEdit}
-            className='rounded-sm bg-black px-3 py-1.5 text-sm font-medium text-white'
-          >
+          <button onClick={handleEdit} className='primary-btn'>
             Edit
           </button>
         </div>
       </div>
       <div>
-        Deliverable due <span className='font-medium underline'>August 18, 2025</span>
+        Deliverable due <span className='font-semibold'>August 18, 2025</span>
       </div>
     </div>
   );

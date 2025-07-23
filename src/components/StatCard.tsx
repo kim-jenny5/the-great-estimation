@@ -1,21 +1,21 @@
-import { formatCurrency } from '../util/formatters';
+import { formatCurrency, formatPercentage } from '../util/formatters';
 
-type StatCardProps = { title: string; value: number };
+type StatCardProps = { title: string; value: number; percentage?: number };
 
-export default function StatCard({ title, value }: StatCardProps) {
-  // const trendTextColor = {
-  //   positive: 'text-green-600',
-  //   negative: 'text-red-600',
-  //   neutral: 'text-gray-500',
-  // };
-
+export default function StatCard({ title, value, percentage }: StatCardProps) {
   return (
-    <div className='rounded-lg border border-gray-200 bg-white p-6 shadow-sm'>
-      <div className='text-sm font-medium text-neutral-500'>{title}</div>
-      <div className='mt-1 text-3xl font-bold text-black'>
+    <div className='flex flex-col gap-y-2 px-6 py-5'>
+      <dt className='flex items-center justify-between text-sm font-medium text-neutral-500'>
+        <span>{title}</span>
+      </dt>
+      <dd className='text-3xl font-semibold tracking-tight text-neutral-800'>
         {formatCurrency(value, { withCents: true })}
-      </div>
-      {/* {trend && <div className={`mt-2 text-sm ${trendTextColor[trendColor]}`}>{trend}</div>} */}
+        {percentage && (
+          <span className='ml-2 text-sm font-medium text-neutral-500'>
+            {formatPercentage(percentage)}
+          </span>
+        )}
+      </dd>
     </div>
   );
 }

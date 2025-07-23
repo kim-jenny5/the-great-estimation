@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.11",
     "eslint-plugin-unicorn": "^60.0.0",
     "radix-ui": "^1.4.2",

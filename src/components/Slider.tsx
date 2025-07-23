@@ -21,7 +21,7 @@ export default function Slider() {
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
                 <MultiSlider.Thumb
-                  className='block h-7 w-5 rounded-full border bg-white shadow-sm shadow-black/40 hover:bg-lime-50 focus:ring-3 focus:ring-black/25 focus:outline-none'
+                  className='block h-7 w-5 cursor-grab rounded-full border bg-white shadow-xs shadow-black/40 hover:bg-neutral-800 focus:ring-3 focus:ring-neutral-800/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
                   aria-label='Volume'
                 />
               </Tooltip.Trigger>
