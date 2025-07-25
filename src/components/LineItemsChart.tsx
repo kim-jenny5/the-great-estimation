@@ -90,8 +90,8 @@ export default function LineItemsChart() {
 
   return (
     <div className='card'>
-      <table className='min-w-full divide-y divide-neutral-300 text-neutral-800'>
-        <thead className='bg-neutral-100 text-sm text-neutral-500 uppercase'>
+      <table className='min-w-full divide-y divide-neutral-300 text-sm text-neutral-800'>
+        <thead className='bg-neutral-100 text-neutral-500 uppercase'>
           <tr>
             <th className='py-3 pr-4 pl-6 text-left font-normal'>Description</th>
             <th className='px-4 py-3 text-left font-normal'>Start/End Dates</th>
