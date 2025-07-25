@@ -64,7 +64,7 @@ All components have been scaffolded and styled. The layout and structure reflect
 
 ## Live Demo
 
-[👉 Link to deployed app]()
+👉 [Link to deployed app](https://the-great-estimation.vercel.app/)
 
 ---
 
