@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { Slider as MultiSlider } from 'radix-ui';
 import { Tooltip } from 'radix-ui';
 
 export default function Slider() {
-  const [values, setValues] = useState<number[]>([25, 75]);
+  const values = [25, 75]; // change this to state
 
   return (
     <form className='flex justify-center pt-4'>

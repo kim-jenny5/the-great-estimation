@@ -1,30 +1,24 @@
-// import { useState } from 'react';
-
 type StatusColor = { bg: string; text: string } | undefined;
+
+const getStatusColor = (status?: string): StatusColor => {
+  switch (status) {
+    case 'In progress': {
+      return { bg: 'bg-yellow-100', text: 'text-yellow-800' };
+    }
+    case 'Completed': {
+      return { bg: 'bg-green-100', text: 'text-green-800' };
+    }
+    case 'Lost': {
+      return { bg: 'bg-red-100', text: 'text-red-800' };
+    }
+    default: {
+      return;
+    }
+  }
+};
 
 export default function Header() {
   const status = 'In progress'; // change later
-
-  const getStatusColor = (status?: string): StatusColor => {
-    switch (status) {
-      case 'In progress':
-        return { bg: 'bg-yellow-100', text: 'text-yellow-800' };
-      case 'Completed':
-        return { bg: 'bg-green-100', text: 'text-green-800' };
-      case 'Lost':
-        return { bg: 'bg-red-100', text: 'text-red-800' };
-      default:
-        return;
-    }
-  };
-
-  const handleExport = () => {
-    console.log('exporting in process');
-  };
-
-  const handleEdit = () => {
-    console.log('editing in process');
-  };
 
   return (
     <div className='flex h-full w-full flex-col gap-y-2'>
@@ -42,12 +36,10 @@ export default function Header() {
           )}
         </div>
         <div className='flex gap-x-4'>
-          <button onClick={handleExport} className='secondary-btn'>
-            Export
-          </button>
-          <button onClick={handleEdit} className='primary-btn'>
-            Edit
-          </button>
+          {/* add handleExport function */}
+          <button className='secondary-btn'>Export</button>
+          {/* add handleEdit function */}
+          <button className='primary-btn'>Edit</button>
         </div>
       </div>
       <div>

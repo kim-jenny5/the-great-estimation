@@ -1,8 +1,8 @@
 import StatCard from './StatCard';
 
 export default function StatGroup() {
-  const totalBudget = 45000;
-  const totalSpend = 12000;
+  const totalBudget = 45_000;
+  const totalSpend = 12_000;
   const percentage = totalSpend / totalBudget;
 
   return (
