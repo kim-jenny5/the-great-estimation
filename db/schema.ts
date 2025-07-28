@@ -10,12 +10,12 @@ export const users = pgTable('users', {
 
 export const orders = pgTable('orders', {
   id: uuid('id').primaryKey().defaultRandom(),
-  name: text('name'),
+  name: text('name').notNull(),
   creator: uuid('creator').references(() => users.id),
   status: text('status'),
-  totalBudget: numeric('total_budget'),
-  totalSpend: numeric('total_spend'),
-  deliverableDueAt: date('deliverable_due_at'),
+  totalBudget: numeric('total_budget').notNull(),
+  totalSpend: numeric('total_spend').default('0'),
+  deliverableDueAt: date('deliverable_due_at').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -23,14 +23,14 @@ export const orders = pgTable('orders', {
 export const lineItems = pgTable('line_items', {
   id: uuid('id').primaryKey().defaultRandom(),
   orderId: uuid('order_id').references(() => orders.id),
-  product: text('product'),
-  description: text('description'),
-  startDate: date('start_date'),
+  product: text('product').notNull(),
+  name: text('name').notNull(),
+  startDate: date('start_date').notNull(),
   endDate: date('end_date'),
-  type: text('type'),
-  rate: numeric('rate'),
-  quantity: integer('quantity'),
-  subtotal: numeric('subtotal'),
+  type: text('type').notNull(),
+  rate: numeric('rate').notNull(),
+  quantity: integer('quantity').notNull(),
+  subtotal: numeric('subtotal').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
