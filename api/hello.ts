@@ -13,8 +13,8 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
 
     console.log('✅ Query result:', result);
     res.status(200).json(result[0]);
-  } catch (err: any) {
-    console.error('❌ Error in /api/hello:', err.message);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error('❌ Error in /api/hello:', (error as Error).message);
+    res.status(500).json({ error: (error as Error).message });
   }
 }
