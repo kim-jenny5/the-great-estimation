@@ -2,7 +2,6 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Client } from 'pg';
 import { users, orders, lineItems } from './schema';
 // import { faker } from '@faker-js/faker';
-import 'dotenv/config';
 
 const client = new Client({ connectionString: process.env.DATABASE_URL });
 const db = drizzle(client);
@@ -16,10 +15,10 @@ export default async function seed() {
 
   const [jenny] = await db
     .insert(users)
-    .values({ name: 'Jenny Kim', email: 'jenny@example.com' })
+    .values({ name: 'Jenny Kim', email: 'jennykimdev@gmail.com' })
     .returning();
 
-  const [realOrder] = await db
+  const [nikeOrder] = await db
     .insert(orders)
     .values({
       name: 'Nike – Back to School – Q3 2025',
@@ -32,9 +31,9 @@ export default async function seed() {
 
   await db.insert(lineItems).values([
     {
-      orderId: realOrder.id,
+      orderId: nikeOrder.id,
       product: 'Newsletter',
-      description: 'Back to School',
+      name: 'Back to School',
       startDate: new Date('2025-08-01'),
       type: 'Flat',
       rate: 2500,
@@ -42,9 +41,9 @@ export default async function seed() {
       subtotal: 2500,
     },
     {
-      orderId: realOrder.id,
+      orderId: nikeOrder.id,
       product: 'Newsletter',
-      description: 'Labor Day',
+      name: 'Labor Day',
       startDate: new Date('2025-08-18'),
       type: 'Flat',
       rate: 3000,
@@ -78,7 +77,7 @@ export default async function seed() {
   //     return {
   //       orderId: fakeOrder.id,
   //       product: faker.helpers.arrayElement(['Newsletter', 'Sponsored Article', 'Display Ads']),
-  //       description: faker.company.catchPhrase(),
+  //       name: faker.company.catchPhrase(),
   //       startDate: faker.date.recent(),
   //       endDate: faker.date.future(),
   //       type: faker.helpers.arrayElement(['Flat', 'CPM']),

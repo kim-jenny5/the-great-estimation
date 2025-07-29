@@ -1,26 +1,26 @@
 CREATE TABLE "line_items" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"order_id" uuid,
-	"product" text,
-	"description" text,
-	"start_date" date,
+	"product" text NOT NULL,
+	"name" text NOT NULL,
+	"start_date" date NOT NULL,
 	"end_date" date,
-	"type" text,
-	"rate" numeric,
-	"quantity" integer,
-	"subtotal" numeric,
+	"type" text NOT NULL,
+	"rate" numeric NOT NULL,
+	"quantity" integer NOT NULL,
+	"subtotal" numeric NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" text,
+	"name" text NOT NULL,
 	"creator" uuid,
 	"status" text,
-	"total_budget" numeric,
-	"total_spend" numeric,
-	"deliverable_due_at" date,
+	"total_budget" numeric NOT NULL,
+	"total_spend" numeric DEFAULT '0',
+	"deliverable_due_at" date NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
