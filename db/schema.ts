@@ -1,4 +1,5 @@
 import { pgTable, uuid, text, numeric, integer, timestamp, date } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -20,10 +21,17 @@ export const orders = pgTable('orders', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const products = pgTable('products', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 export const lineItems = pgTable('line_items', {
   id: uuid('id').primaryKey().defaultRandom(),
   orderId: uuid('order_id').references(() => orders.id),
-  product: text('product').notNull(),
+  productId: uuid('product_id').references(() => products.id),
   name: text('name').notNull(),
   startDate: date('start_date').notNull().$type<Date>(),
   endDate: date('end_date').$type<Date>(),
@@ -35,11 +43,25 @@ export const lineItems = pgTable('line_items', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export type InsertUser = typeof users.$inferInsert;
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({ orders: many(orders) }));
+
+export const ordersRelations = relations(orders, ({ many, one }) => ({
+  creator: one(users, { fields: [orders.creator], references: [users.id] }),
+  lineItems: many(lineItems),
+}));
+
+export const productsRelations = relations(products, ({ many }) => ({
+  lineItems: many(lineItems),
+}));
+
+export const lineItemsRelations = relations(lineItems, ({ one }) => ({
+  order: one(orders, { fields: [lineItems.orderId], references: [orders.id] }),
+  product: one(products, { fields: [lineItems.productId], references: [products.id] }),
+}));
+
+// Type definition
 export type SelectUser = typeof users.$inferSelect;
-
-export type InsertOrder = typeof orders.$inferInsert;
 export type SelectOrder = typeof orders.$inferSelect;
-
-export type InsertLineItems = typeof lineItems.$inferInsert;
-export type SelectLineItems = typeof lineItems.$inferSelect;
+export type SelectLineItem = typeof lineItems.$inferSelect;
+export type SelectProduct = typeof products.$inferSelect;

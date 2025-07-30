@@ -2,14 +2,14 @@ import { Slider as MultiSlider } from 'radix-ui';
 import { Tooltip } from 'radix-ui';
 
 export default function Slider() {
-  const values = [25, 75]; // change this to state
+  const values = [25, 75]; // TODO: change this to state
 
   return (
     <form className='flex justify-center pt-4'>
       <MultiSlider.Root
         className='relative flex h-5 w-full touch-none items-center select-none'
         defaultValue={values}
-        max={100} // change these to be dynamic
+        max={100} // TODO: change these to be dynamic
         step={1}
       >
         <MultiSlider.Track className='relative h-4 grow rounded-full bg-black/15'>
