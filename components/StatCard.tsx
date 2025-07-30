@@ -1,4 +1,4 @@
-import { formatCurrency, formatPercentage } from '../util/formatters';
+import { formatCurrency, formatPercentage } from '@/util/formatters';
 
 type StatCardProps = { title: string; value: number; percentage?: number };
 

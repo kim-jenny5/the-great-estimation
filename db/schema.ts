@@ -34,3 +34,12 @@ export const lineItems = pgTable('line_items', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+export type InsertUser = typeof users.$inferInsert;
+export type SelectUser = typeof users.$inferSelect;
+
+export type InsertOrder = typeof orders.$inferInsert;
+export type SelectOrder = typeof orders.$inferSelect;
+
+export type InsertLineItems = typeof lineItems.$inferInsert;
+export type SelectLineItems = typeof lineItems.$inferSelect;

@@ -1,8 +1,10 @@
 /* eslint-disable drizzle/enforce-delete-with-where */
 
-import 'dotenv/config';
+import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { users, orders, lineItems } from './schema';
+
+config({ path: '.env.local', quiet: true });
 
 const db = drizzle(process.env.DATABASE_URL!);
 
