@@ -8,28 +8,20 @@ This project demonstrates my ability to translate real-world business logic and 
 
 ## Tech Stack
 
-- **Framework**: [React](https://react.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components**: [Radix UI](https://www.radix-ui.com/)
-- **Icons**: [Heroicons](https://heroicons.com/)
-
-## Tech Stack
-
-- **Next.js** – UI library
-- **Vite** – fast, modern build tool for local development and production
+- **Next.js** – React framework with support for serverless functions and route handling
 - **TypeScript** – safer, predictable code
 - **Tailwind CSS** – utility-first styling
 - **Radix UI** – accessible, unstyled component primitives
-- **Icons** – simple, clean icon set to pair seamlessly with Tailwind
+- **Heroicons** - simple, clean icon set to pair seamlessly with Tailwind
+- **Neon** – serverless Postgres database
+- **Drizzle** - Typescript ORM used for schema and queries
+- **Vercel** – seamless deployment for frontend and serverless API routes
 
 ---
 
-## Deployment
+## Architecture Notes
 
-Originally conceived as a static app, the project was built using Vite for optimal performance and quick iteration. Later, I decided to also introduce a simple API endpoint to serve initial data to the app. As a result, **The Great Estimation is deployed as a static frontend with a serverless API**, reflecting a modern hybrid architecture.
-
-Deployment is handled via **Vercel**, which supports both static assets and serverless functions.
+The project was initially scaffolded using Vite to enable quick iteration and performance-optimized local development. However, as the project grew in complexity, I migrated to Next.js to fully integrate with the Vercel ecosystem and take advantage of built-in routing, serverless functions, and hybrid rendering.
 
 ---
 
@@ -38,9 +30,9 @@ Deployment is handled via **Vercel**, which supports both static assets and serv
 This project was rebuilt to:
 
 - Showcase work I couldn’t share due to company access restrictions
-- Highlight my frontend engineering skills using React and Tailwind
+- Highlight my frontend engineering skills using React, Typescript, and Tailwind
 - Demonstrate the ability to design and build interactive, data-driven UIs
-- Reflect a real-world project structure using serverless functions for basic API interaction
+- Reflect a real-world project structure using serverless functions and a relational database
 
 ---
 
@@ -52,23 +44,24 @@ All components have been scaffolded and styled. The layout and structure reflect
 
 ## What's Next
 
+- [ ] Migrate from Drizzle to Prisma for richer data relationships (`user.orders`, `order.lineItems`, etc.)
 - [ ] Add a simple API for data handling (create, read, update, delete)
-- [ ] Add functionality to **create a new order**
+- [ ] Add functionality to create a new order
 - [ ] Enable editing and updating an existing order
-- [ ] Add ability to **add/edit/delete line items**
-- [ ] Make the **slider interactive** for real-time adjustment
-- [ ] Add a way to **export page data to CSV**
+- [ ] Add ability to add/edit/delete line items
+- [ ] Make the slider interactive for real-time adjustment
+- [ ] Add a way to export page data to CSV
 - [ ] Hook up all forms and controls to actual state and validation
 
 ---
 
 ## Live Demo
 
-[👉 Link to deployed app]()
+[👉 Link to deployed app]('/')
 
 ---
 
 ## Notes
 
-- The original implementation was done in **Ruby on Rails**, but this version was reimplemented in **React** to reflect my current focus on frontend development.
+- The original implementation was done in **Ruby on Rails**, but this version was reimplemented in **React** and **Next.js** to reflect my current focus on frontend development.
 - The data loaded via the API is static and used to simulate loading behavior and state management.
