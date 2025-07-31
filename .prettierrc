@@ -1,0 +1,8 @@
+{
+  "arrowParens": "always",
+  "printWidth": 100,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "objectWrap": "collapse",
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
