@@ -4,8 +4,6 @@
 
 This project demonstrates my ability to translate real-world business logic and UI/UX patterns into a polished, interactive frontend experience — this time, in a modern, React-based environment.
 
----
-
 ## Tech Stack
 
 - **Next.js** – React framework with support for serverless functions and route handling
@@ -17,13 +15,9 @@ This project demonstrates my ability to translate real-world business logic and 
 - **Drizzle** - Typescript ORM used for schema and queries
 - **Vercel** – seamless deployment for frontend and serverless API routes
 
----
-
 ## Architecture Notes
 
 The project was initially scaffolded using Vite to enable quick iteration and performance-optimized local development. However, as the project grew in complexity, I migrated to Next.js to fully integrate with the Vercel ecosystem and take advantage of built-in routing, serverless functions, and hybrid rendering.
-
----
 
 ## Purpose
 
@@ -34,13 +28,9 @@ This project was rebuilt to:
 - Demonstrate the ability to design and build interactive, data-driven UIs
 - Reflect a real-world project structure using serverless functions and a relational database
 
----
-
 ## Current Progress
 
 All components have been scaffolded and styled. The layout and structure reflect the core flow of the original feature. What's left is wiring everything up for interaction.
-
----
 
 ## What's Next
 
@@ -52,14 +42,6 @@ All components have been scaffolded and styled. The layout and structure reflect
 - [ ] Make the slider interactive for real-time adjustment
 - [ ] Add a way to export page data to CSV
 - [ ] Hook up all forms and controls to actual state and validation
-
----
-
-## Live Demo
-
-[👉 Link to deployed app]('/')
-
----
 
 ## Notes
 
