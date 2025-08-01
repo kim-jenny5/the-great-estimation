@@ -1,7 +1,5 @@
-import { config } from 'dotenv';
+import 'dotenv/config';
 import { Client } from 'pg';
-
-config({ path: '.env.local', quiet: true });
 
 if (process.env.NODE_ENV !== 'development')
   throw new Error('‼️ Database reset is only allowed in development environment ‼️');

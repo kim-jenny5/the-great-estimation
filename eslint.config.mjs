@@ -1,31 +1,39 @@
-import globals from 'globals';
+import configPrisma from 'eslint-config-prisma';
+import tsEslint from 'typescript-eslint';
 import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import tailwind from 'eslint-plugin-tailwindcss';
-import { FlatCompat } from '@eslint/eslintrc';
+import compat from 'eslint-plugin-compat';
+import globals from 'globals';
 
-const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
-
-/** @type {import('eslint').Linter.Config[]} */
 const config = [
-  { ignores: ['.next/**', 'public/**', 'next.config.js', 'postcss.config.js'] },
-  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-  { languageOptions: { globals: { ...globals.browser, ...globals.node, React: 'readonly' } } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  eslintPluginUnicorn.configs.recommended,
-  ...tailwind.configs['flat/recommended'],
   {
-    plugins: { tailwindcss: tailwind },
-    settings: {
-      tailwindcss: {
-        config: false, // disables config file resolution
-      },
+    ignores: [
+      '.next/**',
+      'public/**',
+      'next.config.js',
+      'postcss.config.js',
+      '**/build/**/*',
+      'eslint.config.js',
+    ],
+  },
+  {
+    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node, React: 'readonly' },
+      parserOptions: { project: true, tsconfigRootDir: import.meta.dirname },
     },
   },
-  ...compat.config({ extends: ['next'], settings: { next: { rootDir: '.' } } }),
-  ...compat.config({ extends: ['plugin:drizzle/all'] }),
+  pluginJs.configs.recommended,
+  ...tsEslint.configs.recommended,
+  eslintPluginUnicorn.configs.recommended,
+  ...tailwind.configs['flat/recommended'],
+  ...configPrisma, // ✅ adds Prisma-specific rules
+  {
+    plugins: { tailwindcss: tailwind },
+    settings: { tailwindcss: { config: false }, next: { rootDir: '.' } },
+  },
+  ...compat.configs({ extends: ['next'] }),
   {
     rules: {
       'no-undef': 'error',
