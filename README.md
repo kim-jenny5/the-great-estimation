@@ -4,6 +4,8 @@
 
 This project demonstrates my ability to translate real-world business logic and UI/UX patterns into a polished, interactive frontend experience — this time, in a modern, React-based environment.
 
+👉 [Link to deployed app](https://the-great-estimation.vercel.app/)
+
 ## Tech Stack
 
 - **Next.js** – React framework with support for serverless functions and route handling
