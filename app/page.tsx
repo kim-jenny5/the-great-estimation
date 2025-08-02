@@ -6,16 +6,16 @@ import LineItemsChart from '@/components/LineItemsChart';
 import Footer from '@/components/Footer';
 
 export default function Dashboard() {
-  return (
-    <>
-      <Navbar />
-      <main className='wrapper min-h-screen flex-col gap-y-6'>
-        <Header />
-        <StatGroup />
-        <Slider />
-        <LineItemsChart />
-      </main>
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<Navbar />
+			<main className='wrapper min-h-screen flex-col gap-y-6'>
+				<Header />
+				<StatGroup />
+				<Slider />
+				<LineItemsChart />
+			</main>
+			<Footer />
+		</>
+	);
 }

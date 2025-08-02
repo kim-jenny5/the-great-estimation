@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  email     String    @unique
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt DateTime? @default(now()) @db.Timestamp(6)
+
+  orders    Order[]
+}
+
+model Order {
+  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  creatorId         String?    @db.Uuid
+  status            String?
+  totalBudget       Decimal    @db.Decimal
+  totalSpend        Decimal?   @default(0) @db.Decimal
+  deliverableDueAt  DateTime   @db.Date
+  createdAt         DateTime?  @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime?  @default(now()) @db.Timestamp(6)
+
+  lineItems         LineItem[]
+  creator           User?      @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Product {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  createdAt DateTime?   @default(now()) @db.Timestamp(6)
+  updatedAt DateTime?   @default(now()) @db.Timestamp(6)
+
+  lineItems LineItem[]
+}
+
+model LineItem {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId    String?    @db.Uuid
+  productId  String?    @db.Uuid
+  name       String
+  startDate  DateTime   @db.Date
+  endDate    DateTime?  @db.Date
+  type       String
+  rate       Decimal    @db.Decimal
+  quantity   Int
+  subtotal   Decimal    @db.Decimal
+  createdAt  DateTime?  @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime?  @default(now()) @db.Timestamp(6)
+
+  order      Order?     @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  product    Product?   @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

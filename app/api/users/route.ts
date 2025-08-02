@@ -1,30 +1,17 @@
-import { getUsers, getUsersWithOrders, getUsersWithOrdersAndLineItems } from '@/db/queries/select';
+import { prisma } from '@/prisma/client';
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const include = url.searchParams.get('include');
+export async function GET() {
+	try {
+		// const users = await prisma.users.findMany({
+		//   include: { orders: { include: { line_items: true } } },
+		// });
+		const jenny = await prisma.user.findFirstOrThrow({
+			include: { orders: { include: { lineItems: true } } },
+		});
 
-  try {
-    let data;
-
-    switch (include) {
-      case 'orders': {
-        data = await getUsersWithOrders();
-        break;
-      }
-      case 'orders,lineItems':
-      case 'orders,lineitems': { // allow lowercase
-        data = await getUsersWithOrdersAndLineItems();
-        break;
-      }
-      default: {
-        data = await getUsers();
-      }
-    }
-
-    return Response.json(data);
-  } catch (error) {
-    console.error('Failed to fetch USERS:', error);
-    return new Response('Internal Server Error', { status: 500 });
-  }
+		return Response.json(jenny);
+	} catch (error) {
+		console.error(`Failed to fetch USERS:`, error);
+		return new Response(`Internal Server Error`, { status: 500 });
+	}
 }
