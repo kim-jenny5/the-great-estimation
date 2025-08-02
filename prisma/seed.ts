@@ -97,9 +97,11 @@ async function main() {
 	console.log(`🌱 Seed complete 🌱`);
 }
 
-main()
-	.catch((error) => {
-		console.error(`❌ Seed error:`, error);
-		process.exit(1);
-	})
-	.finally(() => prisma.$disconnect());
+try {
+	await main();
+} catch (error) {
+	console.error(`❌ Seed error:`, error);
+	throw error;
+} finally {
+	await prisma.$disconnect();
+}
