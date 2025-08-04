@@ -12,7 +12,11 @@ const config = [
 		ignores: ['.next/**', 'public/**', 'next.config.js', 'postcss.config.js', 'generated/**'],
 	},
 	{ files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-	{ languageOptions: { globals: { ...globals.browser, ...globals.node, React: 'readonly' } } },
+	{
+		languageOptions: {
+			globals: { ...globals.browser, ...globals.node, React: 'readonly' },
+		},
+	},
 	pluginJs.configs.recommended,
 	...tsEslint.configs.recommended,
 	eslintPluginUnicorn.configs.recommended,
@@ -25,7 +29,10 @@ const config = [
 			},
 		},
 	},
-	...compat.config({ extends: ['next', 'prettier'], settings: { next: { rootDir: '.' } } }),
+	...compat.config({
+		extends: ['next', 'prettier'],
+		settings: { next: { rootDir: '.' } },
+	}),
 	{
 		rules: {
 			'no-undef': 'error',
@@ -33,7 +40,11 @@ const config = [
 			'tailwindcss/no-custom-classname': 'off',
 			'@typescript-eslint/no-unused-vars': [
 				'error',
-				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+				{
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_',
+				},
 			],
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/filename-case': 'off',

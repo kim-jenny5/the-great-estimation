@@ -17,7 +17,11 @@ export const formatPercentage = (value: number): string => {
 };
 
 export const formatDate = (date: Date) =>
-	date.toLocaleDateString(`en-US`, { month: `long`, day: `numeric`, year: `numeric` });
+	date.toLocaleDateString(`en-US`, {
+		month: `long`,
+		day: `numeric`,
+		year: `numeric`,
+	});
 
 export const formatMonth = (date: Date) =>
 	date.toLocaleDateString(`en-US`, { month: `long`, day: `numeric` });
