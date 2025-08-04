@@ -1,4 +1,4 @@
-import { prisma } from '@/prisma/client';
+import { prisma, Decimal } from '@/prisma/client';
 
 async function main() {
 	// Clean slate
@@ -19,7 +19,10 @@ async function main() {
 			name: `Nike – Back to School – Q3 2025`,
 			creatorId: jenny.id,
 			status: `In progress`,
-			totalBudget: 45000,
+			totalBudget: new Decimal(45_000),
+			totalSpend: new Decimal(17_500),
+			totalProducts: 3,
+			totalLineItems: 5,
 			deliverableDueAt: new Date('2025-08-18'),
 		},
 	});

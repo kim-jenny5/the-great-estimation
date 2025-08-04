@@ -15,12 +15,15 @@ export default async function Dashboard() {
 			<main className='wrapper min-h-screen flex-col gap-y-6'>
 				<Header name={order.name} status={order.status} deliverableDueAt={order.deliverableDueAt} />
 				<StatGroup
-					totalBudget={order.totalBudget}
-					totalSpend={order.totalSpend}
-					totalProducts={order.totalProducts}
+					totalBudget={order.totalBudget.toNumber()}
+					totalSpend={order.totalSpend?.toNumber() ?? 0}
+					totalProducts={order.totalProducts ?? 0}
+					totalLineItems={order.totalLineItems ?? 0}
 				/>
-				<Slider order={order} />
-				<LineItemsChart order={order} />
+				{/* <Slider order={order} />
+				<LineItemsChart order={order} /> */}
+				<Slider />
+				<LineItemsChart />
 			</main>
 			<Footer />
 		</>

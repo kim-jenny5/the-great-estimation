@@ -2,22 +2,17 @@ import StatCard from './StatCard';
 
 type StatGroupProps = {
 	totalBudget: number;
-	totalSpend?: number;
-	totalProducts?: number;
-	totalLineItems?: number;
+	totalSpend: number;
+	totalProducts: number;
+	totalLineItems: number;
 };
 
-// export default function StatGroup({
-// 	totalBudget,
-// 	totalSpend,
-// 	totalProducts,
-// 	totalLineItems,
-// }: StatGroupProps) {
-export default function StatGroup() {
-	const totalBudget = 45000;
-	const totalSpend = 12000;
-	const totalProducts = 3;
-	const totalLineItems = 5;
+export default function StatGroup({
+	totalBudget,
+	totalSpend,
+	totalProducts,
+	totalLineItems,
+}: StatGroupProps) {
 	const percentage = totalSpend / totalBudget;
 
 	return (

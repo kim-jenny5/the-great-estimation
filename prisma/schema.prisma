@@ -22,14 +22,13 @@ model Order {
   name              String
   creatorId         String?    @db.Uuid
   status            String?
-  totalBudget       Decimal    @db.Decimal
-  totalSpend        Decimal?   @default(0) @db.Decimal
-  totalProducts     Decimal?   @default(0) @db.Decimal
-  totalLineItems    Decimal?   @default(0) @db.Decimal
+  totalBudget       Decimal
+  totalSpend        Decimal    @default(0)
+  totalProducts     Int        @default(0)
+  totalLineItems    Int        @default(0)
   deliverableDueAt  DateTime   @db.Date
   createdAt         DateTime?  @default(now()) @db.Timestamp(6)
   updatedAt         DateTime?  @default(now()) @db.Timestamp(6)
-
   lineItems         LineItem[]
   creator           User?      @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
