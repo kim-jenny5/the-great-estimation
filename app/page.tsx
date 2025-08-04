@@ -13,12 +13,12 @@ export default async function Dashboard() {
 		<>
 			<Navbar />
 			<main className='wrapper min-h-screen flex-col gap-y-6'>
-				<Header
-					name={order.name}
-					status={order.status ?? ''}
-					deliverableDueAt={order.deliverableDueAt}
+				<Header name={order.name} status={order.status} deliverableDueAt={order.deliverableDueAt} />
+				<StatGroup
+					totalBudget={order.totalBudget}
+					totalSpend={order.totalSpend}
+					totalProducts={order.totalProducts}
 				/>
-				<StatGroup order={order} />
 				<Slider order={order} />
 				<LineItemsChart order={order} />
 			</main>

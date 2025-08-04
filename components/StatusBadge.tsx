@@ -1,0 +1,15 @@
+import { getStatusColor } from '@/util/stylizers';
+
+export default function StatusBadge({ status }: { status: string }) {
+	const statusStyle = getStatusColor(status);
+
+	if (!statusStyle) return null;
+
+	return (
+		<span
+			className={`inline-flex h-fit w-fit items-center rounded-full ${statusStyle.bg} px-2 py-1 text-xs font-medium ${statusStyle.text} capitalize`}
+		>
+			{status}
+		</span>
+	);
+}

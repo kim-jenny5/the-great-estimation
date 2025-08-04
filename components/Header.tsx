@@ -1,27 +1,19 @@
 import { formatDate } from '@/util/formatters';
-import { getStatusColor } from '@/util/stylizers';
+import StatusBadge from '@/components/StatusBadge';
 
 type HeaderProps = {
 	name: string;
-	status?: string;
+	status: string | null;
 	deliverableDueAt: Date;
 };
 
 export default function Header({ name, status, deliverableDueAt }: HeaderProps) {
-	const statusColor = getStatusColor(status);
-
 	return (
 		<div className='flex h-full w-full flex-col gap-y-2'>
 			<div className='flex w-full items-center justify-between'>
 				<div className='flex items-center gap-x-3'>
 					<div className='text-3xl font-medium tracking-tight text-neutral-800'>{name}</div>
-					{status && (
-						<span
-							className={`inline-flex h-fit w-fit items-center rounded-full ${statusColor?.bg} px-2 py-1 text-xs font-medium ${statusColor?.text} capitalize`}
-						>
-							{status}
-						</span>
-					)}
+					{status && <StatusBadge status={status} />}
 				</div>
 				<div className='flex gap-x-4'>
 					<button className='secondary-btn'>Export</button>
