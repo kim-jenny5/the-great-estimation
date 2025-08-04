@@ -21,6 +21,7 @@ export const formatDate = (date: Date) =>
 		month: `long`,
 		day: `numeric`,
 		year: `numeric`,
+		timeZone: 'UTC',
 	});
 
 export const formatMonth = (date: Date) =>

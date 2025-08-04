@@ -24,6 +24,8 @@ model Order {
   status            String?
   totalBudget       Decimal    @db.Decimal
   totalSpend        Decimal?   @default(0) @db.Decimal
+  totalProducts     Decimal?   @default(0) @db.Decimal
+  totalLineItems    Decimal?   @default(0) @db.Decimal
   deliverableDueAt  DateTime   @db.Date
   createdAt         DateTime?  @default(now()) @db.Timestamp(6)
   updatedAt         DateTime?  @default(now()) @db.Timestamp(6)

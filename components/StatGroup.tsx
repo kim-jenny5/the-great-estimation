@@ -1,5 +1,18 @@
 import StatCard from './StatCard';
 
+type StatGroupProps = {
+	totalBudget: number;
+	totalSpend?: number;
+	totalProducts?: number;
+	totalLineItems?: number;
+};
+
+// export default function StatGroup({
+// 	totalBudget,
+// 	totalSpend,
+// 	totalProducts,
+// 	totalLineItems,
+// }: StatGroupProps) {
 export default function StatGroup() {
 	const totalBudget = 45000;
 	const totalSpend = 12000;

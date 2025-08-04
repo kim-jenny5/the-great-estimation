@@ -1,49 +1,35 @@
-type StatusColor = { bg: string; text: string } | undefined;
+import { formatDate } from '@/util/formatters';
+import { getStatusColor } from '@/util/stylizers';
 
-const getStatusColor = (status?: string): StatusColor => {
-	switch (status) {
-		case `In progress`: {
-			return { bg: `bg-yellow-100`, text: `text-yellow-800` };
-		}
-		case `Completed`: {
-			return { bg: `bg-green-100`, text: `text-green-800` };
-		}
-		case `Lost`: {
-			return { bg: `bg-red-100`, text: `text-red-800` };
-		}
-		default: {
-			return;
-		}
-	}
+type HeaderProps = {
+	name: string;
+	status?: string;
+	deliverableDueAt: Date;
 };
 
-export default function Header() {
-	const status = `In progress`; // change later
+export default function Header({ name, status, deliverableDueAt }: HeaderProps) {
+	const statusColor = getStatusColor(status);
 
 	return (
 		<div className='flex h-full w-full flex-col gap-y-2'>
 			<div className='flex w-full items-center justify-between'>
 				<div className='flex items-center gap-x-3'>
-					<div className='text-3xl font-medium tracking-tight text-neutral-800'>
-						Nike – Back to School – Q3 2025
-					</div>
+					<div className='text-3xl font-medium tracking-tight text-neutral-800'>{name}</div>
 					{status && (
 						<span
-							className={`inline-flex h-fit w-fit items-center rounded-full ${getStatusColor(status)?.bg} px-2 py-1 text-xs font-medium ${getStatusColor(status)?.text} capitalize`}
+							className={`inline-flex h-fit w-fit items-center rounded-full ${statusColor?.bg} px-2 py-1 text-xs font-medium ${statusColor?.text} capitalize`}
 						>
 							{status}
 						</span>
 					)}
 				</div>
 				<div className='flex gap-x-4'>
-					{/* add handleExport function */}
 					<button className='secondary-btn'>Export</button>
-					{/* add handleEdit function */}
 					<button className='primary-btn'>Edit</button>
 				</div>
 			</div>
 			<div>
-				Deliverable due <span className='font-semibold'>August 18, 2025</span>
+				Deliverable due <span className='font-semibold'>{formatDate(deliverableDueAt)}</span>
 			</div>
 		</div>
 	);

@@ -19,8 +19,8 @@ async function main() {
 			name: `Nike – Back to School – Q3 2025`,
 			creatorId: jenny.id,
 			status: `In progress`,
-			totalBudget: 45_000,
-			deliverableDueAt: new Date(`2025-08-18`),
+			totalBudget: 45000,
+			deliverableDueAt: new Date('2025-08-18'),
 		},
 	});
 
