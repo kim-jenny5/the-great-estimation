@@ -1,3 +1,10 @@
+export const formatInitials = (name: string) =>
+	name
+		.split(' ')
+		.map((part) => part[0])
+		.join('')
+		.toUpperCase();
+
 export const formatCurrency = (amount: number, options: { withCents?: boolean } = {}): string => {
 	return amount.toLocaleString(`en-US`, {
 		style: `currency`,

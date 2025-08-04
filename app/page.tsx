@@ -1,4 +1,4 @@
-import { getOrderByIdOrFirst } from '@/util/queries';
+import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import Slider from '@/components/Slider';
@@ -7,11 +7,12 @@ import LineItemsChart from '@/components/LineItemsChart';
 import Footer from '@/components/Footer';
 
 export default async function Dashboard() {
+	const user = await getCurrentUser();
 	const order = await getOrderByIdOrFirst();
 
 	return (
 		<>
-			<Navbar />
+			<Navbar user={user.name} />
 			<main className='wrapper min-h-screen flex-col gap-y-6'>
 				<Header name={order.name} status={order.status} deliverableDueAt={order.deliverableDueAt} />
 				<StatGroup

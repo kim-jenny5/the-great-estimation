@@ -1,4 +1,6 @@
 import React from 'react';
+import DrawerWrapper from './DrawerWrapper';
+import AlertWrapper from './AlertWrapper';
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
@@ -137,12 +139,19 @@ export default function LineItemsChart() {
 										</td>
 										<td>
 											<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>
-												<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
-													<PencilIcon className='h-4.5 w-4.5' />
-												</button>
-												<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
-													<TrashIcon className='h-4.5 w-4.5' />
-												</button>
+												<DrawerWrapper
+													title='Edit line item'
+													description='Edit line item details below and click save when done.'
+												>
+													<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
+														<PencilIcon className='h-4.5 w-4.5' />
+													</button>
+												</DrawerWrapper>
+												<AlertWrapper>
+													<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
+														<TrashIcon className='h-4.5 w-4.5' />
+													</button>
+												</AlertWrapper>
 											</div>
 										</td>
 									</tr>

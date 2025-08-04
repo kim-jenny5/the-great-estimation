@@ -1,5 +1,6 @@
 import { formatDate } from '@/util/formatters';
 import StatusBadge from '@/components/StatusBadge';
+import DrawerWrapper from './DrawerWrapper';
 
 type HeaderProps = {
 	name: string;
@@ -17,7 +18,12 @@ export default function Header({ name, status, deliverableDueAt }: HeaderProps) 
 				</div>
 				<div className='flex gap-x-4'>
 					<button className='secondary-btn'>Export</button>
-					<button className='primary-btn'>Edit</button>
+					<DrawerWrapper
+						title='Edit order'
+						description='Edit order details below and click save when done.'
+					>
+						<button className='primary-btn'>Edit</button>
+					</DrawerWrapper>
 				</div>
 			</div>
 			<div>

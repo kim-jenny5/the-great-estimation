@@ -1,6 +1,7 @@
 import ConstructionBanner from '@/components/ConstructionBanner';
+import { formatInitials } from '@/util/formatters';
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: string }) {
 	return (
 		<>
 			<ConstructionBanner />
@@ -10,7 +11,7 @@ export default function Navbar() {
 					The Great Estimation
 				</div>
 				<div className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-sm font-semibold text-neutral-800'>
-					JK
+					{formatInitials(user)}
 				</div>
 			</nav>
 		</>
