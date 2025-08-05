@@ -1,3 +1,7 @@
+import { DateTime } from 'luxon';
+
+const TIMEZONE = 'America/New_York';
+
 export const formatInitials = (name: string) =>
 	name
 		.split(' ')
@@ -6,17 +10,17 @@ export const formatInitials = (name: string) =>
 		.toUpperCase();
 
 export const formatCurrency = (amount: number, options: { withCents?: boolean } = {}): string => {
-	return amount.toLocaleString(`en-US`, {
-		style: `currency`,
-		currency: `USD`,
+	return amount.toLocaleString('en-US', {
+		style: 'currency',
+		currency: 'USD',
 		minimumFractionDigits: options.withCents ? 2 : 0,
 		maximumFractionDigits: options.withCents ? 2 : 0,
 	});
 };
 
 export const formatPercentage = (value: number): string => {
-	return value.toLocaleString(`en-US`, {
-		style: `percent`,
+	return value.toLocaleString('en-US', {
+		style: 'percent',
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2,
 		useGrouping: false,
@@ -24,15 +28,10 @@ export const formatPercentage = (value: number): string => {
 };
 
 export const formatDate = (date: Date) =>
-	date.toLocaleDateString(`en-US`, {
-		month: `long`,
-		day: `numeric`,
-		year: `numeric`,
-		timeZone: 'UTC',
-	});
+	DateTime.fromJSDate(date).setZone(TIMEZONE).toFormat('MMMM d, yyyy');
 
 export const formatMonth = (date: Date) =>
-	date.toLocaleDateString(`en-US`, { month: `long`, day: `numeric` });
+	DateTime.fromJSDate(date).setZone(TIMEZONE).toFormat('MMMM d');
 
 export const formatStartEndDates = (
 	startDate: Date,
@@ -41,25 +40,23 @@ export const formatStartEndDates = (
 ): string => {
 	const { forAccessibility = false } = options;
 
-	if (!endDate) {
-		return formatDate(startDate);
-	}
+	const start = DateTime.fromJSDate(startDate).setZone(TIMEZONE);
+	const end = endDate ? DateTime.fromJSDate(endDate).setZone(TIMEZONE) : null;
 
-	if (forAccessibility) {
-		return `${formatMonth(startDate)} to ${formatDate(endDate)}`;
-	}
+	if (!end) return start.toFormat('MMMM d, yyyy');
 
-	const sameYear = startDate.getFullYear() === endDate.getFullYear();
-	const sameMonth = startDate.getMonth() === endDate.getMonth();
+	if (forAccessibility) return `${start.toFormat('MMMM d')} to ${end.toFormat('MMMM d, yyyy')}`;
+
+	const sameYear = start.year === end.year;
+	const sameMonth = start.month === end.month;
 
 	if (sameYear && sameMonth) {
-		const month = startDate.toLocaleDateString(`en-US`, { month: `long` });
-		return `${month} ${startDate.getDate()}–${endDate.getDate()}, ${startDate.getFullYear()}`;
+		return `${start.toFormat('MMMM')} ${start.day}–${end.day}, ${start.year}`;
 	}
 
 	if (sameYear) {
-		return `${formatMonth(startDate)} – ${formatMonth(endDate)}, ${startDate.getFullYear()}`;
+		return `${start.toFormat('MMMM d')} – ${end.toFormat('MMMM d')}, ${start.year}`;
 	}
 
-	return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+	return `${start.toFormat('MMMM d, yyyy')} – ${end.toFormat('MMMM d, yyyy')}`;
 };

@@ -15,11 +15,12 @@
 		"migrate:dev": "prisma migrate dev",
 		"migrate:prod": "prisma migrate deploy",
 		"seed": "tsx prisma/seed.ts",
-		"db:reset": "NODE_ENV=development tsx prisma/reset.ts && pnpm db:push && pnpm seed"
+		"db:reset": "NODE_ENV=development prisma migrate reset && pnpm migrate:dev && pnpm seed"
 	},
 	"dependencies": {
 		"@heroicons/react": "^2.2.0",
 		"@prisma/client": "6.13.0",
+		"luxon": "^3.7.1",
 		"next": "15.4.5",
 		"pg": "^8.16.3",
 		"postgres": "^3.4.7",
@@ -32,6 +33,7 @@
 		"@eslint/eslintrc": "^3.3.1",
 		"@eslint/js": "^9.32.0",
 		"@tailwindcss/postcss": "^4.1.11",
+		"@types/luxon": "^3.7.1",
 		"@types/node": "^20.10.6",
 		"@types/pg": "^8.15.5",
 		"@types/react": "^19.0.34",

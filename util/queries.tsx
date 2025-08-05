@@ -13,7 +13,11 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 		include: {
 			orders: {
 				include: {
-					lineItems: true,
+					lineItems: {
+						include: {
+							product: true,
+						},
+					},
 				},
 			},
 		},

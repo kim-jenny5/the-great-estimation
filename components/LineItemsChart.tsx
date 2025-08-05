@@ -1,94 +1,39 @@
+'use client';
+
 import React from 'react';
 import DrawerWrapper from './DrawerWrapper';
 import AlertWrapper from './AlertWrapper';
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
-type GroupedLineItems = { product: string; items: LineItem[] };
-
 type LineItem = {
 	id: string;
-	description: string;
-	startDate: Date;
-	endDate?: Date;
-	type: 'Flat' | 'CPM' | 'CPC';
-	rate: number;
+	name: string;
+	startDate: string;
+	endDate?: string | null;
+	type: string;
+	rate: string;
 	quantity: number;
-	unit?: string;
-	subtotal: number;
+	subtotal: string;
+	product: {
+		name: string;
+	};
 };
 
-const GROUPED_LINE_ITEMS: GroupedLineItems[] = [
-	{
-		product: `Newsletter`,
-		items: [
-			{
-				id: `1`,
-				description: `Back to School`,
-				startDate: new Date(`August 1, 2025`),
-				type: `Flat`,
-				rate: 2500,
-				quantity: 1,
-				subtotal: 2500,
-			},
-			{
-				id: `2`,
-				description: `Labor Day`,
-				startDate: new Date(`August 18, 2025`),
-				type: `Flat`,
-				rate: 3000,
-				quantity: 1,
-				subtotal: 3000,
-			},
-		],
-	},
-	{
-		product: `Sponsored Article`,
-		items: [
-			{
-				id: `3`,
-				description: `Fall Fashion Feature`,
-				startDate: new Date(`August 25, 2025`),
-				endDate: new Date(`November 14, 2025`),
-				type: `Flat`,
-				rate: 4000,
-				quantity: 1,
-				subtotal: 4000,
-			},
-		],
-	},
-	{
-		product: `Display Ads`,
-		items: [
-			{
-				id: `4`,
-				description: `Homepage Takeover`,
-				startDate: new Date(`August 15, 2025`),
-				endDate: new Date(`August 17, 2025`),
-				type: `Flat`,
-				rate: 5000,
-				quantity: 1,
-				subtotal: 5000,
-			},
-			{
-				id: `5`,
-				description: `Sidebar Ad`,
-				startDate: new Date(`August 20, 2025`),
-				endDate: new Date(`August 31, 2025`),
-				type: `CPM`,
-				rate: 1500,
-				quantity: 2,
-				subtotal: 3000,
-			},
-		],
-	},
-];
+type LineItemsChartProps = {
+	lineItems: LineItem[];
+};
 
-export default function LineItemsChart() {
-	const grandTotal = GROUPED_LINE_ITEMS.flatMap((g) => g.items).reduce(
-		(sum, item) => sum + item.subtotal,
-		0
-	);
+export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
+	const groupedLineItems = lineItems.reduce<Record<string, LineItem[]>>((acc, item) => {
+		const groupKey = item.product.name;
+		if (!acc[groupKey]) acc[groupKey] = [];
+		acc[groupKey].push(item);
+		return acc;
+	}, {});
+
+	const grouped = Object.entries(groupedLineItems).map(([product, items]) => ({ product, items }));
+	const grandTotal = lineItems.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
 
 	return (
 		<div className='card'>
@@ -105,8 +50,11 @@ export default function LineItemsChart() {
 					</tr>
 				</thead>
 				<tbody className='divide-y divide-neutral-100 bg-white'>
-					{GROUPED_LINE_ITEMS.map((group) => {
-						const groupTotal = group.items.reduce((sum, item) => sum + item.subtotal, 0);
+					{grouped.map((group) => {
+						const groupTotal = group.items.reduce(
+							(sum, item) => sum + parseFloat(item.subtotal),
+							0
+						);
 
 						return (
 							<React.Fragment key={group.product}>
@@ -120,22 +68,29 @@ export default function LineItemsChart() {
 										<td className='py-2.5 pr-4 pl-8'>
 											<div className='flex items-center gap-2'>
 												<div className='h-6 w-1 rounded-full bg-neutral-300' />
-												<span className='text-neutral-800'>{item.description}</span>
+												<span className='text-neutral-800'>{item.name}</span>
 											</div>
 										</td>
 										<td
-											aria-label={formatStartEndDates(item.startDate, item.endDate, {
-												forAccessibility: true,
-											})}
+											aria-label={formatStartEndDates(
+												new Date(item.startDate),
+												item.endDate ? new Date(item.endDate) : undefined,
+												{ forAccessibility: true }
+											)}
 											className='px-4 py-2.5'
 										>
-											{formatStartEndDates(item.startDate, item.endDate)}
+											{formatStartEndDates(
+												new Date(item.startDate),
+												item.endDate ? new Date(item.endDate) : undefined
+											)}
 										</td>
 										<td className='px-4 py-2.5'>{item.type}</td>
-										<td className='px-4 py-2.5 text-right'>{formatCurrency(item.rate)}</td>
+										<td className='px-4 py-2.5 text-right'>
+											{formatCurrency(parseFloat(item.rate))}
+										</td>
 										<td className='px-4 py-2.5 text-right'>{item.quantity}</td>
 										<td className='px-4 py-2.5 text-right font-medium'>
-											{formatCurrency(item.subtotal)}
+											{formatCurrency(parseFloat(item.subtotal))}
 										</td>
 										<td>
 											<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>
