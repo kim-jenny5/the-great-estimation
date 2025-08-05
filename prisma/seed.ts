@@ -1,4 +1,4 @@
-import { prisma, Decimal } from '@/prisma/client';
+import { prisma } from '@/prisma/client';
 import { DateTime } from 'luxon';
 
 function toESTDate(date: string) {
@@ -15,8 +15,8 @@ async function main() {
 			name: 'Nike – Back to School – Q3 2025',
 			creatorId: jenny.id,
 			status: 'In progress',
-			totalBudget: new Decimal(45000),
-			totalSpend: new Decimal(17500),
+			totalBudget: 45_000,
+			totalSpend: 17_500,
 			totalProducts: 3,
 			totalLineItems: 5,
 			deliverableDueAt: toESTDate('2025-08-18'),
@@ -92,9 +92,9 @@ async function main() {
 
 try {
 	await main();
-} catch (err) {
-	console.error('❌ Seed error:', err);
-	throw err;
+} catch (error) {
+	console.error('❌ Seed error:', error);
+	throw error;
 } finally {
 	await prisma.$disconnect();
 }

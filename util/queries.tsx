@@ -24,9 +24,9 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 	});
 
 	const selectedOrder =
-		orderId != null
-			? userWithOrders.orders.find((order) => order.id === orderId)
-			: userWithOrders.orders[0];
+		orderId == undefined
+			? userWithOrders.orders[0]
+			: userWithOrders.orders.find((order) => order.id === orderId);
 
 	if (!selectedOrder) throw new Error('User has no orders.');
 

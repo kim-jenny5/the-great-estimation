@@ -1,5 +1,4 @@
 import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
-import { formatStartEndDates } from '@/util/formatters';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import Slider from '@/components/Slider';
@@ -13,13 +12,8 @@ export default async function Dashboard() {
 
 	const lineItems = order.lineItems.map((item) => ({
 		...item,
-		startDate: item.startDate.toISOString(),
-		endDate: item.endDate ? item.endDate.toISOString() : null,
-		rate: item.rate.toString(),
-		subtotal: item.subtotal.toString(),
-		product: {
-			name: item.product.name,
-		},
+		rate: item.rate.toNumber(),
+		subtotal: item.subtotal.toNumber(),
 	}));
 
 	return (

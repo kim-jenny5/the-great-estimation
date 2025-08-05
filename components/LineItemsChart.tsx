@@ -1,20 +1,20 @@
 'use client';
 
 import React from 'react';
-import DrawerWrapper from './DrawerWrapper';
-import AlertWrapper from './AlertWrapper';
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import DrawerWrapper from './DrawerWrapper';
+import AlertWrapper from './AlertWrapper';
 
 type LineItem = {
 	id: string;
 	name: string;
-	startDate: string;
-	endDate?: string | null;
+	startDate: Date;
+	endDate?: Date | null;
 	type: string;
-	rate: string;
+	rate: number;
 	quantity: number;
-	subtotal: string;
+	subtotal: number;
 	product: {
 		name: string;
 	};
@@ -25,15 +25,18 @@ type LineItemsChartProps = {
 };
 
 export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
-	const groupedLineItems = lineItems.reduce<Record<string, LineItem[]>>((acc, item) => {
+	const groupedLineItems: Record<string, LineItem[]> = {};
+
+	for (const item of lineItems) {
 		const groupKey = item.product.name;
-		if (!acc[groupKey]) acc[groupKey] = [];
-		acc[groupKey].push(item);
-		return acc;
-	}, {});
+		if (!groupedLineItems[groupKey]) {
+			groupedLineItems[groupKey] = [];
+		}
+		groupedLineItems[groupKey].push(item);
+	}
 
 	const grouped = Object.entries(groupedLineItems).map(([product, items]) => ({ product, items }));
-	const grandTotal = lineItems.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+	const grandTotal = lineItems.reduce((sum, item) => sum + item.subtotal, 0);
 
 	return (
 		<div className='card'>
@@ -51,10 +54,7 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 				</thead>
 				<tbody className='divide-y divide-neutral-100 bg-white'>
 					{grouped.map((group) => {
-						const groupTotal = group.items.reduce(
-							(sum, item) => sum + parseFloat(item.subtotal),
-							0
-						);
+						const groupTotal = group.items.reduce((sum, item) => sum + item.subtotal, 0);
 
 						return (
 							<React.Fragment key={group.product}>
@@ -72,25 +72,18 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 											</div>
 										</td>
 										<td
-											aria-label={formatStartEndDates(
-												new Date(item.startDate),
-												item.endDate ? new Date(item.endDate) : undefined,
-												{ forAccessibility: true }
-											)}
+											aria-label={formatStartEndDates(item.startDate, item.endDate ?? undefined, {
+												forAccessibility: true,
+											})}
 											className='px-4 py-2.5'
 										>
-											{formatStartEndDates(
-												new Date(item.startDate),
-												item.endDate ? new Date(item.endDate) : undefined
-											)}
+											{formatStartEndDates(item.startDate, item.endDate ?? undefined)}
 										</td>
 										<td className='px-4 py-2.5'>{item.type}</td>
-										<td className='px-4 py-2.5 text-right'>
-											{formatCurrency(parseFloat(item.rate))}
-										</td>
+										<td className='px-4 py-2.5 text-right'>{formatCurrency(item.rate)}</td>
 										<td className='px-4 py-2.5 text-right'>{item.quantity}</td>
 										<td className='px-4 py-2.5 text-right font-medium'>
-											{formatCurrency(parseFloat(item.subtotal))}
+											{formatCurrency(item.rate)}
 										</td>
 										<td>
 											<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>

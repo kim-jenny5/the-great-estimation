@@ -14,7 +14,7 @@ export default function StatCard({ title, value, percentage, isCurrency }: StatC
 				<span>{title}</span>
 			</dt>
 			<dd className='text-3xl font-semibold tracking-tight text-neutral-800'>
-				{isCurrency ? formatCurrency(value, { withCents: true }) : value}
+				{isCurrency ? formatCurrency(value) : value}
 				{percentage && (
 					<span className='ml-2 text-sm font-medium text-neutral-500'>
 						{formatPercentage(percentage)}

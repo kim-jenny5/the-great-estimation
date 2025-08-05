@@ -9,12 +9,12 @@ export const formatInitials = (name: string) =>
 		.join('')
 		.toUpperCase();
 
-export const formatCurrency = (amount: number, options: { withCents?: boolean } = {}): string => {
+export const formatCurrency = (amount: number): string => {
 	return amount.toLocaleString('en-US', {
 		style: 'currency',
 		currency: 'USD',
-		minimumFractionDigits: options.withCents ? 2 : 0,
-		maximumFractionDigits: options.withCents ? 2 : 0,
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
 	});
 };
 
@@ -41,7 +41,7 @@ export const formatStartEndDates = (
 	const { forAccessibility = false } = options;
 
 	const start = DateTime.fromJSDate(startDate).setZone(TIMEZONE);
-	const end = endDate ? DateTime.fromJSDate(endDate).setZone(TIMEZONE) : null;
+	const end = endDate ? DateTime.fromJSDate(endDate).setZone(TIMEZONE) : undefined;
 
 	if (!end) return start.toFormat('MMMM d, yyyy');
 

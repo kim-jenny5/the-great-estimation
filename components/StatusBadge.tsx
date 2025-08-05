@@ -3,7 +3,7 @@ import { getStatusColor } from '@/util/stylizers';
 export default function StatusBadge({ status }: { status: string }) {
 	const statusStyle = getStatusColor(status);
 
-	if (!statusStyle) return null;
+	if (!statusStyle) return;
 
 	return (
 		<span
