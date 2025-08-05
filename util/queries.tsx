@@ -8,6 +8,7 @@ export async function getCurrentUser() {
 
 export async function getOrderByIdOrFirst(orderId?: string) {
 	const user = await getCurrentUser();
+
 	const userWithOrders = await prisma.user.findUniqueOrThrow({
 		where: { id: user.id },
 		include: {
@@ -30,7 +31,25 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 
 	if (!selectedOrder) throw new Error('User has no orders.');
 
-	return selectedOrder;
+	const serializedOrder = {
+		...selectedOrder,
+		totalBudget: selectedOrder.totalBudget.toNumber(),
+		totalSpend: selectedOrder.totalSpend.toNumber(),
+		deliverableDueAt: selectedOrder.deliverableDueAt.toISOString(),
+		createdAt: selectedOrder.createdAt.toISOString(),
+		updatedAt: selectedOrder.updatedAt.toISOString(),
+		lineItems: selectedOrder.lineItems.map((item) => ({
+			...item,
+			rate: item.rate.toNumber(),
+			subtotal: item.subtotal.toNumber(),
+			startDate: item.startDate.toISOString(),
+			endDate: item.endDate?.toISOString() ?? null,
+			createdAt: item.createdAt.toISOString(),
+			updatedAt: item.updatedAt.toISOString(),
+		})),
+	};
+
+	return serializedOrder;
 }
 
 // export async function updateOrders(orderId: string) {
@@ -43,15 +62,15 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 // }, 0);
 
 // const uniqueProducts = new Set(lineItems.map((item) => item.productId));
-// const totalProducts = uniqueProducts.size;
-// const totalLineItems = lineItems.length;
+// const productsCount = uniqueProducts.size;
+// const lineItemsCount = lineItems.length;
 
 // await prisma.order.update({
 // 	where: { id: orderId },
 // 	data: {
 // 		totalSpend,
-// 		totalProducts,
-// 		totalLineItems,
+// 		productsCount,
+// 		lineItemsCount,
 // 	},
 // });
 // }

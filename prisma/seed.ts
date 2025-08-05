@@ -17,8 +17,8 @@ async function main() {
 			status: 'In progress',
 			totalBudget: 45_000,
 			totalSpend: 17_500,
-			totalProducts: 3,
-			totalLineItems: 5,
+			productsCount: 3,
+			lineItemsCount: 5,
 			deliverableDueAt: toESTDate('2025-08-18'),
 		},
 	});

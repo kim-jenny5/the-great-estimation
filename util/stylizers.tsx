@@ -1,6 +1,6 @@
 export type StatusColor = { bg: string; text: string } | undefined;
 
-export const getStatusColor = (status?: string): StatusColor => {
+export const styleStatus = (status?: string): StatusColor => {
 	switch (status) {
 		case 'In progress': {
 			return { bg: 'bg-yellow-100', text: 'text-yellow-800' };

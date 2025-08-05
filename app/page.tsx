@@ -10,22 +10,18 @@ export default async function Dashboard() {
 	const user = await getCurrentUser();
 	const order = await getOrderByIdOrFirst();
 
-	const lineItems = order.lineItems.map((item) => ({
-		...item,
-		rate: item.rate.toNumber(),
-		subtotal: item.subtotal.toNumber(),
-	}));
+	const { totalBudget, totalSpend, productsCount, lineItemsCount, lineItems } = order;
 
 	return (
 		<>
 			<Navbar user={user.name} />
 			<main className='wrapper min-h-screen flex-col gap-y-6'>
-				<Header name={order.name} status={order.status} deliverableDueAt={order.deliverableDueAt} />
+				<Header order={order} />
 				<StatGroup
-					totalBudget={order.totalBudget.toNumber()}
-					totalSpend={order.totalSpend?.toNumber() ?? 0}
-					totalProducts={order.totalProducts ?? 0}
-					totalLineItems={order.totalLineItems ?? 0}
+					totalBudget={totalBudget}
+					totalSpend={totalSpend}
+					productsCount={productsCount}
+					lineItemsCount={lineItemsCount}
 				/>
 				<Slider />
 				<LineItemsChart lineItems={lineItems} />

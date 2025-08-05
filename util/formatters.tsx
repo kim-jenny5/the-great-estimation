@@ -27,21 +27,21 @@ export const formatPercentage = (value: number): string => {
 	});
 };
 
-export const formatDate = (date: Date) =>
-	DateTime.fromJSDate(date).setZone(TIMEZONE).toFormat('MMMM d, yyyy');
+export const formatDate = (date: string) =>
+	DateTime.fromISO(date).setZone(TIMEZONE).toFormat('MMMM d, yyyy');
 
-export const formatMonth = (date: Date) =>
-	DateTime.fromJSDate(date).setZone(TIMEZONE).toFormat('MMMM d');
+export const formatMonth = (date: string) =>
+	DateTime.fromISO(date).setZone(TIMEZONE).toFormat('MMMM d');
 
 export const formatStartEndDates = (
-	startDate: Date,
-	endDate?: Date,
+	startDate: string,
+	endDate?: string,
 	options: { forAccessibility?: boolean } = {}
 ): string => {
 	const { forAccessibility = false } = options;
 
-	const start = DateTime.fromJSDate(startDate).setZone(TIMEZONE);
-	const end = endDate ? DateTime.fromJSDate(endDate).setZone(TIMEZONE) : undefined;
+	const start = DateTime.fromISO(startDate).setZone(TIMEZONE);
+	const end = endDate ? DateTime.fromISO(endDate).setZone(TIMEZONE) : undefined;
 
 	if (!end) return start.toFormat('MMMM d, yyyy');
 

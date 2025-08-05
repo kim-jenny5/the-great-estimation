@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import DrawerWrapper from './DrawerWrapper';
@@ -10,8 +10,8 @@ import EditLineItemForm from './forms/EditLineItemForm';
 type LineItem = {
 	id: string;
 	name: string;
-	startDate: Date;
-	endDate?: Date | null;
+	startDate: string;
+	endDate?: string | null;
 	type: string;
 	rate: number;
 	quantity: number;

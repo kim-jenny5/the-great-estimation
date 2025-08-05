@@ -1,7 +1,7 @@
-import { getStatusColor } from '@/util/stylizers';
+import { styleStatus } from '@/util/stylizers';
 
 export default function StatusBadge({ status }: { status: string }) {
-	const statusStyle = getStatusColor(status);
+	const statusStyle = styleStatus(status);
 
 	if (!statusStyle) return;
 

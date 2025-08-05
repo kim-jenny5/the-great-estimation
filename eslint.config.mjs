@@ -4,6 +4,7 @@ import tsEslint from 'typescript-eslint';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import tailwind from 'eslint-plugin-tailwindcss';
 import { FlatCompat } from '@eslint/eslintrc';
+import importPlugin from 'eslint-plugin-import';
 
 const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
 
@@ -27,6 +28,34 @@ const config = [
 			tailwindcss: {
 				config: false, // disables config file resolution
 			},
+		},
+	},
+	{
+		plugins: {
+			import: importPlugin,
+		},
+		rules: {
+			'import/order': [
+				'error',
+				{
+					groups: [
+						'builtin',
+						'external',
+						'internal',
+						['parent', 'sibling', 'index'],
+						'type',
+						'object',
+					],
+					'newlines-between': 'always',
+					alphabetize: {
+						order: 'asc',
+						caseInsensitive: true,
+					},
+				},
+			],
+			'import/no-duplicates': 'error',
+			'import/no-unresolved': 'error',
+			'import/newline-after-import': 'error',
 		},
 	},
 	...compat.config({

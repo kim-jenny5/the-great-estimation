@@ -1,15 +1,12 @@
+import type { SerializedOrder } from '@/util/types';
 import { formatDate } from '@/util/formatters';
 import StatusBadge from '@/components/StatusBadge';
 import DrawerWrapper from './DrawerWrapper';
 import EditOrderForm from './forms/EditOrderForm';
 
-type HeaderProps = {
-	name: string;
-	status: string | null;
-	deliverableDueAt: Date;
-};
+export default function Header({ order }: { order: SerializedOrder }) {
+	const { name, status, deliverableDueAt } = order;
 
-export default function Header({ name, status, deliverableDueAt }: HeaderProps) {
 	return (
 		<div className='flex h-full w-full flex-col gap-y-2'>
 			<div className='flex w-full items-center justify-between'>
@@ -22,7 +19,7 @@ export default function Header({ name, status, deliverableDueAt }: HeaderProps) 
 					<DrawerWrapper
 						title='Edit order'
 						description='Edit order details below and click save when done.'
-						form={<EditOrderForm />}
+						form={<EditOrderForm order={order} />}
 					>
 						<button className='primary-btn'>Edit</button>
 					</DrawerWrapper>
