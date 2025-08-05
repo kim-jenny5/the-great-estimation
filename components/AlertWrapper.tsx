@@ -1,13 +1,15 @@
 'use client';
 
 import { ReactNode, useState, useEffect } from 'react';
+import { deleteLineItem } from '@/util/queries';
 
 type AlertWrapperProps = {
 	children: ReactNode;
+	lineItemId: string;
 	onConfirm?: () => void;
 };
 
-export default function AlertWrapper({ children, onConfirm }: AlertWrapperProps) {
+export default function AlertWrapper({ children, lineItemId, onConfirm }: AlertWrapperProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
@@ -19,6 +21,17 @@ export default function AlertWrapper({ children, onConfirm }: AlertWrapperProps)
 
 		return () => window.removeEventListener('keydown', handleEsc);
 	}, []);
+
+	const handleDelete = async () => {
+		try {
+			await deleteLineItem(lineItemId);
+			onConfirm?.();
+		} catch (err) {
+			console.error('Failed to delete line item:', err);
+		} finally {
+			setIsOpen(false);
+		}
+	};
 
 	return (
 		<>
@@ -44,10 +57,7 @@ export default function AlertWrapper({ children, onConfirm }: AlertWrapperProps)
 						Cancel
 					</button>
 					<button
-						onClick={() => {
-							onConfirm?.();
-							setIsOpen(false);
-						}}
+						onClick={handleDelete}
 						className='cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700'
 					>
 						Delete

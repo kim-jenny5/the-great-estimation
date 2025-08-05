@@ -58,3 +58,18 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 
 	return serializedOrder;
 }
+
+export async function deleteLineItem(lineItemId: string) {
+	try {
+		const res = await fetch(`/api/line-items/${lineItemId}`, {
+			method: 'DELETE',
+		});
+
+		if (!res.ok) throw new Error('Failed to delete line item');
+
+		return await res.json();
+	} catch (error) {
+		console.error('Error deleting line item:', error);
+		throw error;
+	}
+}

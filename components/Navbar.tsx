@@ -10,7 +10,7 @@ export default function Navbar({ user }: { user: string }) {
 				<div className='flex flex-col text-xl leading-none font-black tracking-tight text-neutral-800'>
 					The Great Estimation
 				</div>
-				<div className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-sm font-semibold text-neutral-800'>
+				<div className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 text-sm font-semibold text-neutral-800'>
 					{formatInitials(user)}
 				</div>
 			</nav>

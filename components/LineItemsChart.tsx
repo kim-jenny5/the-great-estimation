@@ -6,6 +6,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import DrawerWrapper from './DrawerWrapper';
 import AlertWrapper from './AlertWrapper';
 import EditLineItemForm from './forms/EditLineItemForm';
+import { useRouter } from 'next/navigation';
 
 type LineItem = {
 	id: string;
@@ -26,6 +27,7 @@ type LineItemsChartProps = {
 };
 
 export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
+	const router = useRouter();
 	const groupedLineItems: Record<string, LineItem[]> = {};
 
 	for (const item of lineItems) {
@@ -103,7 +105,7 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 														<PencilIcon className='h-4.5 w-4.5' />
 													</button>
 												</DrawerWrapper>
-												<AlertWrapper>
+												<AlertWrapper lineItemId={item.id} onConfirm={() => router.refresh()}>
 													<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
 														<TrashIcon className='h-4.5 w-4.5' />
 													</button>
