@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/client';
+import { SerializedOrder, StatusOption } from './types';
 
 // no real auth is to be implemented in this project
 // this function just returns the first user in the DB as the "current" user
@@ -31,8 +32,9 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 
 	if (!selectedOrder) throw new Error('User has no orders.');
 
-	const serializedOrder = {
+	const serializedOrder: SerializedOrder = {
 		...selectedOrder,
+		status: selectedOrder.status as StatusOption,
 		totalBudget: selectedOrder.totalBudget.toNumber(),
 		totalSpend: selectedOrder.totalSpend.toNumber(),
 		deliverableDueAt: selectedOrder.deliverableDueAt.toISOString(),
@@ -46,31 +48,13 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 			endDate: item.endDate?.toISOString() ?? null,
 			createdAt: item.createdAt.toISOString(),
 			updatedAt: item.updatedAt.toISOString(),
+			product: {
+				...item.product,
+				createdAt: item.product.createdAt.toISOString(),
+				updatedAt: item.product.updatedAt.toISOString(),
+			},
 		})),
 	};
 
 	return serializedOrder;
 }
-
-// export async function updateOrders(orderId: string) {
-// 	const lineItems = await prisma.lineItem.findMany({
-// 		where: { orderId },
-// 	});
-
-// const totalSpend = lineItems.reduce((sum, item) => {
-// 	return sum + item.subtotal.toNumber();
-// }, 0);
-
-// const uniqueProducts = new Set(lineItems.map((item) => item.productId));
-// const productsCount = uniqueProducts.size;
-// const lineItemsCount = lineItems.length;
-
-// await prisma.order.update({
-// 	where: { id: orderId },
-// 	data: {
-// 		totalSpend,
-// 		productsCount,
-// 		lineItemsCount,
-// 	},
-// });
-// }
