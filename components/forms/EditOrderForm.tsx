@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import SelectInput from './SelectInput';
 import { StatusOption } from '@/util/types';
+import SelectInput from './SelectInput';
 
 type EditOrderFormProps = {
 	order: {

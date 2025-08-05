@@ -1,10 +1,10 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tsEslint from 'typescript-eslint';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import tailwind from 'eslint-plugin-tailwindcss';
 import { FlatCompat } from '@eslint/eslintrc';
+import pluginJs from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
+import tailwind from 'eslint-plugin-tailwindcss';
+import eslintPluginUnicorn from 'eslint-plugin-unicorn';
+import globals from 'globals';
+import tsEslint from 'typescript-eslint';
 
 const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
 

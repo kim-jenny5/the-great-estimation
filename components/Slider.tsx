@@ -1,5 +1,4 @@
-import { Slider as MultiSlider } from 'radix-ui';
-import { Tooltip } from 'radix-ui';
+import { Slider as MultiSlider , Tooltip } from 'radix-ui';
 
 export default function Slider() {
 	const values = [25, 75]; // TODO: change this to state

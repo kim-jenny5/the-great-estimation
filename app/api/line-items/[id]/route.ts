@@ -1,5 +1,5 @@
-import { prisma } from '@/prisma/client';
 import { NextResponse } from 'next/server';
+import { prisma } from '@/prisma/client';
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
 	const { id } = await params;

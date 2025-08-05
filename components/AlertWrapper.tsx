@@ -17,17 +17,17 @@ export default function AlertWrapper({ children, lineItemId, onConfirm }: AlertW
 			if (e.key === 'Escape') setIsOpen(false);
 		};
 
-		window.addEventListener('keydown', handleEsc);
+		globalThis.addEventListener('keydown', handleEsc);
 
-		return () => window.removeEventListener('keydown', handleEsc);
+		return () => globalThis.removeEventListener('keydown', handleEsc);
 	}, []);
 
 	const handleDelete = async () => {
 		try {
 			await deleteLineItem(lineItemId);
 			onConfirm?.();
-		} catch (err) {
-			console.error('Failed to delete line item:', err);
+		} catch (error) {
+			console.error('Failed to delete line item:', error);
 		} finally {
 			setIsOpen(false);
 		}

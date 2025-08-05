@@ -17,8 +17,8 @@ export default function DrawerWrapper({ children, title, description, form }: Dr
 		const handleEsc = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') setIsOpen(false);
 		};
-		window.addEventListener('keydown', handleEsc);
-		return () => window.removeEventListener('keydown', handleEsc);
+		globalThis.addEventListener('keydown', handleEsc);
+		return () => globalThis.removeEventListener('keydown', handleEsc);
 	}, []);
 
 	return (

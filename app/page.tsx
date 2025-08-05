@@ -1,10 +1,10 @@
-import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
-import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import LineItemsChart from '@/components/LineItemsChart';
+import Navbar from '@/components/Navbar';
 import Slider from '@/components/Slider';
 import StatGroup from '@/components/StatGroup';
-import LineItemsChart from '@/components/LineItemsChart';
-import Footer from '@/components/Footer';
+import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
 import { StatusOption } from '@/util/types';
 
 export default async function Dashboard() {

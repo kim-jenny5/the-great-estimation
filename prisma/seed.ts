@@ -1,5 +1,6 @@
-import { prisma } from '@/prisma/client';
 import { DateTime } from 'luxon';
+
+import { prisma } from '@/prisma/client';
 
 function toESTDate(date: string) {
 	return DateTime.fromISO(date, { zone: 'America/New_York' }).toUTC().toJSDate();

@@ -1,8 +1,9 @@
-import type { SerializedOrder } from '@/util/types';
-import { formatDate } from '@/util/formatters';
 import StatusBadge from '@/components/StatusBadge';
+import { formatDate } from '@/util/formatters';
 import DrawerWrapper from './DrawerWrapper';
 import EditOrderForm from './forms/EditOrderForm';
+
+import type { SerializedOrder } from '@/util/types';
 
 export default function Header({ order }: { order: SerializedOrder }) {
 	const { name, status, deliverableDueAt } = order;
