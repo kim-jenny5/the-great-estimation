@@ -1,35 +1,52 @@
-import { ReactNode } from 'react';
-import { Dialog } from 'radix-ui';
+'use client';
+
+import { ReactNode, useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 type DrawerWrapperProps = {
 	children: ReactNode;
 	title: string;
 	description: string;
+	form?: ReactNode;
 };
 
-export default function DrawerWrapper({ children, title, description }: DrawerWrapperProps) {
+export default function DrawerWrapper({ children, title, description, form }: DrawerWrapperProps) {
+	const [isOpen, setIsOpen] = useState(false);
+
+	useEffect(() => {
+		const handleEsc = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') setIsOpen(false);
+		};
+		window.addEventListener('keydown', handleEsc);
+		return () => window.removeEventListener('keydown', handleEsc);
+	}, []);
+
 	return (
-		<Dialog.Root>
-			<Dialog.Trigger asChild>{children}</Dialog.Trigger>
-			<Dialog.Portal>
-				<Dialog.Overlay className='fixed inset-0 bg-black/50' />
-				<Dialog.Content className='fixed top-0 right-0 z-50 h-full w-80 bg-white p-4 shadow-lg transition-transform duration-300 ease-in-out'>
-					<div className='grid grid-cols-2 items-center'>
-						<Dialog.Title className='col-start-1 row-start-1 text-2xl capitalize'>
-							{title}
-						</Dialog.Title>
-						<Dialog.Description className='col-span-full row-start-2 text-sm'>
-							{description}
-						</Dialog.Description>
-						<Dialog.Close asChild>
-							<button className='col-start-2 row-start-1 w-fit cursor-pointer justify-center place-self-end rounded-full p-2 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
-								<XMarkIcon width={20} height={20} />
-							</button>
-						</Dialog.Close>
-					</div>
-				</Dialog.Content>
-			</Dialog.Portal>
-		</Dialog.Root>
+		<>
+			<div onClick={() => setIsOpen(true)} className='inline-block'>
+				{children}
+			</div>
+			{isOpen && (
+				<div
+					className='fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-400'
+					onClick={() => setIsOpen(false)}
+				/>
+			)}
+			<div
+				className={`fixed top-0 right-0 z-50 h-full w-80 transform bg-white shadow-xl transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+			>
+				<div className='grid grid-cols-2 items-center p-4'>
+					<h2 className='col-start-1 row-start-1 text-2xl capitalize'>{title}</h2>
+					<p className='col-span-full row-start-2 text-sm text-neutral-600'>{description}</p>
+					<button
+						onClick={() => setIsOpen(false)}
+						className='col-start-2 row-start-1 w-fit cursor-pointer place-self-end rounded-full p-2 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
+					>
+						<XMarkIcon width={20} height={20} />
+					</button>
+				</div>
+				<div className='p-4'>{form}</div>
+			</div>
+		</>
 	);
 }

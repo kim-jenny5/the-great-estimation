@@ -1,6 +1,7 @@
 import { formatDate } from '@/util/formatters';
 import StatusBadge from '@/components/StatusBadge';
 import DrawerWrapper from './DrawerWrapper';
+import EditOrderForm from './forms/EditOrderForm';
 
 type HeaderProps = {
 	name: string;
@@ -21,6 +22,7 @@ export default function Header({ name, status, deliverableDueAt }: HeaderProps) 
 					<DrawerWrapper
 						title='Edit order'
 						description='Edit order details below and click save when done.'
+						form={<EditOrderForm />}
 					>
 						<button className='primary-btn'>Edit</button>
 					</DrawerWrapper>

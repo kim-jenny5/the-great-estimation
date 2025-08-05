@@ -1,3 +1,3 @@
 export default function EditLineItemForm() {
-	return <form>EditLineItemForm</form>;
+	return <form>Edit Line Item Form</form>;
 }

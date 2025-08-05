@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import DrawerWrapper from './DrawerWrapper';
 import AlertWrapper from './AlertWrapper';
+import EditLineItemForm from './forms/EditLineItemForm';
 
 type LineItem = {
 	id: string;
@@ -37,6 +38,12 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 
 	const grouped = Object.entries(groupedLineItems).map(([product, items]) => ({ product, items }));
 	const grandTotal = lineItems.reduce((sum, item) => sum + item.subtotal, 0);
+
+	const EditBtn = (
+		<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
+			<PencilIcon className='h-4.5 w-4.5' />
+		</button>
+	);
 
 	return (
 		<div className='card'>
@@ -90,6 +97,7 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 												<DrawerWrapper
 													title='Edit line item'
 													description='Edit line item details below and click save when done.'
+													form={<EditLineItemForm />}
 												>
 													<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
 														<PencilIcon className='h-4.5 w-4.5' />
