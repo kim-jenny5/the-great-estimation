@@ -2,7 +2,7 @@
 
 import { prisma } from '@/prisma/client';
 import { revalidatePath } from 'next/cache';
-import { SerializedOrder, StatusOption } from './types';
+import { CurrentUser, SerializedOrder, StatusOption } from './types';
 
 // no real auth is to be implemented in this project
 // this function just returns the first user in the DB as the "current" user
@@ -10,9 +10,7 @@ export async function getCurrentUser() {
 	return await prisma.user.findFirstOrThrow();
 }
 
-export async function getOrderByIdOrFirst(orderId?: string) {
-	const user = await getCurrentUser();
-
+export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
 	const userWithOrders = await prisma.user.findUniqueOrThrow({
 		where: { id: user.id },
 		include: {

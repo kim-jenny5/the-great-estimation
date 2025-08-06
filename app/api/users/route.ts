@@ -1,4 +1,4 @@
-// THIS IS AN UNNECESSARY FILE - DELETE
+// JUST FOR TESTING
 import { prisma } from '@/prisma/client';
 
 export async function GET() {

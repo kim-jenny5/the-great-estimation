@@ -9,7 +9,7 @@ import { StatusOption } from '@/util/types';
 
 export default async function Dashboard() {
 	const user = await getCurrentUser();
-	const order = await getOrderByIdOrFirst();
+	const order = await getOrderByIdOrFirst(user);
 
 	const { status, totalBudget, totalSpend, productsCount, lineItemsCount, lineItems } = order;
 

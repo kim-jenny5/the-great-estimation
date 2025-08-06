@@ -1,3 +1,7 @@
+import type { User } from '@prisma/client';
+
+export type CurrentUser = User;
+
 type SerializedProduct = {
 	id: string;
 	name: string;
