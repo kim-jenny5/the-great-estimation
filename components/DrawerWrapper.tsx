@@ -7,29 +7,31 @@ type DrawerWrapperProps = {
 	children: ReactNode;
 	title: string;
 	description: string;
-	form?: ReactNode;
+	isOpen: boolean;
+	onClose: () => void;
 };
 
-export default function DrawerWrapper({ children, title, description, form }: DrawerWrapperProps) {
-	const [isOpen, setIsOpen] = useState(false);
-
+export default function DrawerWrapper({
+	children,
+	title,
+	description,
+	isOpen,
+	onClose,
+}: DrawerWrapperProps) {
 	useEffect(() => {
 		const handleEsc = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') setIsOpen(false);
+			if (e.key === 'Escape') onClose();
 		};
 		globalThis.addEventListener('keydown', handleEsc);
 		return () => globalThis.removeEventListener('keydown', handleEsc);
-	}, []);
+	}, [onClose]);
 
 	return (
 		<>
-			<div onClick={() => setIsOpen(true)} className='inline-block'>
-				{children}
-			</div>
 			{isOpen && (
 				<div
 					className='fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-400'
-					onClick={() => setIsOpen(false)}
+					onClick={onClose}
 				/>
 			)}
 			<div
@@ -39,13 +41,13 @@ export default function DrawerWrapper({ children, title, description, form }: Dr
 					<h2 className='col-start-1 row-start-1 text-2xl capitalize'>{title}</h2>
 					<p className='col-span-full row-start-2 text-sm text-neutral-600'>{description}</p>
 					<button
-						onClick={() => setIsOpen(false)}
+						onClick={onClose}
 						className='col-start-2 row-start-1 w-fit cursor-pointer place-self-end rounded-full p-2 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
 					>
 						<XMarkIcon width={20} height={20} />
 					</button>
 				</div>
-				<div className='p-4'>{form}</div>
+				<div className='p-4'>{children}</div>
 			</div>
 		</>
 	);

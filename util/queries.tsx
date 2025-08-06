@@ -60,10 +60,32 @@ export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
 	return serializedOrder;
 }
 
+export async function updateOrder(data: {
+	id: string;
+	name: string;
+	status: string;
+	deliverableDueAt: string;
+	totalBudget: number;
+}) {
+	const { id, name, status, deliverableDueAt, totalBudget } = data;
+
+	await prisma.order.update({
+		where: { id },
+		data: {
+			name,
+			status,
+			totalBudget,
+			deliverableDueAt: new Date(deliverableDueAt),
+		},
+	});
+
+	revalidatePath('/');
+}
+
 export async function deleteLineItem(formData: FormData) {
 	const id = formData.get('id') as string;
 
-	if (!id) throw new Error('Missing line item ID');
+	if (!id) throw new Error('Missing/invalid line item');
 
 	await prisma.lineItem.delete({ where: { id } });
 

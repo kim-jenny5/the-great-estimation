@@ -1,14 +1,12 @@
-'use client';
-
-import { ReactNode, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { TrashIcon } from '@heroicons/react/24/solid';
 import { deleteLineItem } from '@/util/queries';
 
-type AlertWrapperProps = {
-	children: ReactNode;
+type DeleteLineItemFormProps = {
 	lineItemId: string;
 };
 
-export default function AlertWrapper({ children, lineItemId }: AlertWrapperProps) {
+export default function DeleteLineItemForm({ lineItemId }: DeleteLineItemFormProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
@@ -23,10 +21,15 @@ export default function AlertWrapper({ children, lineItemId }: AlertWrapperProps
 
 	return (
 		<>
-			<span onClick={() => setIsOpen(true)}>{children}</span>
+			<button
+				onClick={() => setIsOpen(true)}
+				className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
+			>
+				<TrashIcon className='h-4.5 w-4.5' />
+			</button>
 			{isOpen && (
 				<div
-					className='fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-200'
+					className='fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-200'
 					onClick={() => setIsOpen(false)}
 				/>
 			)}
@@ -40,6 +43,7 @@ export default function AlertWrapper({ children, lineItemId }: AlertWrapperProps
 				<form action={deleteLineItem} className='flex justify-end gap-4'>
 					<input type='hidden' name='id' value={lineItemId} />
 					<button
+						type='button'
 						onClick={() => setIsOpen(false)}
 						className='cursor-pointer rounded bg-gray-100 px-4 py-2 hover:bg-gray-200'
 					>

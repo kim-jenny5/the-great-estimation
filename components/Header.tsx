@@ -1,6 +1,5 @@
 import StatusBadge from '@/components/StatusBadge';
 import { formatDate } from '@/util/formatters';
-import DrawerWrapper from './DrawerWrapper';
 import EditOrderForm from './forms/EditOrderForm';
 
 import type { SerializedOrder } from '@/util/types';
@@ -17,13 +16,14 @@ export default function Header({ order }: { order: SerializedOrder }) {
 				</div>
 				<div className='flex gap-x-4'>
 					<button className='secondary-btn'>Export</button>
-					<DrawerWrapper
+					<EditOrderForm order={order} />
+					{/* <DrawerWrapper
 						title='Edit order'
 						description='Edit order details below and click save when done.'
 						form={<EditOrderForm order={order} />}
 					>
 						<button className='primary-btn'>Edit</button>
-					</DrawerWrapper>
+					</DrawerWrapper> */}
 				</div>
 			</div>
 			<div>

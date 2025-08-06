@@ -1,13 +1,10 @@
 'use client';
 
 import React from 'react';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/navigation';
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
-import AlertWrapper from './AlertWrapper';
-import DrawerWrapper from './DrawerWrapper';
 import AddLineItemForm from './forms/AddLineItemForm';
 import EditLineItemForm from './forms/EditLineItemForm';
+import DeleteLineItemForm from './forms/DeleteLineItemForm';
 
 type LineItem = {
 	id: string;
@@ -28,7 +25,6 @@ type LineItemsChartProps = {
 };
 
 export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
-	const router = useRouter();
 	const groupedLineItems: Record<string, LineItem[]> = {};
 
 	for (const item of lineItems) {
@@ -42,25 +38,10 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 	const grouped = Object.entries(groupedLineItems).map(([product, items]) => ({ product, items }));
 	const grandTotal = lineItems.reduce((sum, item) => sum + item.subtotal, 0);
 
-	// const EditBtn = (
-	// 	<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
-	// 		<PencilIcon className='h-4.5 w-4.5' />
-	// 	</button>
-	// );
-
 	return (
 		<>
 			<div className='flex justify-end'>
-				<DrawerWrapper
-					title='Add line item'
-					description='Add a line item below and click create when done.'
-					form={<AddLineItemForm />}
-				>
-					<button className='primary-btn flex items-center justify-between gap-x-2'>
-						Add a line item
-						<PlusIcon width={15} height={15} />
-					</button>
-				</DrawerWrapper>
+				<AddLineItemForm />
 			</div>
 			<div className='card'>
 				<table className='min-w-full divide-y divide-neutral-300 text-sm text-neutral-800'>
@@ -110,20 +91,8 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 											</td>
 											<td>
 												<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>
-													<DrawerWrapper
-														title='Edit line item'
-														description='Edit line item details below and click save when done.'
-														form={<EditLineItemForm />}
-													>
-														<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
-															<PencilIcon className='h-4.5 w-4.5' />
-														</button>
-													</DrawerWrapper>
-													<AlertWrapper lineItemId={item.id}>
-														<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
-															<TrashIcon className='h-4.5 w-4.5' />
-														</button>
-													</AlertWrapper>
+													<EditLineItemForm />
+													<DeleteLineItemForm lineItemId={item.id} />
 												</div>
 											</td>
 										</tr>
