@@ -33,7 +33,7 @@ export default function DrawerWrapper({ children, title, description, form }: Dr
 				/>
 			)}
 			<div
-				className={`fixed top-0 right-0 z-50 h-full w-1/3 transform bg-white shadow-xl transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+				className={`fixed top-0 right-0 z-50 h-full w-1/3 max-w-md transform bg-white shadow-xl transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
 			>
 				<div className='grid grid-cols-2 items-center p-4'>
 					<h2 className='col-start-1 row-start-1 text-2xl capitalize'>{title}</h2>
