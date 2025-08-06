@@ -17,13 +17,6 @@ export default function Header({ order }: { order: SerializedOrder }) {
 				<div className='flex gap-x-4'>
 					<button className='secondary-btn'>Export</button>
 					<EditOrderForm order={order} />
-					{/* <DrawerWrapper
-						title='Edit order'
-						description='Edit order details below and click save when done.'
-						form={<EditOrderForm order={order} />}
-					>
-						<button className='primary-btn'>Edit</button>
-					</DrawerWrapper> */}
 				</div>
 			</div>
 			<div>

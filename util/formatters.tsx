@@ -27,6 +27,11 @@ export const formatPercentage = (value: number): string => {
 	});
 };
 
+// formats dates for database storing
+export const convertToUTC = (date: string) =>
+	DateTime.fromISO(date).setZone(TIMEZONE).toUTC().toJSDate();
+
+// format dates for display on the UI
 export const formatDate = (date: string) =>
 	DateTime.fromISO(date).setZone(TIMEZONE).toFormat('MMMM d, yyyy');
 

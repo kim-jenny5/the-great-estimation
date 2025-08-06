@@ -1,12 +1,7 @@
-import { DateTime } from 'luxon';
-
 import { prisma } from '@/prisma/client';
+import { convertToUTC } from '@/util/formatters';
 
-function toESTDate(date: string) {
-	return DateTime.fromISO(date, { zone: 'America/New_York' }).toUTC().toJSDate();
-}
-
-async function main() {
+export async function seed() {
 	const jenny = await prisma.user.create({
 		data: { name: 'Jenny Kim', email: 'jennykimdev@gmail.com' },
 	});
@@ -20,7 +15,7 @@ async function main() {
 			totalSpend: 17_500,
 			productsCount: 3,
 			lineItemsCount: 5,
-			deliverableDueAt: toESTDate('2025-08-18'),
+			deliverableDueAt: convertToUTC('2025-08-18'),
 		},
 	});
 
@@ -36,7 +31,7 @@ async function main() {
 				orderId: nikeOrder.id,
 				productId: newsletter.id,
 				name: 'Back to School',
-				startDate: toESTDate('2025-08-01'),
+				startDate: convertToUTC('2025-08-01'),
 				type: 'Flat',
 				rate: 2500,
 				quantity: 1,
@@ -46,7 +41,7 @@ async function main() {
 				orderId: nikeOrder.id,
 				productId: newsletter.id,
 				name: 'Labor Day',
-				startDate: toESTDate('2025-08-18'),
+				startDate: convertToUTC('2025-08-18'),
 				type: 'Flat',
 				rate: 3000,
 				quantity: 1,
@@ -56,8 +51,8 @@ async function main() {
 				orderId: nikeOrder.id,
 				productId: sponsored.id,
 				name: 'Fall Fashion Feature',
-				startDate: toESTDate('2025-08-25'),
-				endDate: toESTDate('2025-11-14'),
+				startDate: convertToUTC('2025-08-25'),
+				endDate: convertToUTC('2025-11-14'),
 				type: 'Flat',
 				rate: 4000,
 				quantity: 1,
@@ -67,8 +62,8 @@ async function main() {
 				orderId: nikeOrder.id,
 				productId: displayAd.id,
 				name: 'Homepage Takeover',
-				startDate: toESTDate('2025-08-15'),
-				endDate: toESTDate('2025-08-17'),
+				startDate: convertToUTC('2025-08-15'),
+				endDate: convertToUTC('2025-08-17'),
 				type: 'Flat',
 				rate: 5000,
 				quantity: 1,
@@ -78,8 +73,8 @@ async function main() {
 				orderId: nikeOrder.id,
 				productId: displayAd.id,
 				name: 'Sidebar Ad',
-				startDate: toESTDate('2025-08-20'),
-				endDate: toESTDate('2025-08-31'),
+				startDate: convertToUTC('2025-08-20'),
+				endDate: convertToUTC('2025-08-31'),
 				type: 'CPM',
 				rate: 1500,
 				quantity: 2,
@@ -91,11 +86,14 @@ async function main() {
 	console.log('🌱 Seed complete');
 }
 
-try {
-	await main();
-} catch (error) {
-	console.error('❌ Seed error:', error);
-	throw error;
-} finally {
-	await prisma.$disconnect();
+// called if seeding is run directly inside the terminal
+if (require.main === module) {
+	try {
+		await seed();
+	} catch (error) {
+		console.error('❌ Seed error:', error);
+		throw error;
+	} finally {
+		await prisma.$disconnect();
+	}
 }

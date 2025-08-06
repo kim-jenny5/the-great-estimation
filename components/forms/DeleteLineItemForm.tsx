@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { deleteLineItem } from '@/util/queries';
 
@@ -8,6 +8,7 @@ type DeleteLineItemFormProps = {
 
 export default function DeleteLineItemForm({ lineItemId }: DeleteLineItemFormProps) {
 	const [isOpen, setIsOpen] = useState(false);
+	const deleteButtonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		const handleEsc = (e: KeyboardEvent) => {
@@ -18,6 +19,12 @@ export default function DeleteLineItemForm({ lineItemId }: DeleteLineItemFormPro
 
 		return () => globalThis.removeEventListener('keydown', handleEsc);
 	}, []);
+
+	useEffect(() => {
+		if (isOpen && deleteButtonRef.current) {
+			deleteButtonRef.current.focus();
+		}
+	}, [isOpen]);
 
 	return (
 		<>
@@ -50,8 +57,9 @@ export default function DeleteLineItemForm({ lineItemId }: DeleteLineItemFormPro
 						Cancel
 					</button>
 					<button
+						ref={deleteButtonRef}
 						type='submit'
-						className='cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700'
+						className='cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
 					>
 						Delete
 					</button>

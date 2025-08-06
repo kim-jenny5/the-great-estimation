@@ -1,8 +1,19 @@
 'use server';
 
 import { prisma } from '@/prisma/client';
+import { seed } from '@/prisma/seed';
 import { revalidatePath } from 'next/cache';
 import { CurrentUser, SerializedOrder, StatusOption } from './types';
+
+export async function resetDatabase() {
+	await prisma.lineItem.deleteMany({});
+	await prisma.order.deleteMany({});
+	await prisma.user.deleteMany({});
+
+	await seed();
+
+	revalidatePath('/');
+}
 
 // no real auth is to be implemented in this project
 // this function just returns the first user in the DB as the "current" user
