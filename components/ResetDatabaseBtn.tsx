@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import NotificationBanner from './NotificationBanner';
+
 import { resetDatabase } from '@/util/queries';
+
+import NotificationBanner from './NotificationBanner';
 
 export default function ResetDatabaseBtn() {
 	const [showNotification, setShowNotification] = useState(false);

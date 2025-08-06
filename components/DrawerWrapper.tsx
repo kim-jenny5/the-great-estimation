@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactNode, useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { ReactNode, useEffect } from 'react';
 
 type DrawerWrapperProps = {
 	children: ReactNode;

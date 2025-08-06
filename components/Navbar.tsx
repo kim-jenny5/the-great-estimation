@@ -1,6 +1,7 @@
 import ConstructionBanner from '@/components/ConstructionBanner';
-import ResetDatabaseBtn from './ResetDatabaseBtn';
 import { formatInitials } from '@/util/formatters';
+
+import ResetDatabaseBtn from './ResetDatabaseBtn';
 
 export default function Navbar({ user }: { user: string }) {
 	return (

@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
 import { TrashIcon } from '@heroicons/react/24/solid';
+import { useState, useEffect, useRef } from 'react';
+
 import { deleteLineItem } from '@/util/queries';
 
 type DeleteLineItemFormProps = {

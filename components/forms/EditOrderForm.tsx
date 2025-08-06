@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { StatusOption } from '@/util/types';
-import SelectInput from './SelectInput';
+import { useState, useEffect } from 'react';
+
 import { updateOrder } from '@/util/queries';
+import { StatusOption } from '@/util/types';
+
+import SelectInput from './SelectInput';
 import DrawerWrapper from '../DrawerWrapper';
 
 type EditOrderFormProps = {
@@ -22,6 +24,13 @@ export default function EditOrderForm({ order }: EditOrderFormProps) {
 	const [status, setStatus] = useState<StatusOption>(order.status ?? null);
 	const [totalBudget, setTotalBudget] = useState(order.totalBudget);
 	const [dueDate, setDueDate] = useState(order.deliverableDueAt);
+
+	useEffect(() => {
+		setName(order.name);
+		setStatus(order.status ?? null);
+		setTotalBudget(order.totalBudget);
+		setDueDate(order.deliverableDueAt);
+	}, [order]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

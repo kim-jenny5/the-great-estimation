@@ -1,8 +1,11 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { prisma } from '@/prisma/client';
 import { seed } from '@/prisma/seed';
-import { revalidatePath } from 'next/cache';
+
+import { convertToUTC } from './formatters';
 import { CurrentUser, SerializedOrder, StatusOption } from './types';
 
 export async function resetDatabase() {
@@ -86,7 +89,7 @@ export async function updateOrder(data: {
 			name,
 			status,
 			totalBudget,
-			deliverableDueAt: new Date(deliverableDueAt),
+			deliverableDueAt: convertToUTC(deliverableDueAt),
 		},
 	});
 

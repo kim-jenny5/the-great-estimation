@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { useState, useEffect, useRef } from 'react';
+
 import { StatusValue, StatusOption } from '@/util/types';
 
 const statusStyles: Record<StatusValue, string> = {

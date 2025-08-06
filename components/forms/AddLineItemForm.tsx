@@ -1,14 +1,12 @@
-import { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
+
 import DrawerWrapper from '../DrawerWrapper';
 
 export default function AddLineItemForm() {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const handleSubmit = async () => {
-		console.log('edit line item submit btn clicked');
-		setIsOpen(false);
-	};
+	const handleSubmit = async () => setIsOpen(false);
 
 	return (
 		<>

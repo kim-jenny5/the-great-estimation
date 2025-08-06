@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
+
 import AddLineItemForm from './forms/AddLineItemForm';
-import EditLineItemForm from './forms/EditLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
+import EditLineItemForm from './forms/EditLineItemForm';
 
 type LineItem = {
 	id: string;

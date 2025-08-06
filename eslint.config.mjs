@@ -77,6 +77,8 @@ const config = [
 			],
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/filename-case': 'off',
+			'unicorn/no-null': 'off',
+			'unicorn/prefer-top-level-await': 'off',
 		},
 	},
 	{ files: ['**/*.{jsx,tsx}'], rules: { 'no-console': 'warn' } },

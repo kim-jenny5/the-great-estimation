@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 
 export default function NotificationBanner() {
 	const [visible, setVisible] = useState(false);

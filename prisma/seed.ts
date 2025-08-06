@@ -87,6 +87,7 @@ export async function seed() {
 }
 
 // called if seeding is run directly inside the terminal
+/* eslint-disable-next-line unicorn/prefer-module */
 if (require.main === module) {
 	try {
 		await seed();
