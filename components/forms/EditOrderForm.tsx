@@ -6,6 +6,7 @@ import SelectInput from './SelectInput';
 
 type EditOrderFormProps = {
 	order: {
+		id: string;
 		name: string;
 		status: StatusOption;
 		totalBudget: number;
@@ -19,7 +20,10 @@ export default function EditOrderForm({ order }: EditOrderFormProps) {
 	const [totalBudget, setTotalBudget] = useState(order.totalBudget);
 	const [dueDate, setDueDate] = useState(order.deliverableDueAt);
 
-	const handleSubmit = () => console.log('submit btn clicked');
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		console.log('submit btn clicked');
+	};
 
 	return (
 		<form onSubmit={handleSubmit}>

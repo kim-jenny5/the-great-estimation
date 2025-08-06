@@ -119,7 +119,7 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 															<PencilIcon className='h-4.5 w-4.5' />
 														</button>
 													</DrawerWrapper>
-													<AlertWrapper lineItemId={item.id} onConfirm={() => router.refresh()}>
+													<AlertWrapper lineItemId={item.id}>
 														<button className='cursor-pointer rounded-full p-2 transition hover:scale-110 hover:bg-neutral-100 hover:text-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'>
 															<TrashIcon className='h-4.5 w-4.5' />
 														</button>

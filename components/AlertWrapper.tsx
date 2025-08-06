@@ -6,10 +6,9 @@ import { deleteLineItem } from '@/util/queries';
 type AlertWrapperProps = {
 	children: ReactNode;
 	lineItemId: string;
-	onConfirm?: () => void;
 };
 
-export default function AlertWrapper({ children, lineItemId, onConfirm }: AlertWrapperProps) {
+export default function AlertWrapper({ children, lineItemId }: AlertWrapperProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
@@ -21,17 +20,6 @@ export default function AlertWrapper({ children, lineItemId, onConfirm }: AlertW
 
 		return () => globalThis.removeEventListener('keydown', handleEsc);
 	}, []);
-
-	const handleDelete = async () => {
-		try {
-			await deleteLineItem(lineItemId);
-			onConfirm?.();
-		} catch (error) {
-			console.error('Failed to delete line item:', error);
-		} finally {
-			setIsOpen(false);
-		}
-	};
 
 	return (
 		<>
@@ -56,12 +44,15 @@ export default function AlertWrapper({ children, lineItemId, onConfirm }: AlertW
 					>
 						Cancel
 					</button>
-					<button
-						onClick={handleDelete}
-						className='cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700'
-					>
-						Delete
-					</button>
+					<form action={deleteLineItem}>
+						<input type='hidden' name='id' value={lineItemId} />
+						<button
+							type='submit'
+							className='cursor-pointer rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700'
+						>
+							Delete
+						</button>
+					</form>
 				</div>
 			</div>
 		</>

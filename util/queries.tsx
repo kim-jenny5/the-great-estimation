@@ -1,4 +1,7 @@
+'use server';
+
 import { prisma } from '@/prisma/client';
+import { revalidatePath } from 'next/cache';
 import { SerializedOrder, StatusOption } from './types';
 
 // no real auth is to be implemented in this project
@@ -59,17 +62,12 @@ export async function getOrderByIdOrFirst(orderId?: string) {
 	return serializedOrder;
 }
 
-export async function deleteLineItem(lineItemId: string) {
-	try {
-		const res = await fetch(`/api/line-items/${lineItemId}`, {
-			method: 'DELETE',
-		});
+export async function deleteLineItem(formData: FormData) {
+	const id = formData.get('id') as string;
 
-		if (!res.ok) throw new Error('Failed to delete line item');
+	if (!id) throw new Error('Missing line item ID');
 
-		return await res.json();
-	} catch (error) {
-		console.error('Error deleting line item:', error);
-		throw error;
-	}
+	await prisma.lineItem.delete({ where: { id } });
+
+	revalidatePath('/');
 }
