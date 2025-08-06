@@ -10,6 +10,7 @@ import { CurrentUser, SerializedOrder, StatusOption } from './types';
 
 export async function resetDatabase() {
 	await prisma.lineItem.deleteMany({});
+	await prisma.product.deleteMany({});
 	await prisma.order.deleteMany({});
 	await prisma.user.deleteMany({});
 
@@ -90,6 +91,80 @@ export async function updateOrder(data: {
 			status,
 			totalBudget,
 			deliverableDueAt: convertToUTC(deliverableDueAt),
+		},
+	});
+
+	revalidatePath('/');
+}
+
+async function updateOrderTotals(orderId: string) {
+	const lineItems = await prisma.lineItem.findMany({ where: { orderId } });
+
+	const totalSpend = lineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
+	const uniqueProducts = new Set(lineItems.map((item) => item.productId));
+	const productsCount = uniqueProducts.size;
+	const lineItemsCount = lineItems.length;
+
+	await prisma.order.update({
+		where: { id: orderId },
+		data: {
+			totalSpend,
+			productsCount,
+			lineItemsCount,
+		},
+	});
+}
+
+export async function getAllProducts() {
+	return await prisma.product.findMany({
+		select: {
+			id: true,
+			name: true,
+		},
+	});
+}
+
+export async function createLineItem(data: {
+	orderId: string;
+	productId: string;
+	name: string;
+	startDate: string;
+	endDate: string | null;
+	type: string;
+	rate: number;
+	quantity: number;
+}) {
+	const { orderId, productId, name, startDate, endDate, type, rate, quantity } = data;
+
+	const subtotal = rate * quantity;
+
+	await prisma.lineItem.create({
+		data: {
+			orderId,
+			productId,
+			name,
+			startDate: convertToUTC(startDate),
+			endDate: endDate ? convertToUTC(endDate) : null,
+			type,
+			rate,
+			quantity,
+			subtotal,
+		},
+	});
+
+	// Optionally recalculate totals for the order
+	const lineItems = await prisma.lineItem.findMany({ where: { orderId } });
+	const totalSpend = lineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
+	const uniqueProducts = new Set(lineItems.map((item) => item.productId));
+	const productsCount = uniqueProducts.size;
+	const lineItemsCount = lineItems.length;
+
+	await prisma.order.update({
+		where: { id: orderId },
+		data: {
+			totalSpend,
+			productsCount,
+			lineItemsCount,
 		},
 	});
 

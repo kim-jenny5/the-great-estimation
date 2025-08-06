@@ -25,7 +25,7 @@ export default async function Dashboard() {
 					lineItemsCount={lineItemsCount}
 				/>
 				<Slider />
-				<LineItemsChart lineItems={lineItems} />
+				<LineItemsChart orderId={order.id} lineItems={lineItems} />
 			</main>
 			<Footer />
 		</>

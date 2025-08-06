@@ -14,7 +14,8 @@ export const styleStatus = (status?: string): StatusColor => {
 		case 'Lost': {
 			return { bg: 'bg-red-100', text: 'text-red-800' };
 		}
-		default:
+		default: {
 			return;
+		}
 	}
 };

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 
-import AddLineItemForm from './forms/AddLineItemForm';
+import CreateLineItemForm from './forms/CreateLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
 import EditLineItemForm from './forms/EditLineItemForm';
 
@@ -23,10 +23,11 @@ type LineItem = {
 };
 
 type LineItemsChartProps = {
+	orderId: string;
 	lineItems: LineItem[];
 };
 
-export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
+export default function LineItemsChart({ orderId, lineItems }: LineItemsChartProps) {
 	const groupedLineItems: Record<string, LineItem[]> = {};
 
 	for (const item of lineItems) {
@@ -43,7 +44,7 @@ export default function LineItemsChart({ lineItems }: LineItemsChartProps) {
 	return (
 		<>
 			<div className='flex justify-end'>
-				<AddLineItemForm />
+				<CreateLineItemForm orderId={orderId} />
 			</div>
 			<div className='card'>
 				<table className='min-w-full divide-y divide-neutral-300 text-sm text-neutral-800'>

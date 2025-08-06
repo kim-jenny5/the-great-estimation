@@ -24,6 +24,25 @@ export async function seed() {
 		prisma.product.create({ data: { name: 'Sponsored Article' } }),
 		prisma.product.create({ data: { name: 'Display Ads' } }),
 	]);
+	// 	const [
+	// 	newsletter,
+	// 	sponsored,
+	// 	displayAd,
+	// 	socialPost,
+	// 	podcastAd,
+	// 	homepageTakeover,
+	// 	brandedVideo,
+	// 	eventSponsorship,
+	// ] = await prisma.$transaction([
+	// 	prisma.product.create({ data: { name: 'Newsletter' } }),
+	// 	prisma.product.create({ data: { name: 'Sponsored Article' } }),
+	// 	prisma.product.create({ data: { name: 'Display Ads' } }),
+	// 	prisma.product.create({ data: { name: 'Social Media Post' } }),
+	// 	prisma.product.create({ data: { name: 'Podcast Ad' } }),
+	// 	prisma.product.create({ data: { name: 'Homepage Takeover' } }),
+	// 	prisma.product.create({ data: { name: 'Branded Video' } }),
+	// 	prisma.product.create({ data: { name: 'Event Sponsorship' } }),
+	// ]);
 
 	await prisma.lineItem.createMany({
 		data: [
