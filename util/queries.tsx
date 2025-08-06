@@ -95,10 +95,32 @@ export async function updateOrder(data: {
 
 export async function deleteLineItem(formData: FormData) {
 	const id = formData.get('id') as string;
-
 	if (!id) throw new Error('Missing/invalid line item');
 
+	const lineItem = await prisma.lineItem.findUnique({ where: { id } });
+	if (!lineItem?.orderId) throw new Error('Order not found');
+
+	const orderId = lineItem.orderId;
+
+	// delete the selected line item
 	await prisma.lineItem.delete({ where: { id } });
+
+	// recalculate total products/line items count
+	const remainingLineItems = await prisma.lineItem.findMany({ where: { orderId } });
+
+	const totalSpend = remainingLineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
+	const uniqueProducts = new Set(remainingLineItems.map((item) => item.productId));
+	const productsCount = uniqueProducts.size;
+	const lineItemsCount = remainingLineItems.length;
+
+	await prisma.order.update({
+		where: { id: orderId },
+		data: {
+			totalSpend,
+			productsCount,
+			lineItemsCount,
+		},
+	});
 
 	revalidatePath('/');
 }
