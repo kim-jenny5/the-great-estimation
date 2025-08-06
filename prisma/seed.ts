@@ -51,7 +51,7 @@ export async function seed() {
 				productId: newsletter.id,
 				name: 'Back to School',
 				startDate: convertToUTC('2025-08-01'),
-				type: 'Flat',
+				rateType: 'Flat',
 				rate: 2500,
 				quantity: 1,
 				subtotal: 2500,
@@ -61,7 +61,7 @@ export async function seed() {
 				productId: newsletter.id,
 				name: 'Labor Day',
 				startDate: convertToUTC('2025-08-18'),
-				type: 'Flat',
+				rateType: 'Flat',
 				rate: 3000,
 				quantity: 1,
 				subtotal: 3000,
@@ -72,7 +72,7 @@ export async function seed() {
 				name: 'Fall Fashion Feature',
 				startDate: convertToUTC('2025-08-25'),
 				endDate: convertToUTC('2025-11-14'),
-				type: 'Flat',
+				rateType: 'Flat',
 				rate: 4000,
 				quantity: 1,
 				subtotal: 4000,
@@ -83,7 +83,7 @@ export async function seed() {
 				name: 'Homepage Takeover',
 				startDate: convertToUTC('2025-08-15'),
 				endDate: convertToUTC('2025-08-17'),
-				type: 'Flat',
+				rateType: 'Flat',
 				rate: 5000,
 				quantity: 1,
 				subtotal: 5000,
@@ -94,7 +94,7 @@ export async function seed() {
 				name: 'Sidebar Ad',
 				startDate: convertToUTC('2025-08-20'),
 				endDate: convertToUTC('2025-08-31'),
-				type: 'CPM',
+				rateType: 'CPM',
 				rate: 1500,
 				quantity: 2,
 				subtotal: 3000,
@@ -106,8 +106,8 @@ export async function seed() {
 }
 
 // called if seeding is run directly inside the terminal
-/* eslint-disable-next-line unicorn/prefer-module */
-if (require.main === module) {
+ 
+if (import.meta.url === `file://${process.argv[1]}`) {
 	try {
 		await seed();
 	} catch (error) {

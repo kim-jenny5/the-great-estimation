@@ -13,7 +13,7 @@ type LineItem = {
 	name: string;
 	startDate: string;
 	endDate?: string | null;
-	type: string;
+	rateType: string;
 	rate: number;
 	quantity: number;
 	subtotal: number;
@@ -52,9 +52,9 @@ export default function LineItemsChart({ orderId, lineItems }: LineItemsChartPro
 						<tr>
 							<th className='py-3 pr-4 pl-6 text-left font-normal'>Description</th>
 							<th className='px-4 py-3 text-left font-normal'>Start/End Dates</th>
-							<th className='px-4 py-3 text-left font-normal'>Type</th>
-							<th className='px-4 py-3 text-right font-normal'>Rate</th>
-							<th className='px-4 py-3 text-right font-normal'>Qty</th>
+							<th className='px-4 py-3 text-left font-normal'>Rate Type</th>
+							<th className='px-4 py-3 text-left font-normal'>Rate</th>
+							<th className='px-4 py-3 text-left font-normal'>Qty</th>
 							<th className='px-4 py-3 text-right font-normal'>Total</th>
 							<th className='py-3 pr-6 pl-4 text-right font-normal'></th>
 						</tr>
@@ -86,11 +86,11 @@ export default function LineItemsChart({ orderId, lineItems }: LineItemsChartPro
 											>
 												{formatStartEndDates(item.startDate, item.endDate ?? undefined)}
 											</td>
-											<td className='px-4 py-2.5'>{item.type}</td>
-											<td className='px-4 py-2.5 text-right'>{formatCurrency(item.rate)}</td>
-											<td className='px-4 py-2.5 text-right'>{item.quantity}</td>
+											<td className='px-4 py-2.5'>{item.rateType}</td>
+											<td className='px-4 py-2.5 text-left'>{formatCurrency(item.rate)}</td>
+											<td className='px-4 py-2.5 text-left'>{item.quantity}</td>
 											<td className='px-4 py-2.5 text-right font-medium'>
-												{formatCurrency(item.rate)}
+												{formatCurrency(item.rate * item.quantity)}
 											</td>
 											<td>
 												<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>

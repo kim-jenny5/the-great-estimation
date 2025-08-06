@@ -43,6 +43,13 @@ model Product {
   lineItems LineItem[]
 }
 
+enum RateType {
+  Flat
+  CPM
+  CPC
+  CPA
+}
+
 model LineItem {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   orderId    String     @db.Uuid
@@ -50,7 +57,7 @@ model LineItem {
   name       String
   startDate  DateTime   @db.Timestamp(6)
   endDate    DateTime?  @db.Timestamp(6)
-  type       String
+  rateType   RateType
   rate       Decimal    @db.Decimal
   quantity   Int
   subtotal   Decimal    @db.Decimal

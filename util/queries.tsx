@@ -97,23 +97,23 @@ export async function updateOrder(data: {
 	revalidatePath('/');
 }
 
-async function updateOrderTotals(orderId: string) {
-	const lineItems = await prisma.lineItem.findMany({ where: { orderId } });
+// async function updateOrderTotals(orderId: string) {
+// 	const lineItems = await prisma.lineItem.findMany({ where: { orderId } });
 
-	const totalSpend = lineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
-	const uniqueProducts = new Set(lineItems.map((item) => item.productId));
-	const productsCount = uniqueProducts.size;
-	const lineItemsCount = lineItems.length;
+// 	const totalSpend = lineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
+// 	const uniqueProducts = new Set(lineItems.map((item) => item.productId));
+// 	const productsCount = uniqueProducts.size;
+// 	const lineItemsCount = lineItems.length;
 
-	await prisma.order.update({
-		where: { id: orderId },
-		data: {
-			totalSpend,
-			productsCount,
-			lineItemsCount,
-		},
-	});
-}
+// 	await prisma.order.update({
+// 		where: { id: orderId },
+// 		data: {
+// 			totalSpend,
+// 			productsCount,
+// 			lineItemsCount,
+// 		},
+// 	});
+// }
 
 export async function getAllProducts() {
 	return await prisma.product.findMany({
@@ -130,11 +130,11 @@ export async function createLineItem(data: {
 	name: string;
 	startDate: string;
 	endDate: string | null;
-	type: string;
+	rateType: string;
 	rate: number;
 	quantity: number;
 }) {
-	const { orderId, productId, name, startDate, endDate, type, rate, quantity } = data;
+	const { orderId, productId, name, startDate, endDate, rateType, rate, quantity } = data;
 
 	const subtotal = rate * quantity;
 
@@ -145,7 +145,7 @@ export async function createLineItem(data: {
 			name,
 			startDate: convertToUTC(startDate),
 			endDate: endDate ? convertToUTC(endDate) : null,
-			type,
+			rateType,
 			rate,
 			quantity,
 			subtotal,

@@ -2,8 +2,11 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import { useState, useEffect } from 'react';
 
 import { getAllProducts, createLineItem } from '@/util/queries';
+import { RATE_TYPES } from '@/util/types';
 
 import DrawerWrapper from '../DrawerWrapper';
+
+import type { RateType } from '@prisma/client';
 
 export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 	const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +15,7 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 	const [name, setName] = useState('');
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
-	const [type, setType] = useState('');
+	const [rateType, setRateType] = useState<RateType>('Flat');
 	const [rate, setRate] = useState('');
 	const [quantity, setQuantity] = useState('');
 
@@ -33,9 +36,9 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 			name,
 			startDate,
 			endDate: endDate || null,
-			type,
-			rate: parseFloat(rate),
-			quantity: parseInt(quantity),
+			rateType,
+			rate: Number.parseFloat(rate),
+			quantity: Number.parseInt(quantity),
 		});
 
 		setIsOpen(false);
@@ -70,7 +73,6 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 									onChange={(e) => setProductId(e.target.value)}
 									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
 								>
-									<option value=''>Select a product</option>
 									{products.map((product) => (
 										<option key={product.id} value={product.id}>
 											{product.name}
@@ -121,19 +123,23 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 							</div>
 
 							<div className='sm:col-span-1'>
-								<label htmlFor='type' className='block text-sm/6 font-medium text-gray-900'>
-									Type
+								<label htmlFor='rateType' className='block text-sm/6 font-medium text-gray-900'>
+									Rate Type
 								</label>
-								<input
+								<select
+									id='rateType'
 									required
-									type='text'
-									id='type'
-									value={type}
-									onChange={(e) => setType(e.target.value)}
+									value={rateType}
+									onChange={(e) => setRateType(e.target.value as RateType)}
 									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
-								/>
+								>
+									{RATE_TYPES.map((rateType) => (
+										<option key={rateType} value={rateType}>
+											{rateType}
+										</option>
+									))}
+								</select>
 							</div>
-
 							<div className='sm:col-span-1'>
 								<label htmlFor='rate' className='block text-sm/6 font-medium text-gray-900'>
 									Rate

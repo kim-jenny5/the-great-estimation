@@ -12,7 +12,7 @@ type SerializedProduct = {
 type SerializedLineItem = {
 	id: string;
 	name: string;
-	type: string;
+	rateType: string;
 	rate: number;
 	subtotal: number;
 	quantity: number;
@@ -41,3 +41,6 @@ export type SerializedOrder = {
 
 export type StatusValue = 'Pending' | 'In progress' | 'Completed' | 'Lost';
 export type StatusOption = StatusValue | null;
+
+export const RATE_TYPES = ['Flat', 'CPM', 'CPC', 'CPA'] as const;
+// export type RateType = (typeof RATE_TYPES)[number];
