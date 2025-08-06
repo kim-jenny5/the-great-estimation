@@ -12,7 +12,7 @@ type SerializedProduct = {
 type SerializedLineItem = {
 	id: string;
 	name: string;
-	rateType: string;
+	rateType: 'Flat' | 'CPM' | 'CPC' | 'CPA';
 	rate: number;
 	subtotal: number;
 	quantity: number;

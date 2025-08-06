@@ -8,12 +8,14 @@ import CreateLineItemForm from './forms/CreateLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
 import EditLineItemForm from './forms/EditLineItemForm';
 
+import type { RateType } from '@prisma/client';
+
 type LineItem = {
 	id: string;
 	name: string;
 	startDate: string;
 	endDate?: string | null;
-	rateType: string;
+	rateType: RateType;
 	rate: number;
 	quantity: number;
 	subtotal: number;

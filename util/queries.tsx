@@ -8,6 +8,8 @@ import { seed } from '@/prisma/seed';
 import { convertToUTC } from './formatters';
 import { CurrentUser, SerializedOrder, StatusOption } from './types';
 
+import type { RateType } from '@prisma/client';
+
 export async function resetDatabase() {
 	await prisma.lineItem.deleteMany({});
 	await prisma.product.deleteMany({});
@@ -130,7 +132,7 @@ export async function createLineItem(data: {
 	name: string;
 	startDate: string;
 	endDate: string | null;
-	rateType: string;
+	rateType: RateType;
 	rate: number;
 	quantity: number;
 }) {
@@ -145,7 +147,7 @@ export async function createLineItem(data: {
 			name,
 			startDate: convertToUTC(startDate),
 			endDate: endDate ? convertToUTC(endDate) : null,
-			rateType,
+			rateType: rateType as RateType,
 			rate,
 			quantity,
 			subtotal,
