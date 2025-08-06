@@ -21,7 +21,7 @@ type EditOrderFormProps = {
 export default function EditOrderForm({ order }: EditOrderFormProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [name, setName] = useState(order.name);
-	const [status, setStatus] = useState<StatusOption>(order.status ?? null);
+	const [status, setStatus] = useState<StatusOption>(order.status);
 	const [totalBudget, setTotalBudget] = useState(order.totalBudget);
 	const [dueDate, setDueDate] = useState(order.deliverableDueAt);
 

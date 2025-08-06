@@ -2,6 +2,9 @@ export type StatusColor = { bg: string; text: string } | undefined;
 
 export const styleStatus = (status?: string): StatusColor => {
 	switch (status) {
+		case 'Pending': {
+			return { bg: 'bg-gray-100', text: 'text-gray-800' };
+		}
 		case 'In progress': {
 			return { bg: 'bg-yellow-100', text: 'text-yellow-800' };
 		}
@@ -11,8 +14,7 @@ export const styleStatus = (status?: string): StatusColor => {
 		case 'Lost': {
 			return { bg: 'bg-red-100', text: 'text-red-800' };
 		}
-		default: {
+		default:
 			return;
-		}
 	}
 };

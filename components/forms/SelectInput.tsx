@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { StatusValue, StatusOption } from '@/util/types';
 
 const statusStyles: Record<StatusValue, string> = {
+	Pending: 'bg-gray-500',
 	'In progress': 'bg-yellow-500',
 	Completed: 'bg-green-500',
 	Lost: 'bg-red-500',
@@ -20,12 +21,12 @@ type SelectInputProps = {
 
 export default function SelectInput({
 	name = 'status',
-	defaultValue = 'In progress',
+	defaultValue = 'Pending',
 	onChange,
 	style: styleFromProps,
 }: SelectInputProps) {
 	const dropdownRef = useRef<HTMLDivElement>(null);
-	const [selected, setSelected] = useState<StatusOption>(defaultValue ?? null);
+	const [selected, setSelected] = useState<StatusOption>(defaultValue);
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {

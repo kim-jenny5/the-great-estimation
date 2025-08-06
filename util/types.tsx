@@ -28,7 +28,7 @@ type SerializedLineItem = {
 export type SerializedOrder = {
 	id: string;
 	name: string;
-	status: 'In progress' | 'Completed' | 'Lost' | null;
+	status: 'Pending' | 'In progress' | 'Completed' | 'Lost' | null;
 	totalBudget: number;
 	totalSpend: number;
 	productsCount: number;
@@ -39,5 +39,5 @@ export type SerializedOrder = {
 	lineItems: SerializedLineItem[];
 };
 
-export type StatusValue = 'In progress' | 'Completed' | 'Lost';
+export type StatusValue = 'Pending' | 'In progress' | 'Completed' | 'Lost';
 export type StatusOption = StatusValue | null;
