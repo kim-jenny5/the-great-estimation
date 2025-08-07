@@ -39,7 +39,7 @@
 		"@types/react": "^19.0.34",
 		"@types/react-dom": "^19.0.13",
 		"autoprefixer": "^10.4.21",
-		"dotenv-flow": "^4.1.0",
+		"dotenv": "^17.2.1",
 		"eslint": "^9.3.0",
 		"eslint-config-next": "15.4.5",
 		"eslint-config-prettier": "^10.1.8",

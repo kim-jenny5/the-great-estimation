@@ -1,8 +1,5 @@
-import 'dotenv-flow/config';
+import 'dotenv/config';
 import { Client } from 'pg';
-
-if (process.env.NODE_ENV !== `development`)
-	throw new Error(`‼️ Database reset is only allowed in development environment ‼️`);
 
 const client = new Client({ connectionString: process.env.DATABASE_URL });
 

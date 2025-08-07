@@ -34,7 +34,7 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 			productId,
 			name,
 			startDate,
-			endDate: endDate || null,
+			endDate,
 			rateType,
 			rate: Number.parseFloat(rate),
 			quantity: Number.parseInt(quantity),
@@ -103,7 +103,7 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 								<input
 									type='date'
 									id='endDate'
-									value={endDate ?? ''}
+									value={endDate}
 									onChange={(e) => setEndDate(e.target.value)}
 									className='input'
 								/>

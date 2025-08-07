@@ -12,14 +12,14 @@ type SerializedProduct = {
 type SerializedLineItem = {
 	id: string;
 	name: string;
-	rateType: 'Flat' | 'CPM' | 'CPC' | 'CPA';
+	rateType: string;
 	rate: number;
 	subtotal: number;
 	quantity: number;
 	startDate: string;
-	endDate: string | null;
-	orderId: string | null;
-	productId: string | null;
+	endDate: string;
+	orderId: string;
+	productId: string;
 	createdAt: string;
 	updatedAt: string;
 	product: SerializedProduct;
@@ -28,7 +28,7 @@ type SerializedLineItem = {
 export type SerializedOrder = {
 	id: string;
 	name: string;
-	status: 'Pending' | 'In progress' | 'Completed' | 'Lost';
+	status: string;
 	totalBudget: number;
 	totalSpend: number;
 	productsCount: number;

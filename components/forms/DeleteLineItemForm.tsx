@@ -3,11 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import { deleteLineItem } from '@/util/queries';
 
-type DeleteLineItemFormProps = {
-	lineItemId: string;
-};
-
-export default function DeleteLineItemForm({ lineItemId }: DeleteLineItemFormProps) {
+export default function DeleteLineItemForm({ lineItemId }: { lineItemId: string }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const deleteButtonRef = useRef<HTMLButtonElement>(null);
 

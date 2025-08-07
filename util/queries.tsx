@@ -61,7 +61,7 @@ export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
 			rate: item.rate.toNumber(),
 			subtotal: item.subtotal.toNumber(),
 			startDate: item.startDate.toISOString(),
-			endDate: item.endDate?.toISOString() ?? null,
+			endDate: item.endDate?.toISOString() ?? '',
 			createdAt: item.createdAt.toISOString(),
 			updatedAt: item.updatedAt.toISOString(),
 			product: {
@@ -129,7 +129,7 @@ export async function createLineItem(data: {
 	productId: string;
 	name: string;
 	startDate: string;
-	endDate: string | null;
+	endDate?: string;
 	rateType: string;
 	rate: number;
 	quantity: number;
@@ -144,7 +144,7 @@ export async function createLineItem(data: {
 			productId,
 			name,
 			startDate: convertToUTC(startDate),
-			endDate: endDate ? convertToUTC(endDate) : null,
+			endDate: endDate ? convertToUTC(endDate) : '',
 			rateType,
 			rate,
 			quantity,
@@ -165,6 +165,41 @@ export async function createLineItem(data: {
 			totalSpend,
 			productsCount,
 			lineItemsCount,
+		},
+	});
+
+	revalidatePath('/');
+}
+
+export async function updateLineItem({
+	id,
+	productId,
+	name,
+	startDate,
+	endDate,
+	rateType,
+	rate,
+	quantity,
+}: {
+	id: string;
+	productId: string;
+	name: string;
+	startDate: string;
+	endDate: string;
+	rateType: string;
+	rate: number;
+	quantity: number;
+}) {
+	await prisma.lineItem.update({
+		where: { id },
+		data: {
+			productId,
+			name,
+			startDate: convertToUTC(startDate),
+			endDate: endDate ? convertToUTC(endDate) : undefined,
+			rateType,
+			rate,
+			quantity,
 		},
 	});
 

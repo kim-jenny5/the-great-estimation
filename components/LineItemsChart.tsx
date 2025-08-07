@@ -8,14 +8,14 @@ import CreateLineItemForm from './forms/CreateLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
 import EditLineItemForm from './forms/EditLineItemForm';
 
-import type { RateType } from '@prisma/client';
-
 type LineItem = {
 	id: string;
+	orderId: string;
+	productId: string;
 	name: string;
 	startDate: string;
-	endDate?: string | null;
-	rateType: RateType;
+	endDate: string;
+	rateType: string;
 	rate: number;
 	quantity: number;
 	subtotal: number;
@@ -30,17 +30,25 @@ type LineItemsChartProps = {
 };
 
 export default function LineItemsChart({ orderId, lineItems }: LineItemsChartProps) {
-	const groupedLineItems: Record<string, LineItem[]> = {};
+	const grouped: { product: string; items: LineItem[]; total: number }[] = [];
 
 	for (const item of lineItems) {
-		const groupKey = item.product.name;
-		if (!groupedLineItems[groupKey]) {
-			groupedLineItems[groupKey] = [];
+		const group = grouped.find((g) => g.product === item.product.name);
+
+		if (group) {
+			group.items.push(item);
+			group.total += item.subtotal;
+		} else {
+			grouped.push({
+				product: item.product.name,
+				items: [item],
+				total: item.subtotal,
+			});
 		}
-		groupedLineItems[groupKey].push(item);
 	}
 
-	const grouped = Object.entries(groupedLineItems).map(([product, items]) => ({ product, items }));
+	console.log(grouped);
+
 	const grandTotal = lineItems.reduce((sum, item) => sum + item.subtotal, 0);
 
 	return (
@@ -62,56 +70,52 @@ export default function LineItemsChart({ orderId, lineItems }: LineItemsChartPro
 						</tr>
 					</thead>
 					<tbody className='divide-y divide-neutral-100 bg-white'>
-						{grouped.map((group) => {
-							const groupTotal = group.items.reduce((sum, item) => sum + item.subtotal, 0);
-
-							return (
-								<React.Fragment key={group.product}>
-									<tr className='bg-neutral-100'>
-										<td colSpan={7} className='px-6 py-2 font-medium text-neutral-800'>
-											{group.product}
+						{grouped.map((group) => (
+							<React.Fragment key={group.product}>
+								<tr className='bg-neutral-100'>
+									<td colSpan={7} className='px-6 py-2 font-medium text-neutral-800'>
+										{group.product}
+									</td>
+								</tr>
+								{group.items.map((item) => (
+									<tr key={item.id}>
+										<td className='py-2.5 pr-4 pl-8'>
+											<div className='flex items-center gap-2'>
+												<div className='h-6 w-1 rounded-full bg-neutral-300' />
+												<span className='text-neutral-800'>{item.name}</span>
+											</div>
+										</td>
+										<td
+											aria-label={formatStartEndDates(item.startDate, item.endDate, {
+												forAccessibility: true,
+											})}
+											className='px-4 py-2.5'
+										>
+											{formatStartEndDates(item.startDate, item.endDate)}
+										</td>
+										<td className='px-4 py-2.5'>{item.rateType}</td>
+										<td className='px-4 py-2.5 text-left'>{formatCurrency(item.rate)}</td>
+										<td className='px-4 py-2.5 text-left'>{item.quantity}</td>
+										<td className='px-4 py-2.5 text-right font-medium'>
+											{formatCurrency(item.rate * item.quantity)}
+										</td>
+										<td>
+											<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>
+												<EditLineItemForm lineItem={item} />
+												<DeleteLineItemForm lineItemId={item.id} />
+											</div>
 										</td>
 									</tr>
-									{group.items.map((item) => (
-										<tr key={item.id}>
-											<td className='py-2.5 pr-4 pl-8'>
-												<div className='flex items-center gap-2'>
-													<div className='h-6 w-1 rounded-full bg-neutral-300' />
-													<span className='text-neutral-800'>{item.name}</span>
-												</div>
-											</td>
-											<td
-												aria-label={formatStartEndDates(item.startDate, item.endDate ?? undefined, {
-													forAccessibility: true,
-												})}
-												className='px-4 py-2.5'
-											>
-												{formatStartEndDates(item.startDate, item.endDate ?? undefined)}
-											</td>
-											<td className='px-4 py-2.5'>{item.rateType}</td>
-											<td className='px-4 py-2.5 text-left'>{formatCurrency(item.rate)}</td>
-											<td className='px-4 py-2.5 text-left'>{item.quantity}</td>
-											<td className='px-4 py-2.5 text-right font-medium'>
-												{formatCurrency(item.rate * item.quantity)}
-											</td>
-											<td>
-												<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>
-													<EditLineItemForm />
-													<DeleteLineItemForm lineItemId={item.id} />
-												</div>
-											</td>
-										</tr>
-									))}
-									<tr className='border-b-neutral-200 bg-neutral-50'>
-										<td colSpan={5} className='p-4 text-right font-semibold text-neutral-600'>
-											{group.product} Total
-										</td>
-										<td className='p-4 text-right font-semibold'>{formatCurrency(groupTotal)}</td>
-										<td colSpan={1}></td>
-									</tr>
-								</React.Fragment>
-							);
-						})}
+								))}
+								<tr className='border-b-neutral-200 bg-neutral-50'>
+									<td colSpan={5} className='p-4 text-right font-semibold text-neutral-600'>
+										{group.product} Total
+									</td>
+									<td className='p-4 text-right font-semibold'>{formatCurrency(group.total)}</td>
+									<td colSpan={1}></td>
+								</tr>
+							</React.Fragment>
+						))}
 					</tbody>
 					<tfoot>
 						<tr className='border-y border-neutral-300'>

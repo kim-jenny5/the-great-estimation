@@ -34,12 +34,11 @@ export const formatPercentage = (value: number): string => {
 export const convertToUTC = (date: string) =>
 	DateTime.fromISO(date).setZone(TIMEZONE).toUTC().toJSDate();
 
-// format dates for display on the UI
-export const formatDate = (date: string) =>
-	DateTime.fromISO(date).setZone(TIMEZONE).toFormat('MMMM d, yyyy');
+export const strippedDate = (date: string) => DateTime.fromISO(date).setZone(TIMEZONE);
 
-export const formatMonth = (date: string) =>
-	DateTime.fromISO(date).setZone(TIMEZONE).toFormat('MMMM d');
+// format dates for display on the UI
+export const formatDate = (date: string) => strippedDate(date).toFormat('MMMM d, yyyy');
+export const formatMonth = (date: string) => strippedDate(date).toFormat('MMMM d');
 
 export const formatStartEndDates = (
 	startDate: string,
@@ -48,12 +47,14 @@ export const formatStartEndDates = (
 ): string => {
 	const { forAccessibility = false } = options;
 
-	const start = DateTime.fromISO(startDate).setZone(TIMEZONE);
-	const end = endDate ? DateTime.fromISO(endDate).setZone(TIMEZONE) : undefined;
+	const start = strippedDate(startDate);
+	const end = endDate ? strippedDate(endDate) : undefined;
 
-	if (!end) return start.toFormat('MMMM d, yyyy');
+	if (!end) return formatDate(startDate);
 
-	if (forAccessibility) return `${start.toFormat('MMMM d')} to ${end.toFormat('MMMM d, yyyy')}`;
+	if (forAccessibility) {
+		return `${start.toFormat('MMMM d')}${endDate && ` to ${formatDate(endDate)}`}`;
+	}
 
 	const sameYear = start.year === end.year;
 	const sameMonth = start.month === end.month;
@@ -66,5 +67,5 @@ export const formatStartEndDates = (
 		return `${start.toFormat('MMMM d')} – ${end.toFormat('MMMM d')}, ${start.year}`;
 	}
 
-	return `${start.toFormat('MMMM d, yyyy')} – ${end.toFormat('MMMM d, yyyy')}`;
+	return `${formatDate(startDate)} – ${formatDate(endDate!)}`;
 };
