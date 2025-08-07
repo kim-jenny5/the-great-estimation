@@ -6,9 +6,7 @@ import { prisma } from '@/prisma/client';
 import { seed } from '@/prisma/seed';
 
 import { convertToUTC } from './formatters';
-import { CurrentUser, SerializedOrder, StatusOption } from './types';
-
-import type { RateType } from '@prisma/client';
+import { CurrentUser, SerializedOrder } from './types';
 
 export async function resetDatabase() {
 	await prisma.lineItem.deleteMany({});
@@ -52,7 +50,7 @@ export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
 
 	const serializedOrder: SerializedOrder = {
 		...selectedOrder,
-		status: selectedOrder.status as StatusOption,
+		status: selectedOrder.status,
 		totalBudget: selectedOrder.totalBudget.toNumber(),
 		totalSpend: selectedOrder.totalSpend.toNumber(),
 		deliverableDueAt: selectedOrder.deliverableDueAt.toISOString(),
@@ -132,7 +130,7 @@ export async function createLineItem(data: {
 	name: string;
 	startDate: string;
 	endDate: string | null;
-	rateType: RateType;
+	rateType: string;
 	rate: number;
 	quantity: number;
 }) {
@@ -147,7 +145,7 @@ export async function createLineItem(data: {
 			name,
 			startDate: convertToUTC(startDate),
 			endDate: endDate ? convertToUTC(endDate) : null,
-			rateType: rateType as RateType,
+			rateType,
 			rate,
 			quantity,
 			subtotal,

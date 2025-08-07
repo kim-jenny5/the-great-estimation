@@ -5,18 +5,17 @@ import { getAllProducts, createLineItem } from '@/util/queries';
 import { RATE_TYPES } from '@/util/types';
 
 import DrawerWrapper from '../DrawerWrapper';
-
-import type { RateType } from '@prisma/client';
+import SelectInput from './SelectInput';
 
 export default function CreateLineItemForm({ orderId }: { orderId: string }) {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [products, setProducts] = useState<{ id: string; name: string }[]>([]);
-	const [productId, setProductId] = useState('');
-	const [name, setName] = useState('');
+	const [productId, setProductId] = useState<string>('');
+	const [name, setName] = useState<string>('');
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
-	const [rateType, setRateType] = useState<RateType>('Flat');
-	const [rate, setRate] = useState('');
+	const [rateType, setRateType] = useState<string>('');
+	const [rate, setRate] = useState<string>('');
 	const [quantity, setQuantity] = useState('');
 
 	useEffect(() => {
@@ -63,24 +62,13 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 					<div className='border-b border-gray-900/10 pb-6'>
 						<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 							<div className='sm:col-span-2'>
-								<label htmlFor='product' className='block text-sm/6 font-medium text-gray-900'>
-									Product
-								</label>
-								<select
-									id='product'
-									required
-									value={productId}
-									onChange={(e) => setProductId(e.target.value)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
-								>
-									{products.map((product) => (
-										<option key={product.id} value={product.id}>
-											{product.name}
-										</option>
-									))}
-								</select>
+								<SelectInput
+									name='product'
+									defaultValue={productId}
+									onChange={(newProductId) => setProductId(newProductId)}
+									options={products.map((product) => product.name)}
+								/>
 							</div>
-
 							<div className='sm:col-span-2'>
 								<label htmlFor='name' className='block text-sm/6 font-medium text-gray-900'>
 									Name
@@ -91,7 +79,7 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 									id='name'
 									value={name}
 									onChange={(e) => setName(e.target.value)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									className='input'
 								/>
 							</div>
 
@@ -105,10 +93,9 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 									id='startDate'
 									value={startDate}
 									onChange={(e) => setStartDate(e.target.value)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									className='input'
 								/>
 							</div>
-
 							<div className='sm:col-span-1'>
 								<label htmlFor='endDate' className='block text-sm/6 font-medium text-gray-900'>
 									End date (optional)
@@ -118,27 +105,16 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 									id='endDate'
 									value={endDate ?? ''}
 									onChange={(e) => setEndDate(e.target.value)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									className='input'
 								/>
 							</div>
-
 							<div className='sm:col-span-1'>
-								<label htmlFor='rateType' className='block text-sm/6 font-medium text-gray-900'>
-									Rate Type
-								</label>
-								<select
-									id='rateType'
-									required
-									value={rateType}
-									onChange={(e) => setRateType(e.target.value as RateType)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
-								>
-									{RATE_TYPES.map((rateType) => (
-										<option key={rateType} value={rateType}>
-											{rateType}
-										</option>
-									))}
-								</select>
+								<SelectInput
+									name='rateType'
+									defaultValue={rateType}
+									onChange={(newRateType) => setRateType(newRateType)}
+									options={RATE_TYPES}
+								/>
 							</div>
 							<div className='sm:col-span-1'>
 								<label htmlFor='rate' className='block text-sm/6 font-medium text-gray-900'>
@@ -158,7 +134,6 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 									/>
 								</div>
 							</div>
-
 							<div className='sm:col-span-1'>
 								<label htmlFor='quantity' className='block text-sm/6 font-medium text-gray-900'>
 									Quantity
@@ -169,7 +144,7 @@ export default function CreateLineItemForm({ orderId }: { orderId: string }) {
 									id='quantity'
 									value={quantity}
 									onChange={(e) => setQuantity(e.target.value)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									className='input'
 								/>
 							</div>
 						</div>

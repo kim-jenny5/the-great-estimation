@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import { updateOrder } from '@/util/queries';
-import { StatusOption } from '@/util/types';
+import { STATUSES } from '@/util/types';
 
 import SelectInput from './SelectInput';
 import DrawerWrapper from '../DrawerWrapper';
@@ -12,16 +12,16 @@ type EditOrderFormProps = {
 	order: {
 		id: string;
 		name: string;
-		status: StatusOption;
+		status: string;
 		totalBudget: number;
 		deliverableDueAt: string;
 	};
 };
 
 export default function EditOrderForm({ order }: EditOrderFormProps) {
-	const [isOpen, setIsOpen] = useState(false);
-	const [name, setName] = useState(order.name);
-	const [status, setStatus] = useState<StatusOption>(order.status);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [name, setName] = useState<string>(order.name);
+	const [status, setStatus] = useState<string>(order.status);
 	const [totalBudget, setTotalBudget] = useState(order.totalBudget);
 	const [dueDate, setDueDate] = useState(order.deliverableDueAt);
 
@@ -71,7 +71,7 @@ export default function EditOrderForm({ order }: EditOrderFormProps) {
 									name='name'
 									value={name}
 									onChange={(e) => setName(e.target.value)}
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									className='input'
 								/>
 							</div>
 							<div className='sm:col-span-1'>
@@ -85,17 +85,15 @@ export default function EditOrderForm({ order }: EditOrderFormProps) {
 									value={dueDate.slice(0, 10)}
 									onChange={(e) => setDueDate(e.target.value)}
 									required
-									className='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									className='input'
 								/>
 							</div>
 							<div className='sm:col-span-1'>
-								<label htmlFor='status' className='block text-sm/6 font-medium text-gray-900'>
-									Status
-								</label>
 								<SelectInput
+									name='status'
 									defaultValue={status}
 									onChange={(newStatus) => setStatus(newStatus)}
-									style='mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
+									options={STATUSES}
 								/>
 							</div>
 							<div className='sm:col-span-2'>

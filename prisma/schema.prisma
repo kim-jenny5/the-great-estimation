@@ -21,7 +21,7 @@ model Order {
   id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name              String
   creatorId         String     @db.Uuid
-  status            String?
+  status            String     @default("Pending")
   totalBudget       Decimal
   totalSpend        Decimal    @default(0)
   productsCount     Int        @default(0)
@@ -43,13 +43,6 @@ model Product {
   lineItems LineItem[]
 }
 
-enum RateType {
-  Flat
-  CPM
-  CPC
-  CPA
-}
-
 model LineItem {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   orderId    String     @db.Uuid
@@ -57,7 +50,7 @@ model LineItem {
   name       String
   startDate  DateTime   @db.Timestamp(6)
   endDate    DateTime?  @db.Timestamp(6)
-  rateType   RateType
+  rateType   String
   rate       Decimal    @db.Decimal
   quantity   Int
   subtotal   Decimal    @db.Decimal

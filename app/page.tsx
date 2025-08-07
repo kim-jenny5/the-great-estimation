@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Slider from '@/components/Slider';
 import StatGroup from '@/components/StatGroup';
 import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
-import { StatusOption } from '@/util/types';
+import { StatusTypes } from '@/util/types';
 
 export default async function Dashboard() {
 	const user = await getCurrentUser();
@@ -17,7 +17,7 @@ export default async function Dashboard() {
 		<>
 			<Navbar user={user.name} />
 			<main className='wrapper min-h-screen flex-col gap-y-6'>
-				<Header order={{ ...order, status: status as StatusOption }} />
+				<Header order={{ ...order, status: status as StatusTypes }} />
 				<StatGroup
 					totalBudget={totalBudget}
 					totalSpend={totalSpend}

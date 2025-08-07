@@ -28,7 +28,7 @@ type SerializedLineItem = {
 export type SerializedOrder = {
 	id: string;
 	name: string;
-	status: 'Pending' | 'In progress' | 'Completed' | 'Lost' | null;
+	status: 'Pending' | 'In progress' | 'Completed' | 'Lost';
 	totalBudget: number;
 	totalSpend: number;
 	productsCount: number;
@@ -39,8 +39,8 @@ export type SerializedOrder = {
 	lineItems: SerializedLineItem[];
 };
 
-export type StatusValue = 'Pending' | 'In progress' | 'Completed' | 'Lost';
-export type StatusOption = StatusValue | null;
+export const STATUSES = ['Pending', 'In progress', 'Completed', 'Lost'] as const;
+// type StatusType = (typeof STATUSES)[number];
+// export type StatusTypes = StatusType | null;
 
 export const RATE_TYPES = ['Flat', 'CPM', 'CPC', 'CPA'] as const;
-// export type RateType = (typeof RATE_TYPES)[number];

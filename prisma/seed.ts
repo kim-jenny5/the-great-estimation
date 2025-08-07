@@ -106,7 +106,6 @@ export async function seed() {
 }
 
 // called if seeding is run directly inside the terminal
- 
 if (import.meta.url === `file://${process.argv[1]}`) {
 	try {
 		await seed();
