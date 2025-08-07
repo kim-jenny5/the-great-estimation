@@ -5,10 +5,10 @@ import { useState, useEffect } from 'react';
 import { updateOrder } from '@/util/queries';
 import { STATUSES } from '@/util/types';
 
-import SelectInput from './SelectInput';
+import SelectInput from './SelectInputField';
 import DrawerWrapper from '../DrawerWrapper';
 
-type EditOrderFormProps = {
+type UpdateOrderFormProps = {
 	order: {
 		id: string;
 		name: string;
@@ -18,7 +18,7 @@ type EditOrderFormProps = {
 	};
 };
 
-export default function EditOrderForm({ order }: EditOrderFormProps) {
+export default function UpdateOrderForm({ order }: UpdateOrderFormProps) {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [name, setName] = useState<string>(order.name);
 	const [status, setStatus] = useState<string>(order.status);

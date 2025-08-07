@@ -1,12 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
 
 import CreateLineItemForm from './forms/CreateLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
-import EditLineItemForm from './forms/EditLineItemForm';
+import EditLineItemForm from './forms/UpdateLineItemForm';
+
+import { getAllProducts } from '@/util/queries';
 
 type LineItem = {
 	id: string;
@@ -47,14 +49,22 @@ export default function LineItemsChart({ orderId, lineItems }: LineItemsChartPro
 		}
 	}
 
-	console.log(grouped);
+	const [products, setProducts] = useState<{ id: string; name: string }[]>([]);
+
+	useEffect(() => {
+		async function fetchProducts() {
+			const data = await getAllProducts();
+			setProducts(data);
+		}
+		fetchProducts();
+	}, []);
 
 	const grandTotal = lineItems.reduce((sum, item) => sum + item.subtotal, 0);
 
 	return (
 		<>
 			<div className='flex justify-end'>
-				<CreateLineItemForm orderId={orderId} />
+				<CreateLineItemForm orderId={orderId} products={products} />
 			</div>
 			<div className='card'>
 				<table className='min-w-full divide-y divide-neutral-300 text-sm text-neutral-800'>
@@ -101,7 +111,7 @@ export default function LineItemsChart({ orderId, lineItems }: LineItemsChartPro
 										</td>
 										<td>
 											<div className='flex items-center justify-end gap-x-4 px-4 py-2.5'>
-												<EditLineItemForm lineItem={item} />
+												<EditLineItemForm lineItem={item} products={products} />
 												<DeleteLineItemForm lineItemId={item.id} />
 											</div>
 										</td>

@@ -35,17 +35,19 @@ export default function DrawerWrapper({
 				/>
 			)}
 			<div
-				className={`fixed top-0 right-0 z-50 h-full w-1/3 max-w-md transform bg-white shadow-xl transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+				className={`fixed top-0 right-0 z-50 h-full w-3/4 transform bg-white shadow-xl transition-transform duration-500 ease-in-out sm:w-1/3 sm:max-w-md ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
 			>
-				<div className='grid grid-cols-2 items-center p-4'>
-					<h2 className='col-start-1 row-start-1 text-2xl capitalize'>{title}</h2>
-					<p className='col-span-full row-start-2 text-sm text-neutral-600'>{description}</p>
-					<button
-						onClick={onClose}
-						className='col-start-2 row-start-1 w-fit cursor-pointer place-self-end rounded-full p-2 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
-					>
-						<XMarkIcon width={20} height={20} />
-					</button>
+				<div className='flex flex-col gap-y-1 p-4'>
+					<div className='flex justify-between'>
+						<h2 className='col-start-1 row-start-1 text-2xl capitalize'>{title}</h2>
+						<button
+							onClick={onClose}
+							className='col-start-2 row-start-1 w-fit cursor-pointer place-self-end rounded-full p-2 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300'
+						>
+							<XMarkIcon width={20} height={20} />
+						</button>
+					</div>
+					<p className='text-sm text-neutral-600'>{description}</p>
 				</div>
 				<div className='p-4'>{children}</div>
 			</div>

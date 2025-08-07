@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import { formatLabel } from '@/util/formatters';
 
-type SelectInputProps = {
+type SelectInputFieldProps = {
 	name: string;
 	defaultValue: string;
 	onChange?: (value: string) => void;
@@ -19,12 +19,12 @@ const statusStyles: Record<string, string> = {
 	Lost: 'bg-red-500',
 };
 
-export default function SelectInput({
+export default function SelectInputField({
 	name = '',
 	defaultValue = '',
 	onChange,
 	options,
-}: SelectInputProps) {
+}: SelectInputFieldProps) {
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const [selected, setSelected] = useState<string>(defaultValue);
 	const [open, setOpen] = useState(false);
@@ -45,6 +45,8 @@ export default function SelectInput({
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, []);
+
+	console.log(name === 'product' && defaultValue);
 
 	const showDot = name === 'status';
 

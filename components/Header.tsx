@@ -1,7 +1,7 @@
 import StatusBadge from '@/components/StatusBadge';
 import { formatDate } from '@/util/formatters';
 
-import EditOrderForm from './forms/EditOrderForm';
+import EditOrderForm from './forms/UpdateOrderForm';
 
 import type { SerializedOrder } from '@/util/types';
 
