@@ -10,7 +10,7 @@ export const formatInitials = (name: string) =>
 		.toUpperCase();
 
 export const formatLabel = (name: string) =>
-	name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (str) => str.toUpperCase());
+	name.replaceAll(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (str) => str.toUpperCase());
 
 export const formatCurrency = (amount: number): string => {
 	return amount.toLocaleString('en-US', {
