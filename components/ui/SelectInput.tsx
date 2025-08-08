@@ -3,9 +3,9 @@
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { useState, useEffect, useRef } from 'react';
 
-import { formatLabel } from '@/util/formatters';
+import { formatLabel, formatPlaceholder } from '@/util/formatters';
 
-type SelectInputFieldProps = {
+type SelectInputProps = {
 	name: string;
 	defaultValue: string;
 	onChange?: (value: string) => void;
@@ -19,12 +19,12 @@ const statusStyles: Record<string, string> = {
 	Lost: 'bg-red-500',
 };
 
-export default function SelectInputField({
+export default function SelectInput({
 	name = '',
 	defaultValue = '',
 	onChange,
 	options,
-}: SelectInputFieldProps) {
+}: SelectInputProps) {
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const [selected, setSelected] = useState<string>(defaultValue);
 	const [open, setOpen] = useState(false);
@@ -46,17 +46,13 @@ export default function SelectInputField({
 		};
 	}, []);
 
-	console.log(name === 'product' && defaultValue);
-
 	const showDot = name === 'status';
 
 	return (
 		<>
-			<label htmlFor={name} className='block text-sm/6 font-medium text-gray-900'>
-				{formatLabel(name)}
-			</label>
+			{formatLabel(name, { required: true })}
 			<div ref={dropdownRef} className='relative w-full'>
-				<input type='hidden' name={name} value={selected ?? ''} />
+				<input required type='hidden' name={name} value={selected ?? ''} />
 				<button type='button' className='input' onClick={() => setOpen((prev) => !prev)}>
 					<div className='flex items-center justify-between'>
 						<div className='flex items-center gap-2'>
@@ -66,9 +62,7 @@ export default function SelectInputField({
 									<span>{selected}</span>
 								</>
 							) : (
-								<span className='text-gray-400 italic'>
-									Select {formatLabel(name).toLowerCase()}
-								</span>
+								<span className='text-gray-400 italic'>Select {formatPlaceholder(name)}</span>
 							)}
 						</div>
 						<ChevronDownIcon width={15} height={15} />

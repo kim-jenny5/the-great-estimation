@@ -1,5 +1,8 @@
-import SelectInput from './SelectInputField';
+import { formatLabel } from '@/util/formatters';
 import { RATE_TYPES } from '@/util/types';
+
+import SelectInput from '../ui/SelectInput';
+import TextInputCurrency from '../ui/TextInputCurrency';
 
 type LineItemFormProps = {
 	initialValues: {
@@ -21,7 +24,9 @@ type LineItemFormProps = {
 		setRate: (rate: string) => void;
 		setQuantity: (qty: string) => void;
 	};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	submitFn: (data: any) => Promise<any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	extraData?: Record<string, any>;
 	closeDrawer: () => void;
 	submitLabel: string;
@@ -60,7 +65,7 @@ export default function LineItemForm({
 	return (
 		<form onSubmit={handleSubmit}>
 			<div className='border-b border-gray-900/10 pb-6'>
-				<div className='grid grid-cols-1 gap-4 sm:grid-cols-6'>
+				<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 					<div className='sm:col-span-full'>
 						<SelectInput
 							name='product'
@@ -73,9 +78,7 @@ export default function LineItemForm({
 						/>
 					</div>
 					<div className='sm:col-span-full'>
-						<label htmlFor='name' className='block text-sm/6 font-medium text-gray-900'>
-							Name
-						</label>
+						{formatLabel('Name', { required: true })}
 						<input
 							required
 							type='text'
@@ -85,10 +88,8 @@ export default function LineItemForm({
 							className='input'
 						/>
 					</div>
-					<div className='sm:col-span-3'>
-						<label htmlFor='startDate' className='block text-sm/6 font-medium text-gray-900'>
-							Start date
-						</label>
+					<div className='sm:col-span-1'>
+						{formatLabel('Start Date', { required: true })}
 						<input
 							required
 							type='date'
@@ -98,10 +99,8 @@ export default function LineItemForm({
 							className='input'
 						/>
 					</div>
-					<div className='sm:col-span-3'>
-						<label htmlFor='endDate' className='block text-sm/6 font-medium text-gray-900'>
-							End date (optional)
-						</label>
+					<div className='sm:col-span-1'>
+						{formatLabel('End Date')}
 						<input
 							type='date'
 							id='endDate'
@@ -110,7 +109,7 @@ export default function LineItemForm({
 							className='input'
 						/>
 					</div>
-					<div className='sm:col-span-2'>
+					<div className='sm:col-span-1'>
 						<SelectInput
 							name='rateType'
 							defaultValue={rateType}
@@ -118,28 +117,11 @@ export default function LineItemForm({
 							options={RATE_TYPES}
 						/>
 					</div>
-					<div className='sm:col-span-2'>
-						<label htmlFor='rate' className='block text-sm/6 font-medium text-gray-900'>
-							Rate
-						</label>
-						<div className='relative mt-1'>
-							<div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-								<span className='text-gray-500 sm:text-sm'>$</span>
-							</div>
-							<input
-								required
-								type='number'
-								id='rate'
-								value={rate}
-								onChange={(e) => setRate(e.target.value)}
-								className='block w-full rounded-md bg-white py-1.5 pr-3 pl-7 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-lime-300 sm:text-sm/6'
-							/>
-						</div>
+					<div className='sm:col-span-1'>
+						<TextInputCurrency name='rate' value={rate} onChange={(e) => setRate(e.target.value)} />
 					</div>
-					<div className='sm:col-span-2'>
-						<label htmlFor='quantity' className='block text-sm/6 font-medium text-gray-900'>
-							Quantity
-						</label>
+					<div className='sm:col-span-full'>
+						{formatLabel('Quantity', { required: true })}
 						<input
 							required
 							type='number'

@@ -9,8 +9,21 @@ export const formatInitials = (name: string) =>
 		.join('')
 		.toUpperCase();
 
-export const formatLabel = (name: string) =>
-	name.replaceAll(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (str) => str.toUpperCase());
+export const formatPlaceholder = (placeholder: string) =>
+	placeholder.replaceAll(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (str) => str.toLowerCase());
+
+export const formatLabel = (label: string, { required = false }: { required?: boolean } = {}) => {
+	const formattedLabel = label
+		.replaceAll(/([a-z])([A-Z])/g, '$1 $2')
+		.replace(/^./, (str) => str.toUpperCase());
+
+	return (
+		<label htmlFor={label} className='block text-sm/6 font-medium text-gray-900'>
+			{formattedLabel}
+			{required && <span className='pl-0.5 text-red-500'>*</span>}
+		</label>
+	);
+};
 
 export const formatCurrency = (amount: number): string => {
 	return amount.toLocaleString('en-US', {

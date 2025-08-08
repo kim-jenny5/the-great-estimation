@@ -1,10 +1,10 @@
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 
-import DrawerWrapper from '../DrawerWrapper';
+import { strippedDate } from '@/util/formatters';
 import { updateLineItem } from '@/util/queries';
 
-import { strippedDate } from '@/util/formatters';
+import DrawerWrapper from '../DrawerWrapper';
 import LineItemForm from './LineItemForm';
 
 type UpdateLineItemFormProps = {

@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from 'react';
 
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
+import { getAllProducts } from '@/util/queries';
 
 import CreateLineItemForm from './forms/CreateLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
 import EditLineItemForm from './forms/UpdateLineItemForm';
-
-import { getAllProducts } from '@/util/queries';
 
 type LineItem = {
 	id: string;
