@@ -40,7 +40,4 @@ export type SerializedOrder = {
 };
 
 export const STATUSES = ['Pending', 'In progress', 'Completed', 'Lost'] as const;
-// type StatusType = (typeof STATUSES)[number];
-// export type StatusTypes = StatusType | null;
-
 export const RATE_TYPES = ['Flat', 'CPM', 'CPC', 'CPA'] as const;

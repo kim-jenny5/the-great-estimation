@@ -19,3 +19,13 @@ export const styleStatus = (status?: string): StatusColor => {
 		}
 	}
 };
+
+export const stylePercentage = (percentage: number) => {
+	if (Math.abs(percentage - 1) < 1e-9) {
+		return 'font-bold text-green-500';
+	} else if (percentage > 1) {
+		return 'font-bold text-red-500';
+	} else {
+		return 'font-medium text-neutral-500';
+	}
+};

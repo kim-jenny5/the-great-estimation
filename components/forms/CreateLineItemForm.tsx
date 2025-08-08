@@ -49,7 +49,7 @@ export default function CreateLineItemForm({ orderId, products }: CreateLineItem
 		setEndDate(end ? (DateTime.fromJSDate(end, { zone: TIMEZONE }).toISODate() ?? '') : '');
 		setRateType(faker.helpers.arrayElement(RATE_TYPES as readonly string[]));
 		setRate(String(faker.number.float({ min: 5, max: 100, multipleOf: 0.01 }).toFixed(2)));
-		setQuantity(String(faker.number.int({ min: 1, max: 5 })));
+		setQuantity(String(faker.number.int({ min: 1, max: 3 })));
 	}, [isOpen, products.length ?? 0]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
