@@ -59,6 +59,14 @@ export default function LineItemForm({
 			quantity: Number.parseInt(quantity),
 		});
 
+		setProductId('');
+		setName('');
+		setStartDate('');
+		setEndDate('');
+		setRateType('');
+		setRate('');
+		setQuantity('');
+
 		closeDrawer();
 	};
 

@@ -18,6 +18,7 @@
 		"db:reset": "NODE_ENV=development prisma migrate reset && pnpm migrate:dev && pnpm seed"
 	},
 	"dependencies": {
+		"@faker-js/faker": "^9.9.0",
 		"@heroicons/react": "^2.2.0",
 		"@prisma/client": "6.13.0",
 		"luxon": "^3.7.1",
