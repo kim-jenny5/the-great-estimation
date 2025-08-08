@@ -1,7 +1,11 @@
+import { faker } from '@faker-js/faker';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { DateTime } from 'luxon';
+import { useState, useRef, useEffect } from 'react';
 
+import { TIMEZONE } from '@/util/formatters';
 import { createLineItem } from '@/util/queries';
+import { RATE_TYPES } from '@/util/types';
 
 import DrawerWrapper from '../DrawerWrapper';
 import LineItemForm from './LineItemForm';
@@ -20,6 +24,33 @@ export default function CreateLineItemForm({ orderId, products }: CreateLineItem
 	const [rateType, setRateType] = useState<string>('');
 	const [rate, setRate] = useState<string>('');
 	const [quantity, setQuantity] = useState('');
+
+	const seededOnceRef = useRef(false);
+
+	useEffect(() => {
+		if (!isOpen) {
+			seededOnceRef.current = false;
+			return;
+		}
+		if (seededOnceRef.current) return;
+		if (!products?.length) return;
+		seededOnceRef.current = true;
+
+		const prod = faker.helpers.arrayElement(products);
+		const start = faker.date.soon({ days: 30 });
+		const maybeHasEnd = faker.datatype.boolean();
+		const end = maybeHasEnd
+			? faker.date.soon({ days: faker.number.int({ min: 3, max: 90 }), refDate: start })
+			: null;
+
+		setProductId(prod.id);
+		setName(faker.commerce.productName());
+		setStartDate(DateTime.fromJSDate(start, { zone: TIMEZONE }).toISODate() ?? '');
+		setEndDate(end ? (DateTime.fromJSDate(end, { zone: TIMEZONE }).toISODate() ?? '') : '');
+		setRateType(faker.helpers.arrayElement(RATE_TYPES as readonly string[]));
+		setRate(String(faker.number.float({ min: 5, max: 100, multipleOf: 0.01 }).toFixed(2)));
+		setQuantity(String(faker.number.int({ min: 1, max: 5 })));
+	}, [isOpen, products.length ?? 0]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<>

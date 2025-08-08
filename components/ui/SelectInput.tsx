@@ -7,7 +7,8 @@ import { formatLabel, formatPlaceholder } from '@/util/formatters';
 
 type SelectInputProps = {
 	name: string;
-	defaultValue: string;
+	defaultValue?: string;
+	value?: string;
 	onChange?: (value: string) => void;
 	options: readonly string[];
 };
@@ -22,16 +23,28 @@ const statusStyles: Record<string, string> = {
 export default function SelectInput({
 	name = '',
 	defaultValue = '',
+	value,
 	onChange,
 	options,
 }: SelectInputProps) {
 	const dropdownRef = useRef<HTMLDivElement>(null);
-	const [selected, setSelected] = useState<string>(defaultValue);
+	// const didMountRef = useRef(false);
+	const [selected, setSelected] = useState<string>(value ?? defaultValue ?? '');
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
-		onChange?.(selected ?? '');
-	}, [selected, onChange]);
+		if (value !== undefined) setSelected(value);
+	}, [value]);
+
+	useEffect(() => {
+		function handleClickOutside(event: MouseEvent) {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+				setOpen(false);
+			}
+		}
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('mousedown', handleClickOutside);
+	}, []);
 
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
@@ -74,8 +87,15 @@ export default function SelectInput({
 							<li
 								key={option}
 								className='flex cursor-pointer items-center gap-2 px-4 py-2 text-sm text-gray-900 hover:bg-gray-100'
+								// onClick={() => {
+								// 	setSelected(option);
+								// 	setOpen(false);
+								// }}
 								onClick={() => {
-									setSelected(option);
+									if (option !== selected) {
+										setSelected(option);
+										onChange?.(option);
+									}
 									setOpen(false);
 								}}
 							>

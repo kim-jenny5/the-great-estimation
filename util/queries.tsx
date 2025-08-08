@@ -1,9 +1,9 @@
 'use server';
 
+import { Prisma, PrismaClient } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 import { prisma } from '@/prisma/client';
-import { Prisma, PrismaClient } from '@prisma/client';
 import { seed } from '@/prisma/seed';
 
 import { convertToUTC } from './formatters';

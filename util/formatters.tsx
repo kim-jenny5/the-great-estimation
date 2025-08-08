@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-const TIMEZONE = 'America/New_York';
+export const TIMEZONE = 'America/New_York';
 
 export const formatInitials = (name: string) =>
 	name

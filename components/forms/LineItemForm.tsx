@@ -48,26 +48,30 @@ export default function LineItemForm({
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		await submitFn({
-			...extraData,
-			productId,
-			name,
-			startDate,
-			endDate,
-			rateType,
-			rate: Number.parseFloat(rate),
-			quantity: Number.parseInt(quantity),
-		});
+		try {
+			await submitFn({
+				...extraData,
+				productId,
+				name,
+				startDate,
+				endDate,
+				rateType,
+				rate: Number.parseFloat(rate),
+				quantity: Number.parseInt(quantity, 10),
+			});
 
-		setProductId('');
-		setName('');
-		setStartDate('');
-		setEndDate('');
-		setRateType('');
-		setRate('');
-		setQuantity('');
+			setProductId('');
+			setName('');
+			setStartDate('');
+			setEndDate('');
+			setRateType('');
+			setRate('');
+			setQuantity('');
 
-		closeDrawer();
+			closeDrawer();
+		} catch (error) {
+			throw new Error(`Failed to submit line item: ${error}`);
+		}
 	};
 
 	return (
@@ -77,6 +81,7 @@ export default function LineItemForm({
 					<div className='sm:col-span-full'>
 						<SelectInput
 							name='product'
+							value={products.find((p) => p.id === productId)?.name ?? ''}
 							defaultValue={products.find((p) => p.id === productId)?.name ?? ''}
 							options={products.map((p) => p.name)}
 							onChange={(name) => {
@@ -120,6 +125,7 @@ export default function LineItemForm({
 					<div className='sm:col-span-1'>
 						<SelectInput
 							name='rateType'
+							value={rateType}
 							defaultValue={rateType}
 							onChange={(val) => setRateType(val)}
 							options={RATE_TYPES}
@@ -136,6 +142,8 @@ export default function LineItemForm({
 							id='quantity'
 							value={quantity}
 							onChange={(e) => setQuantity(e.target.value)}
+							min={1}
+							max={9999}
 							className='input'
 						/>
 					</div>
