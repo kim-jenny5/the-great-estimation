@@ -27,7 +27,8 @@
 		"radix-ui": "^1.4.2",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"tailwindcss": "^4.1.11"
+		"tailwindcss": "^4.1.11",
+		"zod": "^4.0.15"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.1",

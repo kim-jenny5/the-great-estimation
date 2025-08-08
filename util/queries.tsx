@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { prisma } from '@/prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { seed } from '@/prisma/seed';
 
 import { convertToUTC } from './formatters';
@@ -97,30 +98,31 @@ export async function updateOrder(data: {
 	revalidatePath('/');
 }
 
-// async function updateOrderTotals(orderId: string) {
-// 	const lineItems = await prisma.lineItem.findMany({ where: { orderId } });
-
-// 	const totalSpend = lineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
-// 	const uniqueProducts = new Set(lineItems.map((item) => item.productId));
-// 	const productsCount = uniqueProducts.size;
-// 	const lineItemsCount = lineItems.length;
-
-// 	await prisma.order.update({
-// 		where: { id: orderId },
-// 		data: {
-// 			totalSpend,
-// 			productsCount,
-// 			lineItemsCount,
-// 		},
-// 	});
-// }
-
 export async function getAllProducts() {
 	return await prisma.product.findMany({
 		select: {
 			id: true,
 			name: true,
 		},
+	});
+}
+
+async function recalculateOrder(
+	orderId: string,
+	db: PrismaClient | Prisma.TransactionClient = prisma
+) {
+	const lineItems = await db.lineItem.findMany({
+		where: { orderId },
+		select: { productId: true, subtotal: true },
+	});
+
+	const totalSpend = lineItems.reduce((sum, li) => sum + li.subtotal.toNumber(), 0);
+	const productsCount = new Set(lineItems.map((li) => li.productId)).size;
+	const lineItemsCount = lineItems.length;
+
+	await db.order.update({
+		where: { id: orderId },
+		data: { totalSpend, productsCount, lineItemsCount },
 	});
 }
 
@@ -138,69 +140,62 @@ export async function createLineItem(data: {
 
 	const subtotal = rate * quantity;
 
-	await prisma.lineItem.create({
-		data: {
-			orderId,
-			productId,
-			name,
-			startDate: convertToUTC(startDate),
-			endDate: endDate ? convertToUTC(endDate) : '',
-			rateType,
-			rate,
-			quantity,
-			subtotal,
-		},
-	});
+	await prisma.$transaction(async (tx) => {
+		await tx.lineItem.create({
+			data: {
+				orderId,
+				productId,
+				name,
+				startDate: convertToUTC(startDate),
+				endDate: endDate ? convertToUTC(endDate) : null,
+				rateType,
+				rate,
+				quantity,
+				subtotal,
+			},
+		});
 
-	// Optionally recalculate totals for the order
-	const lineItems = await prisma.lineItem.findMany({ where: { orderId } });
-	const totalSpend = lineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
-	const uniqueProducts = new Set(lineItems.map((item) => item.productId));
-	const productsCount = uniqueProducts.size;
-	const lineItemsCount = lineItems.length;
-
-	await prisma.order.update({
-		where: { id: orderId },
-		data: {
-			totalSpend,
-			productsCount,
-			lineItemsCount,
-		},
+		await recalculateOrder(orderId, tx);
 	});
 
 	revalidatePath('/');
 }
 
-export async function updateLineItem({
-	id,
-	productId,
-	name,
-	startDate,
-	endDate,
-	rateType,
-	rate,
-	quantity,
-}: {
+export async function updateLineItem(params: {
 	id: string;
 	productId: string;
 	name: string;
 	startDate: string;
-	endDate: string;
+	endDate?: string;
 	rateType: string;
 	rate: number;
 	quantity: number;
 }) {
-	await prisma.lineItem.update({
-		where: { id },
-		data: {
-			productId,
-			name,
-			startDate: convertToUTC(startDate),
-			endDate: endDate ? convertToUTC(endDate) : undefined,
-			rateType,
-			rate,
-			quantity,
-		},
+	const { id, productId, name, startDate, endDate, rateType, rate, quantity } = params;
+	const subtotal = rate * quantity;
+
+	await prisma.$transaction(async (tx) => {
+		const existing = await tx.lineItem.findUnique({
+			where: { id },
+			select: { orderId: true },
+		});
+		if (!existing?.orderId) throw new Error('Order not found for line item');
+
+		await tx.lineItem.update({
+			where: { id },
+			data: {
+				productId,
+				name,
+				startDate: convertToUTC(startDate),
+				endDate: endDate ? convertToUTC(endDate) : null,
+				rateType,
+				rate,
+				quantity,
+				subtotal,
+			},
+		});
+
+		await recalculateOrder(existing.orderId, tx);
 	});
 
 	revalidatePath('/');
@@ -210,29 +205,15 @@ export async function deleteLineItem(formData: FormData) {
 	const id = formData.get('id') as string;
 	if (!id) throw new Error('Missing/invalid line item');
 
-	const lineItem = await prisma.lineItem.findUnique({ where: { id } });
-	if (!lineItem?.orderId) throw new Error('Order not found');
+	await prisma.$transaction(async (tx) => {
+		const li = await tx.lineItem.findUnique({
+			where: { id },
+			select: { orderId: true },
+		});
+		if (!li?.orderId) throw new Error('Order not found');
 
-	const orderId = lineItem.orderId;
-
-	// delete the selected line item
-	await prisma.lineItem.delete({ where: { id } });
-
-	// recalculate total products/line items count
-	const remainingLineItems = await prisma.lineItem.findMany({ where: { orderId } });
-
-	const totalSpend = remainingLineItems.reduce((sum, item) => sum + item.subtotal.toNumber(), 0);
-	const uniqueProducts = new Set(remainingLineItems.map((item) => item.productId));
-	const productsCount = uniqueProducts.size;
-	const lineItemsCount = remainingLineItems.length;
-
-	await prisma.order.update({
-		where: { id: orderId },
-		data: {
-			totalSpend,
-			productsCount,
-			lineItemsCount,
-		},
+		await tx.lineItem.delete({ where: { id } });
+		await recalculateOrder(li.orderId, tx);
 	});
 
 	revalidatePath('/');
