@@ -71,17 +71,9 @@ export default function CreateLineItemForm({ orderId, products }: CreateLineItem
 					initialValues={{ productId, name, startDate, endDate, rateType, rate, quantity }}
 					products={products}
 					submitFn={createLineItem}
-					setters={{
-						setProductId,
-						setName,
-						setStartDate,
-						setEndDate,
-						setRateType,
-						setRate,
-						setQuantity,
-					}}
 					extraData={{ orderId }}
 					closeDrawer={() => setIsOpen(false)}
+					resetOnSubmit
 					submitLabel='Create'
 				/>
 			</DrawerWrapper>

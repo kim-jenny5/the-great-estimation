@@ -1,10 +1,10 @@
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 
-import { strippedDate } from '@/util/formatters';
+import DrawerWrapper from '../DrawerWrapper';
 import { updateLineItem } from '@/util/queries';
 
-import DrawerWrapper from '../DrawerWrapper';
+import { strippedDate } from '@/util/formatters';
 import LineItemForm from './LineItemForm';
 
 type UpdateLineItemFormProps = {
@@ -24,13 +24,16 @@ type UpdateLineItemFormProps = {
 
 export default function UpdateLineItemForm({ lineItem, products }: UpdateLineItemFormProps) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [productId, setProductId] = useState<string>(lineItem.productId ?? '');
-	const [name, setName] = useState<string>(lineItem.name);
-	const [startDate, setStartDate] = useState<string>(strippedDate(lineItem.startDate).toISODate()!);
-	const [endDate, setEndDate] = useState<string>(strippedDate(lineItem.endDate).toISODate() ?? '');
-	const [rateType, setRateType] = useState<string>(lineItem.rateType);
-	const [rate, setRate] = useState<string>(String(lineItem.rate));
-	const [quantity, setQuantity] = useState<string>(String(lineItem.quantity));
+
+	const initialValues = {
+		productId: lineItem.productId ?? '',
+		name: lineItem.name ?? '',
+		startDate: strippedDate(lineItem.startDate).toISODate() ?? '',
+		endDate: lineItem.endDate ? (strippedDate(lineItem.endDate).toISODate() ?? '') : '',
+		rateType: lineItem.rateType ?? '',
+		rate: String(lineItem.rate ?? ''),
+		quantity: String(lineItem.quantity ?? ''),
+	};
 
 	return (
 		<>
@@ -47,20 +50,13 @@ export default function UpdateLineItemForm({ lineItem, products }: UpdateLineIte
 				description='Edit line item details below and click save when done.'
 			>
 				<LineItemForm
-					initialValues={{ productId, name, startDate, endDate, rateType, rate, quantity }}
+					key={lineItem.id}
+					initialValues={initialValues}
 					products={products}
 					submitFn={updateLineItem}
-					setters={{
-						setProductId,
-						setName,
-						setStartDate,
-						setEndDate,
-						setRateType,
-						setRate,
-						setQuantity,
-					}}
 					extraData={{ id: lineItem.id }}
 					closeDrawer={() => setIsOpen(false)}
+					resetKey={isOpen}
 					submitLabel='Save'
 				/>
 			</DrawerWrapper>

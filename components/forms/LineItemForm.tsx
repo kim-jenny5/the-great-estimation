@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import { formatLabel } from '@/util/formatters';
 import { RATE_TYPES } from '@/util/types';
 
@@ -15,35 +17,34 @@ type LineItemFormProps = {
 		quantity: string;
 	};
 	products: { id: string; name: string }[];
-	setters: {
-		setProductId: (id: string) => void;
-		setName: (name: string) => void;
-		setStartDate: (date: string) => void;
-		setEndDate: (date: string) => void;
-		setRateType: (type: string) => void;
-		setRate: (rate: string) => void;
-		setQuantity: (qty: string) => void;
-	};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	submitFn: (data: any) => Promise<any>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	extraData?: Record<string, any>;
+	submitFn: (data: any) => Promise<any>; // eslint-disable @typescript-eslint/no-explicit-any
+	extraData?: Record<string, any>; // eslint-disable @typescript-eslint/no-explicit-any
 	closeDrawer: () => void;
+	resetOnSubmit?: boolean;
+	resetKey?: boolean;
 	submitLabel: string;
 };
 
 export default function LineItemForm({
 	initialValues,
 	products,
-	setters,
 	submitFn,
 	extraData = {},
 	closeDrawer,
+	resetOnSubmit = false,
+	resetKey,
 	submitLabel,
 }: LineItemFormProps) {
-	const { productId, name, startDate, endDate, rateType, rate, quantity } = initialValues;
-	const { setProductId, setName, setStartDate, setEndDate, setRateType, setRate, setQuantity } =
-		setters;
+	const [values, setValues] = useState(initialValues);
+
+	const set =
+		<K extends keyof typeof initialValues>(k: K) =>
+		(v: (typeof initialValues)[K]) =>
+			setValues((prev) => ({ ...prev, [k]: v }));
+
+	useEffect(() => {
+		setValues(initialValues);
+	}, [resetKey, initialValues]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -51,22 +52,26 @@ export default function LineItemForm({
 		try {
 			await submitFn({
 				...extraData,
-				productId,
-				name,
-				startDate,
-				endDate,
-				rateType,
-				rate: Number.parseFloat(rate),
-				quantity: Number.parseInt(quantity, 10),
+				productId: values.productId,
+				name: values.name,
+				startDate: values.startDate,
+				endDate: values.endDate,
+				rateType: values.rateType,
+				rate: Number.parseFloat(values.rate),
+				quantity: Number.parseInt(values.quantity, 10),
 			});
 
-			setProductId('');
-			setName('');
-			setStartDate('');
-			setEndDate('');
-			setRateType('');
-			setRate('');
-			setQuantity('');
+			if (resetOnSubmit) {
+				setValues({
+					productId: '',
+					name: '',
+					startDate: '',
+					endDate: '',
+					rateType: '',
+					rate: '',
+					quantity: '',
+				});
+			}
 
 			closeDrawer();
 		} catch (error) {
@@ -81,12 +86,11 @@ export default function LineItemForm({
 					<div className='sm:col-span-full'>
 						<SelectInput
 							name='product'
-							value={products.find((p) => p.id === productId)?.name ?? ''}
-							defaultValue={products.find((p) => p.id === productId)?.name ?? ''}
-							options={products.map((p) => p.name)}
+							value={products.find((product) => product.id === values.productId)?.name ?? ''}
+							options={products.map((product) => product.name)}
 							onChange={(name) => {
-								const matched = products.find((p) => p.name === name);
-								setProductId(matched?.id ?? '');
+								const matched = products.find((product) => product.name === name);
+								set('productId')(matched?.id ?? '');
 							}}
 						/>
 					</div>
@@ -96,8 +100,8 @@ export default function LineItemForm({
 							required
 							type='text'
 							id='name'
-							value={name}
-							onChange={(e) => setName(e.target.value)}
+							value={values.name}
+							onChange={(e) => set('name')(e.target.value)}
 							className='input'
 						/>
 					</div>
@@ -107,8 +111,8 @@ export default function LineItemForm({
 							required
 							type='date'
 							id='startDate'
-							value={startDate}
-							onChange={(e) => setStartDate(e.target.value)}
+							value={values.startDate}
+							onChange={(e) => set('startDate')(e.target.value)}
 							className='input'
 						/>
 					</div>
@@ -117,22 +121,25 @@ export default function LineItemForm({
 						<input
 							type='date'
 							id='endDate'
-							value={endDate}
-							onChange={(e) => setEndDate(e.target.value)}
+							value={values.endDate}
+							onChange={(e) => set('endDate')(e.target.value)}
 							className='input'
 						/>
 					</div>
 					<div className='sm:col-span-1'>
 						<SelectInput
 							name='rateType'
-							value={rateType}
-							defaultValue={rateType}
-							onChange={(val) => setRateType(val)}
+							value={values.rateType}
+							onChange={(value) => set('rateType')(value)}
 							options={RATE_TYPES}
 						/>
 					</div>
 					<div className='sm:col-span-1'>
-						<TextInputCurrency name='rate' value={rate} onChange={(e) => setRate(e.target.value)} />
+						<TextInputCurrency
+							name='rate'
+							value={values.rate}
+							onChange={(e) => set('rate')(e.target.value)}
+						/>
 					</div>
 					<div className='sm:col-span-full'>
 						{formatLabel('Quantity', { required: true })}
@@ -140,8 +147,8 @@ export default function LineItemForm({
 							required
 							type='number'
 							id='quantity'
-							value={quantity}
-							onChange={(e) => setQuantity(e.target.value)}
+							value={values.quantity}
+							onChange={(e) => set('quantity')(e.target.value)}
 							min={1}
 							max={9999}
 							className='input'
