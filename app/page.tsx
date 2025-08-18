@@ -7,26 +7,8 @@ import StatGroup from '@/components/StatGroup';
 import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
 
 export default async function Dashboard() {
-	let user, order;
-
-	try {
-		user = await getCurrentUser();
-		order = await getOrderByIdOrFirst(user);
-	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.error('Error fetching data:', error);
-
-		return (
-			<>
-				<Navbar user='Demo User' />
-				<main className='wrapper min-h-[calc(100vh-153px)] flex-col'>
-					<h1 className='text-xl font-semibold'>App unavailable</h1>
-					<p className='text-sm text-gray-600'>Please try again in a moment.</p>
-				</main>
-				<Footer />
-			</>
-		);
-	}
+	const user = await getCurrentUser();
+	const order = await getOrderByIdOrFirst(user);
 
 	const { totalBudget, totalSpend, productsCount, lineItemsCount, lineItems } = order;
 
