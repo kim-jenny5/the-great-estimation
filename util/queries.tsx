@@ -32,27 +32,26 @@ export async function getCurrentUser() {
 }
 
 export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
+	await prisma.$connect();
 	const userWithOrders = await prisma.user.findUniqueOrThrow({
 		where: { id: user.id },
 		include: {
 			orders: {
-				include: {
-					lineItems: {
-						include: {
-							product: true,
-						},
-					},
-				},
+				orderBy: { createdAt: 'desc' },
+				include: { lineItems: { include: { product: true } } },
 			},
 		},
 	});
 
-	const selectedOrder =
-		orderId == undefined
-			? userWithOrders.orders[0]
-			: userWithOrders.orders.find((order) => order.id === orderId);
+	const selectedOrder = orderId
+		? userWithOrders.orders.find((o) => o.id === orderId)
+		: userWithOrders.orders[0];
 
-	if (!selectedOrder) throw new Error('User has no orders.');
+	if (!selectedOrder) {
+		const err = new Error('NO_ORDERS_FOR_USER');
+		(err as any).code = 'NO_ORDERS_FOR_USER';
+		throw err;
+	}
 
 	const serializedOrder: SerializedOrder = {
 		...selectedOrder,
