@@ -9,8 +9,8 @@ type SelectInputProps = {
 	name: string;
 	defaultValue?: string;
 	value?: string;
-	onChange?: (value: string) => void;
 	options: readonly string[];
+	onChange?: (value: string) => void;
 };
 
 const statusStyles: Record<string, string> = {
@@ -24,11 +24,10 @@ export default function SelectInput({
 	name = '',
 	defaultValue = '',
 	value,
-	onChange,
 	options,
+	onChange,
 }: SelectInputProps) {
 	const dropdownRef = useRef<HTMLDivElement>(null);
-	// const didMountRef = useRef(false);
 	const [selected, setSelected] = useState<string>(value ?? defaultValue ?? '');
 	const [open, setOpen] = useState(false);
 
@@ -82,15 +81,11 @@ export default function SelectInput({
 					</div>
 				</button>
 				{open && (
-					<ul className='absolute z-10 mt-1 w-full divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'>
+					<ul className='absolute z-10 mt-1 max-h-[215px] w-full divide-y divide-gray-100 overflow-y-auto rounded-md bg-white shadow-xl ring-1 ring-black/5 focus:outline-none'>
 						{options.map((option) => (
 							<li
 								key={option}
 								className='flex cursor-pointer items-center gap-2 px-4 py-2 text-sm text-gray-900 hover:bg-gray-100'
-								// onClick={() => {
-								// 	setSelected(option);
-								// 	setOpen(false);
-								// }}
 								onClick={() => {
 									if (option !== selected) {
 										setSelected(option);
