@@ -17,8 +17,10 @@ type LineItemFormProps = {
 		quantity: string;
 	};
 	products: { id: string; name: string }[];
-	submitFn: (data: any) => Promise<any>; // eslint-disable @typescript-eslint/no-explicit-any
-	extraData?: Record<string, any>; // eslint-disable @typescript-eslint/no-explicit-any
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	submitFn: (data: any) => Promise<any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	extraData?: Record<string, any>;
 	closeDrawer: () => void;
 	resetOnSubmit?: boolean;
 	resetKey?: boolean;

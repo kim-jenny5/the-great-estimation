@@ -2,6 +2,7 @@
 
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { useEffect, useMemo, useRef, useState } from 'react';
+
 import { formatLabel, formatPlaceholder } from '@/util/formatters';
 
 type SelectInputProps = {
@@ -80,14 +81,7 @@ export default function SelectInput({
 			<div ref={rootRef} className='relative w-full'>
 				<input type='hidden' name={name} value={selected ?? ''} required={required} />
 				{showDot ? (
-					<button
-						type='button'
-						className='input'
-						onClick={() => setOpen((prev) => !prev)}
-						aria-haspopup='listbox'
-						aria-expanded={open}
-						aria-controls={`${name}-listbox`}
-					>
+					<button type='button' className='input' onClick={() => setOpen((prev) => !prev)}>
 						<div className='flex items-center justify-between'>
 							<div className='flex items-center gap-2'>
 								{selected ? (
@@ -129,9 +123,6 @@ export default function SelectInput({
 							}}
 							placeholder={placeholder ?? `Select ${formatPlaceholder(name)}`}
 							className='input pr-8'
-							aria-autocomplete='list'
-							aria-expanded={open}
-							aria-controls={`${name}-listbox`}
 						/>
 						<ChevronDownIcon
 							className={`pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
