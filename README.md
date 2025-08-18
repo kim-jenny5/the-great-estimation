@@ -39,12 +39,12 @@ All components have been scaffolded and styled. The layout and structure reflect
 - [x] Migrate from Drizzle to Prisma for richer data relationships (`user.orders`, `order.lineItems`, etc.)
 - [x] Add a simple API for data handling (create, read, update, delete)
   - Switched over to using Server Actions from API routes
-- [ ] Add functionality to create a new order
 - [x] Enable editing and updating an existing order
-- [ ] Add ability to add/edit/delete line items
+- [x] Add ability to add/edit/delete line items
+- [ ] Add form validation with Zod
 - [ ] Make the slider interactive for real-time adjustment
 - [ ] Add a way to export page data to CSV
-- [ ] Hook up all forms and controls to actual state and validation
+- [] Hook up all forms and controls to actual state and validation
 
 ## Notes
 
