@@ -1,6 +1,9 @@
 'use client';
 
+import { DateTime } from 'luxon';
 import Papa from 'papaparse';
+
+import { TIMEZONE } from './formatters';
 
 type LineItem = {
 	name: string;
@@ -13,6 +16,16 @@ type LineItem = {
 	subtotal: number | string;
 };
 
+// Luxon-friendly YMD, consistent with your other formatters
+const toYMD = (date: string | Date | null) => {
+	if (!date) return '';
+	const dt =
+		typeof date === 'string'
+			? DateTime.fromISO(date, { zone: TIMEZONE })
+			: DateTime.fromJSDate(date, { zone: TIMEZONE });
+	return dt.toISODate() ?? '';
+};
+
 export default function ExportButtons({
 	orderName,
 	totalBudget,
@@ -22,10 +35,8 @@ export default function ExportButtons({
 	totalBudget: number;
 	lineItems: LineItem[];
 }) {
-	const toYMD = (date: string | Date | null) =>
-		date ? new Date(date).toISOString().slice(0, 10) : '';
-
 	const handleExportCSV = () => {
+		// group by product
 		const byProduct = new Map<string, LineItem[]>();
 		for (const li of lineItems) {
 			const key = li.product?.name ?? 'Uncategorized';
@@ -33,37 +44,30 @@ export default function ExportButtons({
 			byProduct.get(key)!.push(li);
 		}
 
-		// Grand total
 		const grandTotal = lineItems.reduce((sum, li) => sum + Number(li.subtotal), 0);
 
-		// Build AOA (array of arrays) so we can inject custom rows
+		// AOA: batch pushes to satisfy unicorn/prefer-single-call
 		const aoa: (string | number)[][] = [];
 
-		// Title + Budget (top)
-		aoa.push([orderName]); // title row
-		aoa.push(['Budget Total', Number(totalBudget)]); // budget row
-		aoa.push([]); // empty spacer row
+		aoa.push(
+			// Title + Budget + header
+			[orderName],
+			['Budget Total', Number(totalBudget)],
+			[],
+			[
+				'Description',
+				'Product',
+				'StartDate',
+				'EndDate',
+				'RateType',
+				'Rate',
+				'Quantity',
+				'Subtotal',
+			],
 
-		// Table header
-		aoa.push([
-			'Description',
-			'Product',
-			'StartDate',
-			'EndDate',
-			'RateType',
-			'Rate',
-			'Quantity',
-			'Subtotal',
-		]);
-
-		// Product groups
-		for (const [productName, items] of byProduct.entries()) {
-			// Group header row (light gray style is visual; CSV will just have the text)
-			aoa.push([`${productName}`]);
-
-			// Item rows
-			for (const li of items) {
-				aoa.push([
+			// Product groups (each group contributes multiple rows)
+			...[...byProduct.entries()].flatMap(([productName, items]) => {
+				const rowsForItems = items.map((li) => [
 					li.name,
 					productName,
 					toYMD(li.startDate),
@@ -73,31 +77,30 @@ export default function ExportButtons({
 					Number(li.quantity),
 					Number(li.subtotal),
 				]);
-			}
 
-			// Group subtotal
-			const groupTotal = items.reduce((sum, li) => sum + Number(li.subtotal), 0);
-			aoa.push(['', '', '', '', '', '', `${productName} Total`, Number(groupTotal)]);
+				const groupTotal = items.reduce((sum, li) => sum + Number(li.subtotal), 0);
 
-			// Spacer between groups
-			aoa.push([]);
-		}
+				// Return: group header, all item rows, group total row, spacer
+				return [
+					[productName],
+					...rowsForItems,
+					['', '', '', '', '', '', `${productName} Total`, Number(groupTotal)],
+					[],
+				];
+			}),
 
-		// Grand total at bottom
-		aoa.push(['', '', '', '', '', '', 'Grand Total', Number(grandTotal)]);
-
-		// Export
-		const csv = Papa.unparse(aoa, { header: false });
-		const blob = new Blob(
-			['\uFEFF' + csv], // keep BOM so Excel shows UTF-8 correctly
-			{ type: 'text/csv;charset=utf-8;' }
+			// Grand total
+			['', '', '', '', '', '', 'Grand Total', Number(grandTotal)]
 		);
+
+		const csv = Papa.unparse(aoa, { header: false });
+		const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
 		const url = URL.createObjectURL(blob);
 
 		const a = document.createElement('a');
 		const slug = orderName
-			.replace(/[^\w]+/g, '-')
-			.replace(/^-|-$/g, '')
+			.replaceAll(/[^\w]+/g, '-')
+			.replaceAll(/^-|-$/g, '')
 			.slice(0, 60);
 		a.href = url;
 		a.download = `TGE Demo ${slug || 'Order'}.csv`;

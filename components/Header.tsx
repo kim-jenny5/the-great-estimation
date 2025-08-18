@@ -7,7 +7,7 @@ import ExportButtons from './ui/ExportButton';
 import type { SerializedOrder } from '@/util/types';
 
 export default function Header({ order }: { order: SerializedOrder }) {
-	const { name, status, deliverableDueAt, lineItems, totalBudget } = order;
+	const { name, status, deliverableDueAt, lineItems } = order;
 
 	return (
 		<div className='flex h-full w-full flex-col gap-y-2'>
