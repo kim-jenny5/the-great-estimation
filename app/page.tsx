@@ -1,3 +1,7 @@
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LineItemsChart from '@/components/LineItemsChart';
