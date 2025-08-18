@@ -23,7 +23,12 @@ export async function resetDatabase() {
 // no real auth is to be implemented in this project
 // this function just returns the first user in the DB as the "current" user
 export async function getCurrentUser() {
-	return await prisma.user.findFirstOrThrow();
+	const user = await prisma.user.findFirst();
+	if (user) return user;
+
+	return prisma.user.create({
+		data: { name: 'Demo User', email: 'user@demo.com' },
+	});
 }
 
 export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
