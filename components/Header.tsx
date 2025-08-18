@@ -2,11 +2,12 @@ import StatusBadge from '@/components/StatusBadge';
 import { formatDate } from '@/util/formatters';
 
 import EditOrderForm from './forms/UpdateOrderForm';
+import ExportButtons from './ui/ExportButton';
 
 import type { SerializedOrder } from '@/util/types';
 
 export default function Header({ order }: { order: SerializedOrder }) {
-	const { name, status, deliverableDueAt } = order;
+	const { name, status, deliverableDueAt, lineItems, totalBudget } = order;
 
 	return (
 		<div className='flex h-full w-full flex-col gap-y-2'>
@@ -16,7 +17,7 @@ export default function Header({ order }: { order: SerializedOrder }) {
 					{status && <StatusBadge status={status} />}
 				</div>
 				<div className='flex gap-x-4'>
-					<button className='secondary-btn'>Export</button>
+					<ExportButtons orderName={name} lineItems={lineItems} />
 					<EditOrderForm order={order} />
 				</div>
 			</div>
