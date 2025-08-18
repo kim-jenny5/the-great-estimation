@@ -1,107 +1,101 @@
+import { faker } from '@faker-js/faker';
+
 import { prisma } from '@/prisma/client';
+import { convertToUTC } from '@/util/formatters';
+import { RATE_TYPES } from '@/util/types';
 
-async function main() {
-	// Clean slate
-	await prisma.lineItem.deleteMany();
-	await prisma.order.deleteMany();
-	await prisma.user.deleteMany();
-	await prisma.product.deleteMany();
-	console.log(`🩵 Database reset 🩵`);
-
-	// Insert user
+export async function seed() {
 	const jenny = await prisma.user.create({
-		data: { name: `Jenny Kim`, email: `jennykimdev@gmail.com` },
+		data: { name: 'Jenny Kim', email: 'jennykimdev@gmail.com' },
 	});
 
-	// Insert order
-	const nikeOrder = await prisma.order.create({
-		data: {
-			name: `Nike – Back to School – Q3 2025`,
-			creatorId: jenny.id,
-			status: `In progress`,
-			totalBudget: 45_000,
-			deliverableDueAt: new Date(`2025-08-18`),
-		},
-	});
-
-	// Insert products
-	const insertedProducts = await prisma.$transaction([
-		prisma.product.create({ data: { name: `Newsletter` } }),
-		prisma.product.create({ data: { name: `Sponsored Article` } }),
-		prisma.product.create({ data: { name: `Display Ads` } }),
+	const [newsletter, sponsored, displayAd] = await prisma.$transaction([
+		prisma.product.create({ data: { name: 'Newsletter' } }),
+		prisma.product.create({ data: { name: 'Sponsored Article' } }),
+		prisma.product.create({ data: { name: 'Display Ads' } }),
+		prisma.product.create({ data: { name: 'Social Media Post' } }),
+		prisma.product.create({ data: { name: 'Podcast Ad' } }),
+		prisma.product.create({ data: { name: 'Homepage Takeover' } }),
+		prisma.product.create({ data: { name: 'Branded Video' } }),
+		prisma.product.create({ data: { name: 'Event Sponsorship' } }),
 	]);
 
-	const newsletter = insertedProducts.find((p) => p.name === `Newsletter`)!;
-	const sponsored = insertedProducts.find((p) => p.name === `Sponsored Article`)!;
-	const displayAd = insertedProducts.find((p) => p.name === `Display Ads`)!;
-
-	// Insert line items
-	const lineItemData = [
+	const items = [
 		{
-			orderId: nikeOrder.id,
 			productId: newsletter.id,
-			name: `Back to School`,
-			startDate: new Date(`2025-08-01`),
-			type: `Flat`,
-			rate: 2500,
-			quantity: 1,
-			subtotal: 2500,
+			name: 'Back to School',
+			startDate: '2025-08-01',
 		},
+		{ productId: newsletter.id, name: 'Labor Day', startDate: '2025-08-18' },
 		{
-			orderId: nikeOrder.id,
-			productId: newsletter.id,
-			name: `Labor Day`,
-			startDate: new Date(`2025-08-18`),
-			type: `Flat`,
-			rate: 3000,
-			quantity: 1,
-			subtotal: 3000,
-		},
-		{
-			orderId: nikeOrder.id,
 			productId: sponsored.id,
-			name: `Fall Fashion Feature`,
-			startDate: new Date(`2025-08-25`),
-			endDate: new Date(`2025-11-14`),
-			type: `Flat`,
-			rate: 4000,
-			quantity: 1,
-			subtotal: 4000,
+			name: 'Fall Fashion Feature',
+			startDate: '2025-08-25',
+			endDate: '2025-11-14',
 		},
 		{
-			orderId: nikeOrder.id,
 			productId: displayAd.id,
-			name: `Homepage Takeover`,
-			startDate: new Date(`2025-08-15`),
-			endDate: new Date(`2025-08-17`),
-			type: `Flat`,
-			rate: 5000,
-			quantity: 1,
-			subtotal: 5000,
+			name: 'Homepage Takeover',
+			startDate: '2025-08-15',
+			endDate: '2025-08-17',
 		},
 		{
-			orderId: nikeOrder.id,
 			productId: displayAd.id,
-			name: `Sidebar Ad`,
-			startDate: new Date(`2025-08-20`),
-			endDate: new Date(`2025-08-31`),
-			type: `CPM`,
-			rate: 1500,
-			quantity: 2,
-			subtotal: 3000,
+			name: 'Sidebar Ad',
+			startDate: '2025-08-20',
+			endDate: '2025-08-31',
 		},
 	];
 
-	await prisma.lineItem.createMany({ data: lineItemData });
+	const itemsData = items.map((item) => {
+		const rate = faker.number.float({ min: 5, max: 100, multipleOf: 0.01 });
+		const quantity = faker.number.int({ min: 1, max: 3 });
 
-	console.log(`🌱 Seed complete 🌱`);
+		return {
+			...item,
+			startDate: convertToUTC(item.startDate),
+			endDate: item.endDate ? convertToUTC(item.endDate) : null,
+			rateType: faker.helpers.arrayElement(RATE_TYPES),
+			rate,
+			quantity,
+			subtotal: rate * quantity,
+		};
+	});
+
+	const totalSpend = itemsData.reduce((sum, i) => sum + i.subtotal, 0);
+	const totalBudget =
+		Math.round((totalSpend * faker.number.float({ min: 1, max: 3, multipleOf: 0.01 })) / 50) * 50;
+	const productsCount = new Set(itemsData.map((i) => i.productId)).size;
+
+	await prisma.$transaction(async (tx) => {
+		const nikeOrder = await tx.order.create({
+			data: {
+				name: 'Nike – Back to School – Q3 2025',
+				creatorId: jenny.id,
+				status: 'In progress',
+				totalBudget,
+				totalSpend,
+				productsCount,
+				lineItemsCount: itemsData.length,
+				deliverableDueAt: convertToUTC('2025-08-18'),
+			},
+		});
+
+		await tx.lineItem.createMany({
+			data: itemsData.map((i) => ({ ...i, orderId: nikeOrder.id })),
+		});
+	});
+
+	console.log('🌱 Seed complete');
 }
 
-try {
-	await main();
-} catch (error) {
-	console.error(`❌ Seed error:`, error);
-	throw error;
-} finally {
-	await prisma.$disconnect();
+// called if seeding is run directly inside the terminal
+if (import.meta.url === `file://${process.argv[1]}`) {
+	try {
+		await seed();
+	} catch (error) {
+		throw new Error(`❌ Seed error: ${error}`);
+	} finally {
+		await prisma.$disconnect();
+	}
 }

@@ -13,7 +13,7 @@ This project demonstrates my ability to translate real-world business logic and 
 - **Tailwind CSS** – utility-first styling
 - **Radix UI** – accessible, unstyled component primitives
 - **Heroicons** - simple, clean icon set to pair seamlessly with Tailwind
-- **Neon** – serverless Postgres database
+- **Supabase** – serverless Postgres database
 - **Drizzle** - Typescript ORM used for schema and queries
 - **Vercel** – seamless deployment for frontend and serverless API routes
 
@@ -36,14 +36,15 @@ All components have been scaffolded and styled. The layout and structure reflect
 
 ## What's Next
 
-- [ ] Migrate from Drizzle to Prisma for richer data relationships (`user.orders`, `order.lineItems`, etc.)
-- [ ] Add a simple API for data handling (create, read, update, delete)
-- [ ] Add functionality to create a new order
-- [ ] Enable editing and updating an existing order
-- [ ] Add ability to add/edit/delete line items
+- [x] Migrate from Drizzle to Prisma for richer data relationships (`user.orders`, `order.lineItems`, etc.)
+- [x] Add a simple API for data handling (create, read, update, delete)
+  - Switched over to using Server Actions from API routes
+- [x] Enable editing and updating an existing order
+- [x] Add ability to add/edit/delete line items
+- [ ] Add form validation with Zod
 - [ ] Make the slider interactive for real-time adjustment
 - [ ] Add a way to export page data to CSV
-- [ ] Hook up all forms and controls to actual state and validation
+- [] Hook up all forms and controls to actual state and validation
 
 ## Notes
 

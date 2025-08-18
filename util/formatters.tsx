@@ -1,53 +1,84 @@
-export const formatCurrency = (amount: number, options: { withCents?: boolean } = {}): string => {
-	return amount.toLocaleString(`en-US`, {
-		style: `currency`,
-		currency: `USD`,
-		minimumFractionDigits: options.withCents ? 2 : 0,
-		maximumFractionDigits: options.withCents ? 2 : 0,
+import { DateTime } from 'luxon';
+
+export const TIMEZONE = 'America/New_York';
+
+export const formatInitials = (name: string) =>
+	name
+		.split(' ')
+		.map((part) => part[0])
+		.join('')
+		.toUpperCase();
+
+export const formatPlaceholder = (placeholder: string) =>
+	placeholder.replaceAll(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (str) => str.toLowerCase());
+
+export const formatLabel = (label: string, { required = false }: { required?: boolean } = {}) => {
+	const formattedLabel = label
+		.replaceAll(/([a-z])([A-Z])/g, '$1 $2')
+		.replace(/^./, (str) => str.toUpperCase());
+
+	return (
+		<label htmlFor={label} className='block text-sm/6 font-medium text-gray-900'>
+			{formattedLabel}
+			{required && <span className='pl-0.5 text-red-500'>*</span>}
+		</label>
+	);
+};
+
+export const formatCurrency = (amount: number): string => {
+	return amount.toLocaleString('en-US', {
+		style: 'currency',
+		currency: 'USD',
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
 	});
 };
 
 export const formatPercentage = (value: number): string => {
-	return value.toLocaleString(`en-US`, {
-		style: `percent`,
+	return value.toLocaleString('en-US', {
+		style: 'percent',
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2,
 		useGrouping: false,
 	});
 };
 
-export const formatDate = (date: Date) =>
-	date.toLocaleDateString(`en-US`, { month: `long`, day: `numeric`, year: `numeric` });
+// formats dates for database storing
+export const convertToUTC = (date: string) =>
+	DateTime.fromISO(date).setZone(TIMEZONE).toUTC().toJSDate();
 
-export const formatMonth = (date: Date) =>
-	date.toLocaleDateString(`en-US`, { month: `long`, day: `numeric` });
+export const strippedDate = (date: string) => DateTime.fromISO(date).setZone(TIMEZONE);
+
+// format dates for display on the UI
+export const formatDate = (date: string) => strippedDate(date).toFormat('MMMM d, yyyy');
+export const formatMonth = (date: string) => strippedDate(date).toFormat('MMMM d');
 
 export const formatStartEndDates = (
-	startDate: Date,
-	endDate?: Date,
+	startDate: string,
+	endDate?: string,
 	options: { forAccessibility?: boolean } = {}
 ): string => {
 	const { forAccessibility = false } = options;
 
-	if (!endDate) {
-		return formatDate(startDate);
-	}
+	const start = strippedDate(startDate);
+	const end = endDate ? strippedDate(endDate) : undefined;
+
+	if (!end) return formatDate(startDate);
 
 	if (forAccessibility) {
-		return `${formatMonth(startDate)} to ${formatDate(endDate)}`;
+		return `${start.toFormat('MMMM d')}${endDate && ` to ${formatDate(endDate)}`}`;
 	}
 
-	const sameYear = startDate.getFullYear() === endDate.getFullYear();
-	const sameMonth = startDate.getMonth() === endDate.getMonth();
+	const sameYear = start.year === end.year;
+	const sameMonth = start.month === end.month;
 
 	if (sameYear && sameMonth) {
-		const month = startDate.toLocaleDateString(`en-US`, { month: `long` });
-		return `${month} ${startDate.getDate()}–${endDate.getDate()}, ${startDate.getFullYear()}`;
+		return `${start.toFormat('MMMM')} ${start.day}–${end.day}, ${start.year}`;
 	}
 
 	if (sameYear) {
-		return `${formatMonth(startDate)} – ${formatMonth(endDate)}, ${startDate.getFullYear()}`;
+		return `${start.toFormat('MMMM d')} – ${end.toFormat('MMMM d')}, ${start.year}`;
 	}
 
-	return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+	return `${formatDate(startDate)} – ${formatDate(endDate!)}`;
 };
