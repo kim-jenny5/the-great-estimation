@@ -29,6 +29,7 @@ export async function getCurrentUser() {
 
 	if (!user) {
 		const err = new Error('No user found');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		(err as any).code = 'NO_USER_FOUND';
 		throw err;
 	}
@@ -49,6 +50,7 @@ export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
 
 	if (!userWithOrders) {
 		const err = new Error('No user found');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		(err as any).code = 'NO_USER_FOUND';
 		throw err;
 	}
@@ -59,7 +61,7 @@ export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
 
 	if (!selectedOrder) {
 		const err = new Error('No orders found for current user');
-
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		(err as any).code = 'NO_ORDERS_FOUND';
 		throw err;
 	}

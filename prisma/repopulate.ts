@@ -1,7 +1,8 @@
 // prisma/repopulate.ts
+import { faker } from '@faker-js/faker';
+
 import { prisma } from '@/prisma/client';
 import { convertToUTC } from '@/util/formatters';
-import { faker } from '@faker-js/faker';
 import { RATE_TYPES } from '@/util/types';
 
 export async function repopulate() {
