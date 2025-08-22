@@ -4,18 +4,14 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "next dev",
-		"build": "prisma generate && next build",
+		"dev": "prisma generate && prisma db push && next dev",
+		"build": "prisma generate && prisma migrate deploy && next build",
 		"start": "next start",
 		"lint": "NODE_NO_WARNINGS=1 eslint .",
 		"lint:fix": "NODE_NO_WARNINGS=1 eslint . --fix",
 		"format": "prettier --write .",
-		"db:generate": "prisma generate",
 		"db:push": "prisma db push",
-		"migrate:dev": "prisma migrate dev",
-		"migrate:prod": "prisma migrate deploy",
-		"seed": "tsx prisma/seed.ts",
-		"db:reset": "NODE_ENV=development prisma migrate reset && pnpm migrate:dev && pnpm seed"
+		"db:reset": "prisma migrate reset --force && pnpm migrate:dev"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^9.9.0",
