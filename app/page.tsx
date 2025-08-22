@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import LineItemsChart from '@/components/LineItemsChart';
 import Navbar from '@/components/Navbar';
-import Slider from '@/components/Slider';
+// import Slider from '@/components/Slider';
 import StatGroup from '@/components/StatGroup';
 import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
 
@@ -23,7 +23,8 @@ export default async function Dashboard() {
 					productsCount={productsCount}
 					lineItemsCount={lineItemsCount}
 				/>
-				<Slider />
+				{/* commented out for now as functionality is currently being built */}
+				{/* <Slider /> */}
 				<LineItemsChart orderId={order.id} lineItems={lineItems} />
 			</main>
 			<Footer />

@@ -1,4 +1,3 @@
-// prisma/repopulate.ts
 import { faker } from '@faker-js/faker';
 
 import { prisma } from '@/prisma/client';
@@ -7,14 +6,12 @@ import { RATE_TYPES } from '@/util/types';
 
 export async function repopulate() {
 	await prisma.$transaction(async (tx) => {
-		// 1) Ensure user
 		const jenny = await tx.user.upsert({
 			where: { email: 'jennykimdev@gmail.com' },
 			update: { name: 'Jenny Kim' },
 			create: { name: 'Jenny Kim', email: 'jennykimdev@gmail.com' },
 		});
 
-		// 2) Ensure products (one-and-done; skips if they exist)
 		const productNames = [
 			'Newsletter',
 			'Sponsored Article',
@@ -28,7 +25,7 @@ export async function repopulate() {
 
 		await tx.product.createMany({
 			data: productNames.map((name) => ({ name })),
-			skipDuplicates: true, // requires @unique on Product.name
+			skipDuplicates: true,
 		});
 
 		const products = await tx.product.findMany({
@@ -37,10 +34,9 @@ export async function repopulate() {
 		});
 		const byName = Object.fromEntries(products.map((p) => [p.name, p.id]));
 
-		// 3) Ensure order (unique on [creatorId, name])
 		const order = await tx.order.upsert({
 			where: { creatorId_name: { creatorId: jenny.id, name: 'Nike – Back to School – Q3 2025' } },
-			update: {}, // leave existing as-is; totals recalculated below
+			update: {},
 			create: {
 				name: 'Nike – Back to School – Q3 2025',
 				creatorId: jenny.id,
@@ -53,8 +49,6 @@ export async function repopulate() {
 			},
 		});
 
-		// 4) Build items (random but stable shape). If called twice without wipe:
-		//    createMany(skipDuplicates) ensures no duplicate line items by (orderId, name)
 		const items = [
 			{ name: 'Back to School', productName: 'Newsletter', start: '2025-08-01' },
 			{ name: 'Labor Day', productName: 'Newsletter', start: '2025-08-18' },
@@ -91,19 +85,18 @@ export async function repopulate() {
 
 		await tx.lineItem.createMany({
 			data: itemsData,
-			skipDuplicates: true, // requires @@unique([orderId, name])
+			skipDuplicates: true,
 		});
 
-		// 5) Recalculate order totals from DB (covers both fresh + incremental runs)
-		const litems = await tx.lineItem.findMany({
+		const lineItems = await tx.lineItem.findMany({
 			where: { orderId: order.id },
 			select: { productId: true, subtotal: true },
 		});
 
-		const totalSpend = litems.reduce((s, li) => s + Number(li.subtotal), 0);
-		const productsCount = new Set(litems.map((li) => li.productId)).size;
-		const lineItemsCount = litems.length;
-		const totalBudget = Math.ceil((totalSpend * 1.5) / 50) * 50; // deterministic formula
+		const totalSpend = lineItems.reduce((s, li) => s + Number(li.subtotal), 0);
+		const productsCount = new Set(lineItems.map((li) => li.productId)).size;
+		const lineItemsCount = lineItems.length;
+		const totalBudget = Math.ceil((totalSpend * 1.5) / 50) * 50; // just to initially keep it proportional to total budget
 
 		await tx.order.update({
 			where: { id: order.id },

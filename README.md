@@ -11,10 +11,9 @@ This project demonstrates my ability to translate real-world business logic and 
 - **Next.js** – React framework with support for serverless functions and route handling
 - **TypeScript** – safer, predictable code
 - **Tailwind CSS** – utility-first styling
-- **Radix UI** – accessible, unstyled component primitives
 - **Heroicons** - simple, clean icon set to pair seamlessly with Tailwind
 - **Supabase** – serverless Postgres database
-- **Drizzle** - Typescript ORM used for schema and queries
+- **Prisma** - Typescript ORM used for schema and queries
 - **Vercel** – seamless deployment for frontend and serverless API routes
 
 ## Architecture Notes
@@ -32,7 +31,7 @@ This project was rebuilt to:
 
 ## Current Progress
 
-All components have been scaffolded and styled. The layout and structure reflect the core flow of the original feature. What's left is wiring everything up for interaction.
+All components have been scaffolded and styled. The layout and structure reflect the core flow of the original feature. What's left are the finishing touches of adding form validation and the interactive slider.
 
 ## What's Next
 
@@ -42,10 +41,9 @@ All components have been scaffolded and styled. The layout and structure reflect
 - [x] Enable editing and updating an existing order
 - [x] Add ability to add/edit/delete line items
 - [ ] Add form validation with Zod
-- [ ] Fix data time bug
-- [ ] Make the slider interactive for real-time adjustment
-- [ ] Add a way to export page data to CSV
-- [ ] Hook up all forms and controls to actual state and validation
+- [ ] Add interactive slider for real-time adjustment
+- [x] Add a way to export page data to CSV
+- [x] Hook up all forms and controls to actual state and validation
 
 ## Notes
 
