@@ -16,6 +16,24 @@ type LineItem = {
 	subtotal: number | string;
 };
 
+const toN = (v: number | string | null | undefined) => (typeof v === 'number' ? v : Number(v ?? 0));
+
+const toYMD = (d: string | Date | null, tz: string = TIMEZONE): string => {
+	if (!d) return '';
+
+	let dt: DateTime;
+
+	if (typeof d === 'string') {
+		dt = /^\d{4}-\d{2}-\d{2}$/.test(d)
+			? DateTime.fromISO(d, { zone: tz })
+			: DateTime.fromISO(d, { setZone: true }).setZone(tz);
+	} else {
+		dt = DateTime.fromJSDate(d, { zone: 'utc' }).setZone(tz);
+	}
+
+	return dt.isValid ? dt.toFormat('yyyy-LL-dd') : '';
+};
+
 export default function ExportButton({
 	orderName,
 	lineItems,
@@ -25,27 +43,6 @@ export default function ExportButton({
 	lineItems: LineItem[];
 	totalBudget: number;
 }) {
-	const toN = (v: number | string | null | undefined) =>
-		typeof v === 'number' ? v : Number(v ?? 0);
-
-	const toYMD = (d: string | Date | null, tz: string = TIMEZONE): string => {
-		if (!d) return '';
-
-		let dt: DateTime;
-
-		if (typeof d === 'string') {
-			if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
-				dt = DateTime.fromISO(d, { zone: tz });
-			} else {
-				dt = DateTime.fromISO(d, { setZone: true }).setZone(tz);
-			}
-		} else {
-			dt = DateTime.fromJSDate(d, { zone: 'utc' }).setZone(tz);
-		}
-
-		return dt.isValid ? dt.toFormat('yyyy-LL-dd') : '';
-	};
-
 	const makeBaseName = () =>
 		`TGE Demo ${
 			orderName
@@ -64,7 +61,7 @@ export default function ExportButton({
 			.sort(([a], [b]) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
 			.map(([product, items]) => [
 				product,
-				items.slice().sort((a, b) => (toYMD(a.startDate) > toYMD(b.startDate) ? 1 : -1)),
+				[...items].sort((a, b) => (toYMD(a.startDate) > toYMD(b.startDate) ? 1 : -1)),
 			]) as [string, LineItem[]][];
 
 		const totalSpend = lineItems.reduce((s, li) => s + toN(li.subtotal), 0);
@@ -143,9 +140,7 @@ export default function ExportButton({
 		r++;
 
 		// Product groups
-		for (let i = 0; i < entries.length; i++) {
-			const [productName, items] = entries[i];
-
+		for (const [i, [productName, items]] of entries.entries()) {
 			if (i > 0) setRowBottomBorder(r - 1, 'medium');
 
 			// Group label row
