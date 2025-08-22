@@ -42,9 +42,10 @@ All components have been scaffolded and styled. The layout and structure reflect
 - [x] Enable editing and updating an existing order
 - [x] Add ability to add/edit/delete line items
 - [ ] Add form validation with Zod
+- [ ] Fix data time bug
 - [ ] Make the slider interactive for real-time adjustment
 - [ ] Add a way to export page data to CSV
-- [] Hook up all forms and controls to actual state and validation
+- [ ] Hook up all forms and controls to actual state and validation
 
 ## Notes
 

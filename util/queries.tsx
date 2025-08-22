@@ -4,18 +4,20 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 import { prisma } from '@/prisma/client';
-import { seed } from '@/prisma/seed';
+import { repopulate } from '@/prisma/repopulate';
 
 import { convertToUTC } from './formatters';
 import { CurrentUser, SerializedOrder } from './types';
 
 export async function resetDatabase() {
-	await prisma.lineItem.deleteMany({});
-	await prisma.product.deleteMany({});
-	await prisma.order.deleteMany({});
-	await prisma.user.deleteMany({});
+	await prisma.$transaction(async (tx) => {
+		await tx.lineItem.deleteMany({});
+		await tx.product.deleteMany({});
+		await tx.order.deleteMany({});
+		await tx.user.deleteMany({});
+	});
 
-	await seed();
+	await repopulate();
 
 	revalidatePath('/');
 }
@@ -23,31 +25,46 @@ export async function resetDatabase() {
 // no real auth is to be implemented in this project
 // this function just returns the first user in the DB as the "current" user
 export async function getCurrentUser() {
-	return await prisma.user.findFirstOrThrow();
+	const user = await prisma.user.findFirst();
+
+	if (!user) {
+		const err = new Error('No user found');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		(err as any).code = 'NO_USER_FOUND';
+		throw err;
+	}
+
+	return user;
 }
 
 export async function getOrderByIdOrFirst(user: CurrentUser, orderId?: string) {
-	const userWithOrders = await prisma.user.findUniqueOrThrow({
+	const userWithOrders = await prisma.user.findUnique({
 		where: { id: user.id },
 		include: {
 			orders: {
-				include: {
-					lineItems: {
-						include: {
-							product: true,
-						},
-					},
-				},
+				orderBy: { createdAt: 'desc' },
+				include: { lineItems: { include: { product: true } } },
 			},
 		},
 	});
 
-	const selectedOrder =
-		orderId == undefined
-			? userWithOrders.orders[0]
-			: userWithOrders.orders.find((order) => order.id === orderId);
+	if (!userWithOrders) {
+		const err = new Error('No user found');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		(err as any).code = 'NO_USER_FOUND';
+		throw err;
+	}
 
-	if (!selectedOrder) throw new Error('User has no orders.');
+	const selectedOrder = orderId
+		? userWithOrders.orders.find((o) => o.id === orderId)
+		: userWithOrders.orders[0];
+
+	if (!selectedOrder) {
+		const err = new Error('No orders found for current user');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		(err as any).code = 'NO_ORDERS_FOUND';
+		throw err;
+	}
 
 	const serializedOrder: SerializedOrder = {
 		...selectedOrder,
