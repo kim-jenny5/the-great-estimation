@@ -8,43 +8,67 @@ This project demonstrates my ability to translate real-world business logic and 
 
 ## Tech Stack
 
-- **Next.js** – React framework with support for serverless functions and route handling
+- **Next.js** – React framework with support for server actions and hybrid rendering
 - **TypeScript** – safer, predictable code
 - **Tailwind CSS** – utility-first styling
-- **Heroicons** - simple, clean icon set to pair seamlessly with Tailwind
-- **Supabase** – serverless Postgres database
-- **Prisma** - Typescript ORM used for schema and queries
+- **Heroicons** – simple, clean icon set to pair seamlessly with Tailwind
+- **Neon** – serverless Postgres database
+- **Prisma** – TypeScript ORM used for schema and queries
+- **Zod** – schema validation for forms
 - **Vercel** – seamless deployment for frontend and serverless API routes
 
 ## Architecture Notes
 
-The project was initially scaffolded using Vite to enable quick iteration and performance-optimized local development. However, as the project grew in complexity, I migrated to Next.js to fully integrate with the Vercel ecosystem and take advantage of built-in routing, serverless functions, and hybrid rendering.
+The project was initially scaffolded using Vite to enable quick iteration and performance-optimized local development. However, as the project grew in complexity, I migrated to Next.js to fully integrate with the Vercel ecosystem and take advantage of built-in routing, server actions, and hybrid rendering.
 
 ## Purpose
 
 This project was rebuilt to:
 
-- Showcase work I couldn’t share due to company access restrictions
-- Highlight my frontend engineering skills using React, Typescript, and Tailwind
+- Showcase work I couldn't share due to company access restrictions
+- Highlight my frontend engineering skills using React, TypeScript, and Tailwind
 - Demonstrate the ability to design and build interactive, data-driven UIs
 - Reflect a real-world project structure using serverless functions and a relational database
 
-## Current Progress
+## Running Locally
 
-All components have been scaffolded and styled. The layout and structure reflect the core flow of the original feature. What's left are the finishing touches of adding form validation and the interactive slider.
+**Prerequisites:** Node.js, pnpm, and a PostgreSQL database (local via Docker or a hosted provider like Neon).
 
-## What's Next
+1. Clone the repository
 
-- [x] Migrate from Drizzle to Prisma for richer data relationships (`user.orders`, `order.lineItems`, etc.)
-- [x] Add a simple API for data handling (create, read, update, delete)
-  - Switched over to using Server Actions from API routes
-- [x] Enable editing and updating an existing order
-- [x] Add ability to add/edit/delete line items
-- [x] Add form validation with Zod
-- [x] Add a way to export page data to CSV
-- [x] Hook up all forms and controls to actual state and validation
+```bash
+git clone https://github.com/kim-jenny5/the-great-estimation.git
+cd the-great-estimation
+```
+
+2. Install dependencies
+
+```bash
+pnpm install
+```
+
+3. Set up environment variables — create a `.env` file at the root:
+
+```
+DATABASE_URL="postgresql://..."
+```
+
+4. Push the schema and seed the database
+
+```bash
+pnpm db:push
+pnpm db:seed
+```
+
+5. Start the development server
+
+```bash
+pnpm dev
+```
+
+The app will be running at `http://localhost:3000`.
 
 ## Notes
 
 - The original implementation was done in **Ruby on Rails**, but this version was reimplemented in **React** and **Next.js** to reflect my current focus on frontend development.
-- The data loaded via the API is static and used to simulate loading behavior and state management.
+- No authentication is implemented — the app loads the first user in the database as the current user to simulate a logged-in state.

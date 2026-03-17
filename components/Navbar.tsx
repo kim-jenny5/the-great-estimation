@@ -1,4 +1,3 @@
-import ConstructionBanner from '@/components/ConstructionBanner';
 import { formatInitials } from '@/util/formatters';
 
 import ResetDatabaseBtn from './ResetDatabaseBtn';
@@ -6,9 +5,7 @@ import ResetDatabaseBtn from './ResetDatabaseBtn';
 export default function Navbar({ user }: { user: string }) {
 	return (
 		<>
-			<ConstructionBanner />
-			{/* remove pt-12 upon construction banner removal */}
-			<nav className='wrapper items-center justify-between border-b border-black/25 pt-12'>
+			<nav className='wrapper items-center justify-between border-b border-black/25'>
 				<div className='flex flex-col text-xl leading-none font-black tracking-tight text-neutral-800'>
 					The Great Estimation
 				</div>
