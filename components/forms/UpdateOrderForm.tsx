@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 
 import { formatLabel } from '@/util/formatters';
 import { updateOrder } from '@/util/queries';
+import { updateOrderFormSchema } from '@/util/schemas';
 import { STATUSES } from '@/util/types';
 
 import DrawerWrapper from '../DrawerWrapper';
@@ -26,6 +27,7 @@ export default function UpdateOrderForm({ order }: UpdateOrderFormProps) {
 	const [status, setStatus] = useState<string>(order.status);
 	const [totalBudget, setTotalBudget] = useState<number>(order.totalBudget);
 	const [dueDate, setDueDate] = useState(order.deliverableDueAt);
+	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	useEffect(() => {
 		setName(order.name);
@@ -36,6 +38,18 @@ export default function UpdateOrderForm({ order }: UpdateOrderFormProps) {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		const result = updateOrderFormSchema.safeParse({ name, status, totalBudget, deliverableDueAt: dueDate });
+		if (!result.success) {
+			const fieldErrors: Record<string, string> = {};
+			for (const issue of result.error.issues) {
+				const key = issue.path[0] as string;
+				if (key) fieldErrors[key] = issue.message;
+			}
+			setErrors(fieldErrors);
+			return;
+		}
+		setErrors({});
 
 		await updateOrder({
 			id: order.id,
@@ -73,6 +87,7 @@ export default function UpdateOrderForm({ order }: UpdateOrderFormProps) {
 									onChange={(e) => setName(e.target.value)}
 									className='input'
 								/>
+								{errors.name && <p className='mt-1 text-sm text-red-500'>{errors.name}</p>}
 							</div>
 							<div className='sm:col-span-1'>
 								{formatLabel('Deliverable Due At', { required: true })}
@@ -82,9 +97,9 @@ export default function UpdateOrderForm({ order }: UpdateOrderFormProps) {
 									type='date'
 									value={dueDate.slice(0, 10)}
 									onChange={(e) => setDueDate(e.target.value)}
-									required
 									className='input'
 								/>
+								{errors.deliverableDueAt && <p className='mt-1 text-sm text-red-500'>{errors.deliverableDueAt}</p>}
 							</div>
 							<div className='sm:col-span-1'>
 								<SelectInput
@@ -100,6 +115,7 @@ export default function UpdateOrderForm({ order }: UpdateOrderFormProps) {
 									value={totalBudget}
 									onChange={(e) => setTotalBudget(Number(e.target.value))}
 								/>
+								{errors.totalBudget && <p className='mt-1 text-sm text-red-500'>{errors.totalBudget}</p>}
 							</div>
 						</div>
 					</div>

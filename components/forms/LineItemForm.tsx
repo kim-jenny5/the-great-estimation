@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { formatLabel } from '@/util/formatters';
+import { lineItemFormSchema } from '@/util/schemas';
 import { RATE_TYPES } from '@/util/types';
 
 import SelectInput from '../ui/SelectInput';
@@ -38,6 +39,7 @@ export default function LineItemForm({
 	submitLabel,
 }: LineItemFormProps) {
 	const [values, setValues] = useState(initialValues);
+	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	const set =
 		<K extends keyof typeof initialValues>(k: K) =>
@@ -50,6 +52,18 @@ export default function LineItemForm({
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		const result = lineItemFormSchema.safeParse(values);
+		if (!result.success) {
+			const fieldErrors: Record<string, string> = {};
+			for (const issue of result.error.issues) {
+				const key = issue.path[0] as string;
+				if (key) fieldErrors[key] = issue.message;
+			}
+			setErrors(fieldErrors);
+			return;
+		}
+		setErrors({});
 
 		try {
 			await submitFn({
@@ -99,24 +113,24 @@ export default function LineItemForm({
 					<div className='sm:col-span-full'>
 						{formatLabel('Name', { required: true })}
 						<input
-							required
 							type='text'
 							id='name'
 							value={values.name}
 							onChange={(e) => set('name')(e.target.value)}
 							className='input'
 						/>
+						{errors.name && <p className='mt-1 text-sm text-red-500'>{errors.name}</p>}
 					</div>
 					<div className='sm:col-span-1'>
 						{formatLabel('Start Date', { required: true })}
 						<input
-							required
 							type='date'
 							id='startDate'
 							value={values.startDate}
 							onChange={(e) => set('startDate')(e.target.value)}
 							className='input'
 						/>
+						{errors.startDate && <p className='mt-1 text-sm text-red-500'>{errors.startDate}</p>}
 					</div>
 					<div className='sm:col-span-1'>
 						{formatLabel('End Date')}
@@ -127,6 +141,7 @@ export default function LineItemForm({
 							onChange={(e) => set('endDate')(e.target.value)}
 							className='input'
 						/>
+						{errors.endDate && <p className='mt-1 text-sm text-red-500'>{errors.endDate}</p>}
 					</div>
 					<div className='sm:col-span-1'>
 						<SelectInput
@@ -142,11 +157,11 @@ export default function LineItemForm({
 							value={values.rate}
 							onChange={(e) => set('rate')(e.target.value)}
 						/>
+						{errors.rate && <p className='mt-1 text-sm text-red-500'>{errors.rate}</p>}
 					</div>
 					<div className='sm:col-span-full'>
 						{formatLabel('Quantity', { required: true })}
 						<input
-							required
 							type='number'
 							id='quantity'
 							value={values.quantity}
@@ -155,6 +170,7 @@ export default function LineItemForm({
 							max={9999}
 							className='input'
 						/>
+						{errors.quantity && <p className='mt-1 text-sm text-red-500'>{errors.quantity}</p>}
 					</div>
 				</div>
 			</div>
