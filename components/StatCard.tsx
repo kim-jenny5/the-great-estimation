@@ -5,10 +5,11 @@ type StatCardProps = {
 	title: string;
 	value: number;
 	percentage?: number;
+	badge?: string;
 	isCurrency?: boolean;
 };
 
-export default function StatCard({ title, value, percentage, isCurrency }: StatCardProps) {
+export default function StatCard({ title, value, percentage, badge, isCurrency }: StatCardProps) {
 	return (
 		<div className='flex flex-col gap-y-2 px-6 py-5'>
 			<dt className='flex items-center justify-between text-sm font-medium text-neutral-500'>
@@ -20,6 +21,9 @@ export default function StatCard({ title, value, percentage, isCurrency }: StatC
 					<span className={`ml-2 text-sm ${stylePercentage(percentage)}`}>
 						{formatPercentage(percentage)}
 					</span>
+				)}
+				{!percentage && badge && (
+					<span className='ml-2 text-sm font-bold text-red-500'>{badge}</span>
 				)}
 			</dd>
 		</div>
