@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 
 import { formatCurrency, formatStartEndDates } from '@/util/formatters';
-
-const DISCOUNTS = [0.05, 0.1, 0.15, 0.2];
 import { getAllProducts } from '@/util/queries';
 
 import CreateLineItemForm from './forms/CreateLineItemForm';
 import DeleteLineItemForm from './forms/DeleteLineItemForm';
 import EditLineItemForm from './forms/UpdateLineItemForm';
+
+const DISCOUNTS = [0.05, 0.1, 0.15, 0.2];
 
 type LineItem = {
 	id: string;
