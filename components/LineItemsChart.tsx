@@ -83,7 +83,7 @@ export default function LineItemsChart({
 						<button
 							key={d}
 							onClick={() => onDiscountChange(discount === d ? 0 : d)}
-							className={`rounded-full border px-3 py-1 text-sm transition ${
+							className={`cursor-pointer rounded-full border px-3 py-1 text-sm transition ${
 								discount === d
 									? 'border-lime-400 bg-lime-100 font-semibold text-lime-700'
 									: 'border-neutral-300 text-neutral-600 hover:border-neutral-400'
