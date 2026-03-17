@@ -40,8 +40,7 @@ All components have been scaffolded and styled. The layout and structure reflect
   - Switched over to using Server Actions from API routes
 - [x] Enable editing and updating an existing order
 - [x] Add ability to add/edit/delete line items
-- [ ] Add form validation with Zod
-- [ ] Add interactive slider for real-time adjustment
+- [x] Add form validation with Zod
 - [x] Add a way to export page data to CSV
 - [x] Hook up all forms and controls to actual state and validation
 

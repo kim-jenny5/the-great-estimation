@@ -1,9 +1,7 @@
+import DashboardView from '@/components/DashboardView';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import LineItemsChart from '@/components/LineItemsChart';
 import Navbar from '@/components/Navbar';
-// import Slider from '@/components/Slider';
-import StatGroup from '@/components/StatGroup';
 import { getCurrentUser, getOrderByIdOrFirst } from '@/util/queries';
 
 export default async function Dashboard() {
@@ -17,15 +15,14 @@ export default async function Dashboard() {
 			<Navbar user={user.name} />
 			<main className='wrapper min-h-screen flex-col gap-y-6'>
 				<Header order={{ ...order }} />
-				<StatGroup
+				<DashboardView
+					orderId={order.id}
 					totalBudget={totalBudget}
 					totalSpend={totalSpend}
 					productsCount={productsCount}
 					lineItemsCount={lineItemsCount}
+					lineItems={lineItems}
 				/>
-				{/* commented out for now as functionality is currently being built */}
-				{/* <Slider /> */}
-				<LineItemsChart orderId={order.id} lineItems={lineItems} />
 			</main>
 			<Footer />
 		</>
