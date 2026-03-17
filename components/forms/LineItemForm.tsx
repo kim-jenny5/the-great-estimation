@@ -48,6 +48,7 @@ export default function LineItemForm({
 
 	useEffect(() => {
 		setValues(initialValues);
+		setErrors({});
 	}, [resetKey, initialValues]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -101,6 +102,7 @@ export default function LineItemForm({
 				<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 					<div className='sm:col-span-full'>
 						<SelectInput
+							key={`${values.productId}-${products.length}`}
 							name='product'
 							value={products.find((product) => product.id === values.productId)?.name ?? ''}
 							options={products.map((product) => product.name)}
@@ -166,8 +168,6 @@ export default function LineItemForm({
 							id='quantity'
 							value={values.quantity}
 							onChange={(e) => set('quantity')(e.target.value)}
-							min={1}
-							max={9999}
 							className='input'
 						/>
 						{errors.quantity && <p className='mt-1 text-sm text-red-500'>{errors.quantity}</p>}
