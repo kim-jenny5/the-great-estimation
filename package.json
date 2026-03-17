@@ -22,7 +22,7 @@
 		"@types/papaparse": "^5.5.2",
 		"exceljs": "^4.4.0",
 		"luxon": "^3.7.2",
-		"next": "15.4.5",
+		"next": "16.1.7",
 		"papaparse": "^5.5.3",
 		"pg": "^8.20.0",
 		"postgres": "^3.4.8",
