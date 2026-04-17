@@ -1,8 +1,10 @@
 'use server';
 
-import { headers } from 'next/headers';
+import { waitUntil } from '@vercel/functions';
 
 import { prisma } from '@/prisma/client';
+
+import { processExportJob } from './process-export-job';
 
 export type ExportJobSummary = {
 	id: string;
@@ -22,16 +24,7 @@ export async function createExportJob(orderId: string, orderName: string): Promi
 		data: { name, status: 'pending' },
 	});
 
-	const h = await headers();
-	const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
-	const proto = h.get('x-forwarded-proto') ?? 'http';
-	const url = `${proto}://${host}/api/export-jobs/${job.id}/process`;
-
-	fetch(url, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ orderId }),
-	}).catch(console.error);
+	waitUntil(processExportJob(job.id, orderId));
 
 	return { jobId: job.id };
 }
