@@ -2,12 +2,12 @@
 
 import { resetDatabase } from '@/util/queries';
 
-export default function ResetDatabaseBtn() {
-	const handleReset = async () => {
-		await resetDatabase();
-		window.location.reload();
-	};
+const handleReset = async () => {
+	await resetDatabase();
+	globalThis.location.reload();
+};
 
+export default function ResetDatabaseBtn() {
 	return (
 		<button
 			onClick={handleReset}

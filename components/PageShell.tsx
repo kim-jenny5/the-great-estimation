@@ -48,8 +48,8 @@ export default function PageShell({ order }: { order: SerializedOrder }) {
 			await createExportJob(order.id, order.name);
 			await fetchJobs();
 			startPolling();
-		} catch (err) {
-			console.error('Export failed:', err);
+		} catch (error) {
+			console.error('Export failed:', error);
 		}
 	};
 
@@ -120,7 +120,10 @@ export default function PageShell({ order }: { order: SerializedOrder }) {
 
 			<div className='fixed right-12 bottom-6 z-50 flex flex-col-reverse gap-y-2'>
 				{bannerIds.map((id) => (
-					<ExportBanner key={id} onDismiss={() => setBannerIds((prev) => prev.filter((b) => b !== id))} />
+					<ExportBanner
+						key={id}
+						onDismiss={() => setBannerIds((prev) => prev.filter((b) => b !== id))}
+					/>
 				))}
 			</div>
 		</main>

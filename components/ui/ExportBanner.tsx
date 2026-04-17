@@ -23,7 +23,7 @@ export default function ExportBanner({ onDismiss }: ExportBannerProps) {
 			cancelAnimationFrame(raf);
 			clearTimeout(timer);
 		};
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+	 
 	}, []);
 
 	return (
