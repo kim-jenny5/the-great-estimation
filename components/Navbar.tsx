@@ -7,7 +7,7 @@ export default function Navbar({ user }: { user: string }) {
 		<>
 			<nav className='wrapper items-center justify-between border-b border-black/25'>
 				<div className='flex flex-col text-xl leading-none font-black tracking-tight text-neutral-800'>
-					The Great Estimation
+					Deal Estimation Interface
 				</div>
 				<div className='flex items-center gap-x-4'>
 					<ResetDatabaseBtn />
